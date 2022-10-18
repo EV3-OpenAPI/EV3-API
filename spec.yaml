@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: EV3-REST
+  description: EV3-REST
+  version: 0.1.0
+servers:
+  - url: 'http://127.0.0.1:8080/api/v1'
+paths:
+  '/power':
+    get:
+      responses:
+        '200':
+          description: 'Get general system info'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voltage:
+                    type: number
+                  current:
+                    type: number
+                  voltage_max:
+                    type: number
+                  voltage_min:
+                    type: number
+
+  '/motor/stopall':
+    post:
+      description: 'Stops all connected motors'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
+
+  '/sound/tone':
+    post:
+      requestBody:
+        description: 'Tone to be played'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tone'
+      responses:
+        '200':
+          description: 'Tone successfully played'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
+
+  '/sound/tones':
+    post:
+      requestBody:
+        description: 'Array of tones to be played'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tone'
+      responses:
+        '200':
+          description: 'Tone successfully played'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
+
+components:
+  schemas:
+    Tone:
+      type: object
+      properties:
+        frequency:
+          type: integer
+        length_ms:
+          type: integer

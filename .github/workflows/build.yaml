@@ -1,0 +1,54 @@
+name: Go binary
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Gerate go server
+        uses: docker://openapitools/openapi-generator-cli
+        with:
+          args: generate -i /local/spec.yaml -g go-server -o internal -c server-config.yml
+
+      - name: Install dependencies
+        run: |
+          go get .
+          go install golang.org/x/tools/cmd/goimports@latest
+
+      - name: Lint with goimports
+        run: |
+          goimports -l -w internal/openapi
+          gofmt -l -w internal/openapi
+
+      - name: Build package
+        run: |
+          go build -v -o server EV3-API/cmd
+        env:
+          GOOS: linux
+          GOARCH: arm
+          GOARM: 5
+
+      - name: Test
+        run: |
+          go test -json > TestResults.json
+
+      - name: Upload Go test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Go-results
+          path: TestResults.json
+
+      - name: Upload Go binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: Go-binary
+          path: server
+          retention-days: 7

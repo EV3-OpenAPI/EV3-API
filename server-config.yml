@@ -1,0 +1,3 @@
+outputAsLibrary: true
+onlyInterfaces: true
+sourceFolder: openapi
