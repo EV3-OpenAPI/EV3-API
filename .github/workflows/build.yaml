@@ -16,7 +16,7 @@ jobs:
       - name: Gerate go server
         uses: docker://openapitools/openapi-generator-cli
         with:
-          args: generate -i /local/spec.yaml -g go-server -o internal -c server-config.yml
+          args: generate -i spec.yaml -g go-server -o internal -c server-config.yml
 
       - name: Install dependencies
         run: |
