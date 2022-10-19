@@ -43,7 +43,7 @@ jobs:
 
       - name: Test
         run: |
-          go test -json > TestResults.json
+          go test EV3-API/cmd -json > TestResults.json
 
       - name: Upload Go test results
         uses: actions/upload-artifact@v3
