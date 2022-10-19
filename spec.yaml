@@ -5,9 +5,17 @@ info:
   version: 0.1.0
 servers:
   - url: 'http://127.0.0.1:8080/api/v1'
+
+tags:
+  - name: power
+  - name: motor
+  - name: sensor
+  - name: sound
 paths:
   '/power':
     get:
+      tags:
+        - power
       responses:
         '200':
           description: 'Get general system info'
@@ -18,6 +26,8 @@ paths:
 
   '/motor/stopall':
     post:
+      tags:
+        - motor
       description: 'Stops all connected motors'
       responses:
         '200':
@@ -29,6 +39,8 @@ paths:
 
   '/sound/tone':
     post:
+      tags:
+        - sound
       requestBody:
         description: 'Tone to be played'
         required: true
@@ -46,6 +58,8 @@ paths:
 
   '/sound/tones':
     post:
+      tags:
+        - sound
       requestBody:
         description: 'Array of tones to be played'
         required: true
