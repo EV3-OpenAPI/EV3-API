@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          go get .
+          go get EV3-API
           go install golang.org/x/tools/cmd/goimports@latest
 
       - name: Lint with goimports
