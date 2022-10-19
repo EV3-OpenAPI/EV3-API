@@ -25,8 +25,8 @@ The ZHAW holds every 2 weeks web conferences to review to code and open pull req
 The lego robot EV3 encourages participation from individuals and companies alike. If you want to participate in the evolution of the lego robot, consider taking the following actions:
 
 * Review the current specification. The human-readable markdown file is the source of truth for the specification.
-* Review the [development](https://github.com/PA-arslasel-machitic/EV3-REST/blob/main/DEVELOPMENT.md) process so you understand how the spec is evolving.
-* Check the [issues](https://github.com/PA-arslasel-machitic/EV3-REST/issues) and [pull requests](https://github.com/PA-arslasel-machitic/EV3-REST/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
+* Review the [development](https://github.com/PA-arslasel-machitic/EV3-API/blob/main/DEVELOPMENT.md) process so you understand how the spec is evolving.
+* Check the [issues](https://github.com/PA-arslasel-machitic/EV3-API/issues) and [pull requests](https://github.com/PA-arslasel-machitic/EV3-API/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
 * Create an issue to describe a new concern. If possible, propose a solution.
 
 Not all feedback can be accommodated and there may be solid arguments for or against a change being appropriate for the specification.
