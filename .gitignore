@@ -1,5 +1,5 @@
 internal
 
-!internal/server_impl
+!internal/server_impl/**
 .idea
 *.iml
