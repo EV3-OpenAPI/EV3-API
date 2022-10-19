@@ -14,16 +14,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  voltage:
-                    type: number
-                  current:
-                    type: number
-                  voltage_max:
-                    type: number
-                  voltage_min:
-                    type: number
+                $ref: '#/components/schemas/PowerInfo'
 
   '/motor/stopall':
     post:
@@ -81,3 +72,31 @@ components:
           type: integer
         length_ms:
           type: integer
+
+    PowerInfo:
+      type: object
+      properties:
+        voltage:
+          type: number
+          description: Voltage returns voltage measured from the power supply in volts.
+        current:
+          type: number
+          description: Current returns the current drawn from the power supply in milliamps.
+        voltage_max:
+          type: number
+          description: VoltageMax returns the maximum design voltage for the power supply in volts.
+        voltage_min:
+          type: number
+          description: VoltageMin returns the minimum design voltage for the power supply in volts.
+        technology:
+          type: string
+          description: Technology returns the battery technology of the power supply.
+        type:
+          type: string
+          description: Type returns the battery type of the power supply.
+        u_event:
+          type: object
+          description: Uevent returns the current uevent state for the power supply.
+          additionalProperties:
+            type: string
+

@@ -12,7 +12,6 @@ import (
 )
 
 func (s *ApiService) PowerGet(ctx context.Context) (openapi.ImplResponse, error) {
-	// /sys/class/power_supply/lego-ev3-battery
 	p := ev3dev.PowerSupply("lego-ev3-battery")
 	var internal_errors []string
 
@@ -36,16 +35,34 @@ func (s *ApiService) PowerGet(ctx context.Context) (openapi.ImplResponse, error)
 		internal_errors = append(internal_errors, fmt.Sprintf("could not read min design voltage: %v", err))
 	}
 
+	tech, err := p.Technology()
+	if err != nil {
+		internal_errors = append(internal_errors, fmt.Sprintf("could not read technology: %v", err))
+	}
+
+	t, err := p.Type()
+	if err != nil {
+		internal_errors = append(internal_errors, fmt.Sprintf("could not read type: %v", err))
+	}
+
+	uevt, err := p.Uevent()
+	if err != nil {
+		internal_errors = append(internal_errors, fmt.Sprintf("could not read min design voltage: %v", err))
+	}
+
 	if len(internal_errors) > 0 {
 		log.Printf("ERROR - %v", internal_errors)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internal_errors, ", "))
 	}
 
-	resp := openapi.PowerGet200Response{
+	resp := openapi.PowerInfo{
 		Voltage:    float32(v),
 		Current:    float32(i),
 		VoltageMax: float32(vMax),
 		VoltageMin: float32(vMin),
+		Technology: tech,
+		Type:       t,
+		UEvent:     uevt,
 	}
 
 	return openapi.Response(http.StatusOK, resp), nil
