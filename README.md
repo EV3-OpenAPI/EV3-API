@@ -18,7 +18,7 @@ TODO
 
 # Participation
 
-The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/main/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
+The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
 
 The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving lego robot. 
 
