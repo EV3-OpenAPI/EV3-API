@@ -10,9 +10,20 @@ import (
 	"time"
 )
 
+// SoundApiService is a service that implements the logic for the DefaultApiServicer
+// This service should implement the business logic for every endpoint for the DefaultApi API.
+// Include any external packages or services that will be required by this service.
+type SoundApiService struct {
+}
+
+// NewPowerApiService creates a default api service
+func NewSoundApiService() openapi.SoundApiServicer {
+	return &SoundApiService{}
+}
+
 const SoundPath = "/dev/input/by-path/platform-sound-event"
 
-func (s *ApiService) SoundTonePost(ctx context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
+func (s *SoundApiService) SoundTonePost(ctx context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
 
 	var speaker = ev3dev.NewSpeaker(SoundPath)
 
@@ -28,7 +39,7 @@ func (s *ApiService) SoundTonePost(ctx context.Context, tone openapi.Tone) (open
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
-func (s *ApiService) SoundTonesPost(ctx context.Context, tones []openapi.Tone) (openapi.ImplResponse, error) {
+func (s *SoundApiService) SoundTonesPost(ctx context.Context, tones []openapi.Tone) (openapi.ImplResponse, error) {
 
 	var speaker = ev3dev.NewSpeaker(SoundPath)
 

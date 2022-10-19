@@ -11,10 +11,16 @@ import (
 func main() {
 	log.Println("Started")
 
-	DefaultApiService := server_impl.NewApiService()
-	DefaultApiController := openapi.NewDefaultApiController(DefaultApiService)
+	MotorApiService := server_impl.NewMotorApiService()
+	MotorApiController := openapi.NewMotorApiController(MotorApiService)
 
-	router := openapi.NewRouter(DefaultApiController)
+	PowerApiService := server_impl.NewPowerApiService()
+	PowerApiController := openapi.NewPowerApiController(PowerApiService)
+
+	SoundApiService := server_impl.NewSoundApiService()
+	SoundApiController := openapi.NewSoundApiController(SoundApiService)
+
+	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController)
 
 	port := 8080
 

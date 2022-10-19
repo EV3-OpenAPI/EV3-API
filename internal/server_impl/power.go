@@ -4,65 +4,40 @@ import (
 	"EV3-API/internal/openapi"
 	"context"
 	"errors"
-	"fmt"
 	"github.com/ev3go/ev3dev"
 	"log"
 	"net/http"
 	"strings"
 )
 
-func (s *ApiService) PowerGet(ctx context.Context) (openapi.ImplResponse, error) {
+// PowerApiService is a service that implements the logic for the DefaultApiServicer
+// This service should implement the business logic for every endpoint for the DefaultApi API.
+// Include any external packages or services that will be required by this service.
+type PowerApiService struct {
+}
+
+// NewPowerApiService creates a default api service
+func NewPowerApiService() openapi.PowerApiServicer {
+	return &PowerApiService{}
+}
+
+func (s *PowerApiService) PowerGet(ctx context.Context) (openapi.ImplResponse, error) {
 	p := ev3dev.PowerSupply("lego-ev3-battery")
 	var internal_errors []string
 
-	v, err := p.Voltage()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read voltage: %v", err))
-	}
-
-	i, err := p.Current()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read current: %v", err))
-	}
-
-	vMax, err := p.VoltageMax()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read max design voltage: %v", err))
-	}
-
-	vMin, err := p.VoltageMin()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read min design voltage: %v", err))
-	}
-
-	tech, err := p.Technology()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read technology: %v", err))
-	}
-
-	t, err := p.Type()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read type: %v", err))
-	}
-
-	uevt, err := p.Uevent()
-	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("could not read min design voltage: %v", err))
+	resp := openapi.PowerInfo{
+		Voltage:    GetFloat32(p.Voltage, &internal_errors),
+		Current:    GetFloat32(p.Current, &internal_errors),
+		VoltageMax: GetFloat32(p.VoltageMax, &internal_errors),
+		VoltageMin: GetFloat32(p.VoltageMax, &internal_errors),
+		Technology: GetString(p.Technology, &internal_errors),
+		Type:       GetString(p.Type, &internal_errors),
+		UEvent:     GetStringMap(p.Uevent, &internal_errors),
 	}
 
 	if len(internal_errors) > 0 {
 		log.Printf("ERROR - %v", internal_errors)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internal_errors, ", "))
-	}
-
-	resp := openapi.PowerInfo{
-		Voltage:    float32(v),
-		Current:    float32(i),
-		VoltageMax: float32(vMax),
-		VoltageMin: float32(vMin),
-		Technology: tech,
-		Type:       t,
-		UEvent:     uevt,
 	}
 
 	return openapi.Response(http.StatusOK, resp), nil

@@ -16,13 +16,128 @@ paths:
     get:
       tags:
         - power
+      description: 'Get power info'
       responses:
         '200':
-          description: 'Get general system info'
+          description: 'Success'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PowerInfo'
+
+  '/motor/tacho/{type}/{port}':
+    get:
+      tags:
+        - motor
+      description: 'Get information about this motor'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: port
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TachoMotorInfo'
+        '404':
+           description: 'Motor not found'
+  '/motor/tacho/{type}/command':
+    post:
+      tags:
+        - motor
+      description: 'Set the desired state for the motor'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'Command to be executed'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ports:
+                  type: array
+                  items:
+                    type: string
+                command:
+                  type: string
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Motor not found'
+  '/motor/tacho/{type}/max_speed':
+    post:
+      tags:
+        - motor
+      description: 'Set the desired state for the motor'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'Command to be executed'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ports:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Motor not found'
+  '/motor/tacho/{type}/speed_setpoint':
+    post:
+      tags:
+        - motor
+      description: 'Set the desired state for the motor'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 'Command to be executed'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ports:
+                  type: array
+                  items:
+                    type: string
+                setpoint:
+                  type: integer
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Motor not found'
 
   '/motor/stopall':
     post:
@@ -87,6 +202,56 @@ components:
         length_ms:
           type: integer
 
+    TachoMotorInfo:
+      type: object
+      properties:
+        commnds:
+          type: array
+          items:
+            type: string
+        stop_actions:
+          type: array
+          items:
+            type: string
+        count_per_rot:
+          type: integer
+        duty_cycle:
+          type: integer
+        duty_cycle_setpoint:
+          type: integer
+        polarity:
+          type: string
+        position:
+          type: integer
+        hold_PID_kd:
+          type: integer
+        hold_PID_ki:
+          type: integer
+        hold_PID_kp:
+          type: integer
+        max_speed:
+          type: integer
+        position_setpoint:
+          type: integer
+        current_speed:
+          type: integer
+        current_speed_setpoint:
+          type: integer
+        current_ramp_up_setpoint:
+          type: integer
+        current_ramp_down_setpoint:
+          type: integer
+        speed_PID_kd:
+          type: integer
+        speedPID_ki:
+          type: integer
+        speed_PID_kp:
+          type: integer
+        state:
+          type: integer
+        time_setpoint:
+          type: integer
+
     PowerInfo:
       type: object
       properties:
@@ -113,4 +278,3 @@ components:
           description: Uevent returns the current uevent state for the power supply.
           additionalProperties:
             type: string
-
