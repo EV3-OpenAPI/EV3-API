@@ -19,7 +19,7 @@ import (
 type MotorApiService struct {
 }
 
-// NewPowerApiService creates a default api service
+// NewMotorApiService creates a default api service
 func NewMotorApiService() openapi.MotorApiServicer {
 	return &MotorApiService{}
 }
@@ -28,87 +28,87 @@ func GetTachoMotor(mType string, port string) (*ev3dev.TachoMotor, error) {
 	return ev3dev.TachoMotorFor(fmt.Sprintf("ev3-ports:out%s", port), fmt.Sprintf("lego-ev3-%s-motor", mType))
 }
 
-func (s *MotorApiService) MotorTachoTypeCommandPost(ctx context.Context, mType string, request openapi.MotorTachoTypeCommandPostRequest) (openapi.ImplResponse, error) {
+func (s *MotorApiService) MotorTachoTypeCommandPost(_ context.Context, _ string, _ openapi.MotorTachoTypeCommandPostRequest) (openapi.ImplResponse, error) {
 	//TODO implement me
 	return openapi.Response(http.StatusNotImplemented, nil), nil
 }
 
-func (s *MotorApiService) MotorTachoTypePortGet(ctx context.Context, mType string, port string) (openapi.ImplResponse, error) {
-	var internal_errors []string
+func (s *MotorApiService) MotorTachoTypePortGet(_ context.Context, mType string, port string) (openapi.ImplResponse, error) {
+	var internalErrors []string
 
 	m, err := GetTachoMotor(mType, port)
 	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("Could not get specified motor: %v", err))
+		internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified motor: %v", err))
 	}
 
 	pol, err := m.Polarity()
 	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("Could not get polarity: %v", err))
+		internalErrors = append(internalErrors, fmt.Sprintf("Could not get polarity: %v", err))
 	}
 
 	state, err := m.State()
 	if err != nil {
-		internal_errors = append(internal_errors, fmt.Sprintf("Could not get state: %v", err))
+		internalErrors = append(internalErrors, fmt.Sprintf("Could not get state: %v", err))
 	}
 
 	resp := openapi.TachoMotorInfo{
 		Commnds:                 m.Commands(),
 		StopActions:             m.StopActions(),
 		CountPerRot:             int32(m.CountPerRot()),
-		DutyCycle:               GetInt32(m.DutyCycle, &internal_errors),
-		DutyCycleSetpoint:       GetInt32(m.DutyCycleSetpoint, &internal_errors),
+		DutyCycle:               GetInt32(m.DutyCycle, &internalErrors),
+		DutyCycleSetpoint:       GetInt32(m.DutyCycleSetpoint, &internalErrors),
 		Polarity:                string(pol),
-		Position:                GetInt32(m.Position, &internal_errors),
-		HoldPIDKd:               GetInt32(m.HoldPIDKd, &internal_errors),
-		HoldPIDKi:               GetInt32(m.HoldPIDKi, &internal_errors),
-		HoldPIDKp:               GetInt32(m.HoldPIDKp, &internal_errors),
+		Position:                GetInt32(m.Position, &internalErrors),
+		HoldPIDKd:               GetInt32(m.HoldPIDKd, &internalErrors),
+		HoldPIDKi:               GetInt32(m.HoldPIDKi, &internalErrors),
+		HoldPIDKp:               GetInt32(m.HoldPIDKp, &internalErrors),
 		MaxSpeed:                int32(m.MaxSpeed()),
-		PositionSetpoint:        GetInt32(m.PositionSetpoint, &internal_errors),
-		CurrentSpeed:            GetInt32(m.Speed, &internal_errors),
-		CurrentSpeedSetpoint:    GetInt32(m.SpeedSetpoint, &internal_errors),
-		CurrentRampUpSetpoint:   GetDurationAsInt32(m.RampUpSetpoint, &internal_errors),
-		CurrentRampDownSetpoint: GetDurationAsInt32(m.RampDownSetpoint, &internal_errors),
-		SpeedPIDKd:              GetInt32(m.SpeedPIDKd, &internal_errors),
-		SpeedPIDKi:              GetInt32(m.SpeedPIDKi, &internal_errors),
-		SpeedPIDKp:              GetInt32(m.SpeedPIDKp, &internal_errors),
+		PositionSetpoint:        GetInt32(m.PositionSetpoint, &internalErrors),
+		CurrentSpeed:            GetInt32(m.Speed, &internalErrors),
+		CurrentSpeedSetpoint:    GetInt32(m.SpeedSetpoint, &internalErrors),
+		CurrentRampUpSetpoint:   GetDurationAsInt32(m.RampUpSetpoint, &internalErrors),
+		CurrentRampDownSetpoint: GetDurationAsInt32(m.RampDownSetpoint, &internalErrors),
+		SpeedPIDKd:              GetInt32(m.SpeedPIDKd, &internalErrors),
+		SpeedPIDKi:              GetInt32(m.SpeedPIDKi, &internalErrors),
+		SpeedPIDKp:              GetInt32(m.SpeedPIDKp, &internalErrors),
 		State:                   int32(state),
-		TimeSetpoint:            GetDurationAsInt32(m.TimeSetpoint, &internal_errors),
+		TimeSetpoint:            GetDurationAsInt32(m.TimeSetpoint, &internalErrors),
 	}
 
-	if len(internal_errors) > 0 {
-		log.Printf("ERROR - %v", internal_errors)
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internal_errors, ", "))
+	if len(internalErrors) > 0 {
+		log.Printf("ERROR - %v", internalErrors)
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internalErrors, ", "))
 	}
 
 	return openapi.Response(http.StatusOK, resp), nil
 }
 
-func (s *MotorApiService) MotorTachoTypeMaxSpeedPost(ctx context.Context, mType string, request openapi.MotorTachoTypeMaxSpeedPostRequest) (openapi.ImplResponse, error) {
-	var internal_errors []string
+func (s *MotorApiService) MotorTachoTypeMaxSpeedPost(_ context.Context, mType string, request openapi.MotorTachoTypeMaxSpeedPostRequest) (openapi.ImplResponse, error) {
+	var internalErrors []string
 
 	for _, port := range request.Ports {
 		m, err := GetTachoMotor(mType, port)
 		if err != nil {
-			internal_errors = append(internal_errors, fmt.Sprintf("Could not get specified motor: %v", err))
+			internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified motor: %v", err))
 		}
 
 		m.SetSpeedSetpoint(m.MaxSpeed()).Command("run-forever")
 	}
 
-	if len(internal_errors) > 0 {
-		log.Printf("ERROR - %v", internal_errors)
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internal_errors, ", "))
+	if len(internalErrors) > 0 {
+		log.Printf("ERROR - %v", internalErrors)
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internalErrors, ", "))
 	}
 
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
-func (s *MotorApiService) MotorTachoTypeSpeedSetpointPost(ctx context.Context, mType string, request openapi.MotorTachoTypeSpeedSetpointPostRequest) (openapi.ImplResponse, error) {
+func (s *MotorApiService) MotorTachoTypeSpeedSetpointPost(_ context.Context, _ string, _ openapi.MotorTachoTypeSpeedSetpointPostRequest) (openapi.ImplResponse, error) {
 	//TODO implement me
 	return openapi.Response(http.StatusNotImplemented, nil), nil
 }
 
-func (s *MotorApiService) MotorStopallPost(ctx context.Context) (openapi.ImplResponse, error) {
+func (s *MotorApiService) MotorStopallPost(_ context.Context) (openapi.ImplResponse, error) {
 	start := time.Now()
 	err := motorutil.ResetAll()
 	if err != nil {

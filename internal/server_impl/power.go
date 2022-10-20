@@ -21,23 +21,23 @@ func NewPowerApiService() openapi.PowerApiServicer {
 	return &PowerApiService{}
 }
 
-func (s *PowerApiService) PowerGet(ctx context.Context) (openapi.ImplResponse, error) {
+func (s *PowerApiService) PowerGet(_ context.Context) (openapi.ImplResponse, error) {
 	p := ev3dev.PowerSupply("lego-ev3-battery")
-	var internal_errors []string
+	var internalErrors []string
 
 	resp := openapi.PowerInfo{
-		Voltage:    GetFloat32(p.Voltage, &internal_errors),
-		Current:    GetFloat32(p.Current, &internal_errors),
-		VoltageMax: GetFloat32(p.VoltageMax, &internal_errors),
-		VoltageMin: GetFloat32(p.VoltageMax, &internal_errors),
-		Technology: GetString(p.Technology, &internal_errors),
-		Type:       GetString(p.Type, &internal_errors),
-		UEvent:     GetStringMap(p.Uevent, &internal_errors),
+		Voltage:    GetFloat32(p.Voltage, &internalErrors),
+		Current:    GetFloat32(p.Current, &internalErrors),
+		VoltageMax: GetFloat32(p.VoltageMax, &internalErrors),
+		VoltageMin: GetFloat32(p.VoltageMax, &internalErrors),
+		Technology: GetString(p.Technology, &internalErrors),
+		Type:       GetString(p.Type, &internalErrors),
+		UEvent:     GetStringMap(p.Uevent, &internalErrors),
 	}
 
-	if len(internal_errors) > 0 {
-		log.Printf("ERROR - %v", internal_errors)
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internal_errors, ", "))
+	if len(internalErrors) > 0 {
+		log.Printf("ERROR - %v", internalErrors)
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New(strings.Join(internalErrors, ", "))
 	}
 
 	return openapi.Response(http.StatusOK, resp), nil
