@@ -6,7 +6,7 @@
 This project deals with the goal to design the Lego Robot of the type mindstorm EV3 for the promotion of programming knowledge for non-informaticians, in such a way that the implemented methods in the server are callable over several programming technologies. The implemented methods should be callable via an application programming interface.
 The server which is the Lego robot is implemented with [OpenAPI Specification](https://www.openapis.org/), which allows to automatically generate libraries for the client in several programming languages.
 
-This Github project is the starting point for the Lego Robot Mindstorm EV3-RESt. Here you will find the information you need about the lego robot, simple examples of what it looks like, and some general information regarding the project.
+This Github project is the starting point for the Lego Robot Mindstorm EV3-RESt. Here you will find the information you need about the Lego Robot, simple examples of what it looks like, and some general information regarding the project.
 
 # Current Version 1.0
 
@@ -20,9 +20,9 @@ TODO
 
 The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
 
-The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving lego robot. 
+The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving Lego Robot. 
 
-The lego robot EV3 encourages participation from individuals and companies alike. If you want to participate in the evolution of the lego robot, consider taking the following actions:
+The Lego Robot EV3 encourages participation from individuals and companies alike. If you want to participate in the evolution of the Lego Robot, consider taking the following actions:
 
 * Review the current specification. The human-readable markdown file is the source of truth for the specification.
 * Review the [development](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md) process so you understand how the spec is evolving.
