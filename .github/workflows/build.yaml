@@ -35,7 +35,7 @@ jobs:
 
       - name: Build package
         run: |
-          go build -v -o server EV3-API/cmd
+          go build -v -o server -ldflags="-s -w" EV3-API/cmd
         env:
           GOOS: linux
           GOARCH: arm
