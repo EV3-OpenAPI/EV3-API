@@ -32,9 +32,26 @@ The Lego Robot EV3 encourages participation from individuals and companies alike
 Not all feedback can be accommodated and there may be solid arguments for or against a change being appropriate for the specification.
 
 
-### Setup
+### Setup delevopment
 
-Install ev3dev: `pip install git+https://github.com/ev3dev/ev3dev-lang-python`
+#### Prequisites
+
+Install GO: [Offical website](https://go.dev/dl/), version >= 1.18  
+Install either [Docker](https://docs.docker.com/engine/install/) or [Openapi-Generator](https://openapi-generator.tech/docs/installation) for genrating the server code.  
+Install goimports tool: `go install golang.org/x/tools/cmd/goimports@latest` for fixing unused imports ing enerated code.
+
+#### Generate server code
+
+Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i spec.yaml -o internal -g go-server -c server-config.yml`  
+Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o internal -g go-server -c server-config.yml`
+
+Clean up unsued imports (go refuses to compile if you don't): `goimports -l -w internal/openapi`  
+Clean up genrated code (because why not?): `gofmt -l -w internal/openapi`
+
+#### Compile server binary
+
+The ldflags option will remove debug code and result in a smaller binary.  
+`go build -o server -ldflags="-s -w" EV3-API/cmd`
 
 
 ### To-Test
