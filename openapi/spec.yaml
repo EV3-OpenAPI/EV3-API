@@ -25,6 +25,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/PowerInfo'
 
+  '/motor/tacho':
+    post:
+      tags:
+        - motor
+      description: 'Set motor parameters'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MotorRequest'
+      responses:
+        '200':
+          description: 'Success'
+        '404':
+          description: 'Motor not found'
   '/motor/tacho/{type}/{port}':
     get:
       tags:
@@ -139,7 +155,7 @@ paths:
         '404':
           description: 'Motor not found'
 
-  '/motor/stopall':
+  '/motor/stopAll':
     post:
       tags:
         - motor
@@ -202,6 +218,44 @@ components:
         length_ms:
           type: integer
 
+    Motor:
+      type: object
+      properties:
+        size:
+          type: string
+          #anyOf:
+          #  - s
+          #  - m
+          #  - l
+        port:
+          type: string
+
+    MotorRequest:
+      type: object
+      properties:
+        motors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Motor'
+        speed:
+          type: integer
+        command:
+          type: string
+#          anyOf:
+#            - run-forever
+#            - run-to-abs-pos
+#            - run-to-rel-pos
+#            - run-timed
+#            - run-direct
+#            - stop
+#            - reset
+        stop-action:
+          type: string
+#          oneOf:
+#            - coast
+#            - brake
+#            - hold
+
     TachoMotorInfo:
       type: object
       properties:
@@ -243,7 +297,7 @@ components:
           type: integer
         speed_PID_kd:
           type: integer
-        speedPID_ki:
+        speed_PID_ki:
           type: integer
         speed_PID_kp:
           type: integer

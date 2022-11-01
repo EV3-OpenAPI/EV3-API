@@ -1,7 +1,7 @@
 package main
 
 import (
-	"EV3-API/internal/openapi"
+	"EV3-API/internal/gen/openapi"
 	"EV3-API/internal/server_impl"
 	"fmt"
 	"log"

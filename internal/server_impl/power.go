@@ -1,7 +1,7 @@
 package server_impl
 
 import (
-	"EV3-API/internal/openapi"
+	"EV3-API/internal/gen/openapi"
 	"context"
 	"errors"
 	"github.com/ev3go/ev3dev"
