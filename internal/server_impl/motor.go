@@ -108,18 +108,18 @@ func (s *MotorApiService) MotorTachoTypeSpeedSetpointPost(_ context.Context, _ s
 	return openapi.Response(http.StatusNotImplemented, nil), nil
 }
 
-func (s *MotorApiService) MotorTachoPost(ctx context.Context, request openapi.MotorRequest) (openapi.ImplResponse, error) {
+func (s *MotorApiService) MotorTachoPost(_ context.Context, request openapi.MotorRequest) (openapi.ImplResponse, error) {
 	var motors []*ev3dev.TachoMotor
 
 	// Load motors
 	start := time.Now()
-	for i, m := range request.Motors {
+	for _, m := range request.Motors {
 		motor, err := GetTachoMotor(m.Size, m.Port)
 		if err != nil {
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
 
-		motors[i] = motor
+		motors = append(motors, motor)
 	}
 	log.Printf("INFO - Load motors: %s", time.Since(start))
 
@@ -130,7 +130,7 @@ func (s *MotorApiService) MotorTachoPost(ctx context.Context, request openapi.Mo
 	}
 	log.Printf("INFO - Set motors: %s", time.Since(start))
 
-	return openapi.Response(http.StatusNotImplemented, nil), nil
+	return openapi.Response(http.StatusOK, nil), nil
 }
 
 func (s *MotorApiService) MotorStopAllPost(_ context.Context) (openapi.ImplResponse, error) {

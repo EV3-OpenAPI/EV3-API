@@ -6,7 +6,6 @@ import ch.zhaw.ev3_api.client.invoker.ApiException;
 import ch.zhaw.ev3_api.client.model.Motor;
 import ch.zhaw.ev3_api.client.model.MotorRequest;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class Main {
@@ -19,11 +18,14 @@ public class Main {
         try {
             Motor a = new Motor().size("l").port("A");
             Motor d = new Motor().size("l").port("D");
+
             MotorRequest mr = new MotorRequest().motors(Arrays.asList(a, d));
+            mr.setSpeed(100);
+            mr.setCommand("run-forever");
 
             apiInstance.motorTachoPost(mr);
 
-            Thread.sleep(200);
+            Thread.sleep(5000);
 
             apiInstance.motorStopAllPost();
         } catch (InterruptedException | ApiException e) {
