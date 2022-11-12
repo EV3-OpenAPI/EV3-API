@@ -4,7 +4,9 @@ import ch.zhaw.ev3_api.client.invoker.ApiClient;
 import ch.zhaw.ev3_api.client.api.MotorApi;
 import ch.zhaw.ev3_api.client.invoker.ApiException;
 import ch.zhaw.ev3_api.client.model.Motor;
+import ch.zhaw.ev3_api.client.model.Motor.SizeEnum;
 import ch.zhaw.ev3_api.client.model.MotorRequest;
+import ch.zhaw.ev3_api.client.model.MotorRequest.CommandEnum;
 
 import java.util.Arrays;
 
@@ -16,12 +18,12 @@ public class Main {
 
         MotorApi apiInstance = new MotorApi(defaultClient);
         try {
-            Motor a = new Motor().size("l").port("A");
-            Motor d = new Motor().size("l").port("D");
+            Motor a = new Motor().size(SizeEnum.L).port("A");
+            Motor d = new Motor().size(SizeEnum.L).port("D");
 
             MotorRequest mr = new MotorRequest().motors(Arrays.asList(a, d));
             mr.setSpeed(100);
-            mr.setCommand("run-forever");
+            mr.setCommand(CommandEnum.RUN_FOREVER);
 
             apiInstance.motorTachoPost(mr);
 

@@ -223,10 +223,10 @@ components:
       properties:
         size:
           type: string
-          #anyOf:
-          #  - s
-          #  - m
-          #  - l
+          enum:
+            - s
+            - m
+            - l
         port:
           type: string
 
@@ -241,20 +241,20 @@ components:
           type: integer
         command:
           type: string
-#          anyOf:
-#            - run-forever
-#            - run-to-abs-pos
-#            - run-to-rel-pos
-#            - run-timed
-#            - run-direct
-#            - stop
-#            - reset
+          enum:
+            - run-forever
+            - run-to-abs-pos
+            - run-to-rel-pos
+            - run-timed
+            - run-direct
+            - stop
+            - reset
         stop-action:
           type: string
-#          oneOf:
-#            - coast
-#            - brake
-#            - hold
+          enum:
+            - coast
+            - brake
+            - hold
 
     TachoMotorInfo:
       type: object
