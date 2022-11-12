@@ -1,13 +1,11 @@
 package server_impl
 
 import (
+	"EV3-API/internal/ev3"
+	"EV3-API/internal/ev3/sound"
 	"EV3-API/internal/gen/openapi"
 	"context"
-	"fmt"
-	"github.com/ev3go/ev3dev"
-	"log"
 	"net/http"
-	"time"
 )
 
 // SoundApiService is a service that implements the logic for the DefaultApiServicer
@@ -16,55 +14,46 @@ import (
 type SoundApiService struct {
 }
 
-// NewSoundApiService creates a default api service
-func NewSoundApiService() openapi.SoundApiServicer {
-	return &SoundApiService{}
-}
-
-const SoundPath = "/dev/input/by-path/platform-sound-event"
-
-func (s *SoundApiService) SoundTonePost(_ context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
-
-	var speaker = ev3dev.NewSpeaker(SoundPath)
-
-	if err := speaker.Init(); err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-	defer speaker.Close()
-
-	d, _ := time.ParseDuration(fmt.Sprintf("%vms", tone.LengthMs)) // FIXME replace by 1000*1000*tone.LengthMs or so
-	if err := speaker.Tone(uint32(tone.Frequency)); err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-	time.Sleep(d)
-
-	if err := speaker.Tone(0); err != nil {
+func (s *SoundApiService) SoundSpeakPost(_ context.Context, text openapi.Text) (openapi.ImplResponse, error) {
+	if err := sound.Speak(text.Text); err != nil {
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
-func (s *SoundApiService) SoundTonesPost(_ context.Context, tones []openapi.Tone) (openapi.ImplResponse, error) {
+// NewSoundApiService creates a default api service
+func NewSoundApiService() openapi.SoundApiServicer {
+	return &SoundApiService{}
+}
 
-	var speaker = ev3dev.NewSpeaker(SoundPath)
-
-	if err := speaker.Init(); err != nil {
+func (s *SoundApiService) SoundBeepPost(_ context.Context) (openapi.ImplResponse, error) {
+	if err := sound.Beep(); err != nil {
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
-	defer speaker.Close()
 
-	for i, tone := range tones {
-		log.Printf("INFO - Playing tone %d/%d", i+1, len(tones))
+	return openapi.Response(http.StatusOK, nil), nil
+}
 
-		d, _ := time.ParseDuration(fmt.Sprintf("%vms", tone.LengthMs))
-		if err := speaker.Tone(uint32(tone.Frequency)); err != nil {
-			return openapi.Response(http.StatusInternalServerError, nil), err
-		}
-		time.Sleep(d)
+func (s *SoundApiService) SoundTonePost(_ context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
+	tones := []sound.Tone{{uint32(tone.Frequency), ev3.DurationMs(tone.LengthMs)}}
+
+	if err := sound.Tones(tones); err != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	if err := speaker.Tone(0); err != nil {
+	return openapi.Response(http.StatusOK, nil), nil
+}
+
+func (s *SoundApiService) SoundTonesPost(_ context.Context, tonesReq []openapi.Tone) (openapi.ImplResponse, error) {
+	tones := make([]sound.Tone, len(tonesReq))
+
+	// Parse requested tones
+	for i, tone := range tonesReq {
+		tones[i] = sound.Tone{Freq: uint32(tone.Frequency), Duration: ev3.DurationMs(tone.LengthMs)}
+	}
+
+	if err := sound.Tones(tones); err != nil {
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 

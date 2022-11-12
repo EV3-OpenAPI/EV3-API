@@ -1,6 +1,7 @@
 package main
 
 import (
+	"EV3-API/internal/ev3/sound"
 	"EV3-API/internal/gen/openapi"
 	"EV3-API/internal/server_impl"
 	"fmt"
@@ -10,6 +11,9 @@ import (
 
 func main() {
 	log.Println("Started")
+
+	_ = sound.Init()
+	defer sound.Close()
 
 	MotorApiService := server_impl.NewMotorApiService()
 	MotorApiController := openapi.NewMotorApiController(MotorApiService)
