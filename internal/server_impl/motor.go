@@ -1,16 +1,15 @@
 package server_impl
 
 import (
+	ev3motor "EV3-API/internal/ev3/motor"
 	"EV3-API/internal/gen/openapi"
 	"context"
 	"errors"
 	"fmt"
 	"github.com/ev3go/ev3dev"
-	"github.com/ev3go/ev3dev/motorutil"
 	"log"
 	"net/http"
 	"strings"
-	"time"
 )
 
 // MotorApiService is a service that implements the logic for the DefaultApiServicer
@@ -25,7 +24,7 @@ func NewMotorApiService() openapi.MotorApiServicer {
 }
 
 func GetTachoMotor(mType string, port string) (*ev3dev.TachoMotor, error) {
-	return ev3dev.TachoMotorFor(fmt.Sprintf("ev3-ports:out%s", port), fmt.Sprintf("lego-ev3-%s-motor", mType))
+	return ev3dev.TachoMotorFor(fmt.Sprintf("ev3-ports:out%s", port), fmt.Sprintf("lego-ev3-%s-ev3motor", mType))
 }
 
 func (s *MotorApiService) MotorTachoTypeCommandPost(_ context.Context, _ string, _ openapi.MotorTachoTypeCommandPostRequest) (openapi.ImplResponse, error) {
@@ -36,9 +35,9 @@ func (s *MotorApiService) MotorTachoTypeCommandPost(_ context.Context, _ string,
 func (s *MotorApiService) MotorTachoTypePortGet(_ context.Context, mType string, port string) (openapi.ImplResponse, error) {
 	var internalErrors []string
 
-	m, err := GetTachoMotor(mType, port)
-	if err != nil {
-		internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified motor: %v", err))
+	m, exists := ev3motor.TachoMotors[port]
+	if !exists {
+		internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified ev3motor port: %s", port))
 	}
 
 	pol, err := m.Polarity()
@@ -89,7 +88,7 @@ func (s *MotorApiService) MotorTachoTypeMaxSpeedPost(_ context.Context, mType st
 	for _, port := range request.Ports {
 		m, err := GetTachoMotor(mType, port)
 		if err != nil {
-			internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified motor: %v", err))
+			internalErrors = append(internalErrors, fmt.Sprintf("Could not get specified ev3motor: %v", err))
 		}
 
 		m.SetSpeedSetpoint(m.MaxSpeed()).Command("run-forever")
@@ -109,37 +108,16 @@ func (s *MotorApiService) MotorTachoTypeSpeedSetpointPost(_ context.Context, _ s
 }
 
 func (s *MotorApiService) MotorTachoPost(_ context.Context, request openapi.MotorRequest) (openapi.ImplResponse, error) {
-	var motors []*ev3dev.TachoMotor
-
-	// Load motors
-	start := time.Now()
 	for _, m := range request.Motors {
-		motor, err := GetTachoMotor(m.Size, m.Port)
-		if err != nil {
-			return openapi.Response(http.StatusInternalServerError, nil), err
+		if motor := ev3motor.TachoMotors[m.Port]; motor.Driver()[9] == m.Size[0] {
+			motor.SetSpeedSetpoint(int(request.Speed)).Command(request.Command)
 		}
-
-		motors = append(motors, motor)
 	}
-	log.Printf("INFO - Load motors: %s", time.Since(start))
-
-	// Set motor command
-	start = time.Now()
-	for _, m := range motors {
-		m.SetSpeedSetpoint(int(request.Speed)).Command(request.Command)
-	}
-	log.Printf("INFO - Set motors: %s", time.Since(start))
 
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
 func (s *MotorApiService) MotorStopAllPost(_ context.Context) (openapi.ImplResponse, error) {
-	start := time.Now()
-	err := motorutil.ResetAll()
-	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-
-	log.Printf("INFO - execution time: %s", time.Since(start))
+	ev3motor.StopAll()
 	return openapi.Response(http.StatusOK, nil), nil
 }

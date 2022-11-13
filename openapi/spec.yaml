@@ -42,6 +42,18 @@ paths:
           description: 'Success'
         '404':
           description: 'Motor not found'
+    get:
+      description: 'Get information about all connected motors'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TachoMotorInfo'
+
   '/motor/tacho/{type}/{port}':
     get:
       tags:
@@ -67,94 +79,6 @@ paths:
                 $ref: '#/components/schemas/TachoMotorInfo'
         '404':
            description: 'Motor not found'
-  '/motor/tacho/{type}/command':
-    post:
-      tags:
-        - motor
-      description: 'Set the desired state for the motor'
-      parameters:
-        - name: type
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: 'Command to be executed'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ports:
-                  type: array
-                  items:
-                    type: string
-                command:
-                  type: string
-      responses:
-        '200':
-          description: 'Success'
-        '404':
-          description: 'Motor not found'
-  '/motor/tacho/{type}/max_speed':
-    post:
-      tags:
-        - motor
-      description: 'Set the desired state for the motor'
-      parameters:
-        - name: type
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: 'Command to be executed'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ports:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        '200':
-          description: 'Success'
-        '404':
-          description: 'Motor not found'
-  '/motor/tacho/{type}/speed_setpoint':
-    post:
-      tags:
-        - motor
-      description: 'Set the desired state for the motor'
-      parameters:
-        - name: type
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: 'Command to be executed'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ports:
-                  type: array
-                  items:
-                    type: string
-                setpoint:
-                  type: integer
-      responses:
-        '200':
-          description: 'Success'
-        '404':
-          description: 'Motor not found'
 
   '/motor/stopAll':
     post:
@@ -168,6 +92,8 @@ paths:
           description: 'Client error'
         '500':
           description: 'Server error'
+
+  /motor/steer
 
 ### Sounds
   '/sound/beep':
