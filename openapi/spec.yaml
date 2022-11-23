@@ -27,6 +27,19 @@ paths:
 
 ### Motor
   '/motor/tacho':
+    get:
+      tags:
+        - motor
+      description: 'Get information about all connected motors'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TachoMotor'
     post:
       tags:
         - motor
@@ -42,17 +55,6 @@ paths:
           description: 'Success'
         '404':
           description: 'Motor not found'
-    get:
-      description: 'Get information about all connected motors'
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TachoMotorInfo'
 
   '/motor/tacho/{type}/{port}':
     get:
@@ -76,7 +78,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TachoMotorInfo'
+                $ref: '#/components/schemas/TachoMotor'
         '404':
            description: 'Motor not found'
 
@@ -93,13 +95,183 @@ paths:
         '500':
           description: 'Server error'
 
-  /motor/steer
+  /motor/steer/reset:
+    post:
+      tags:
+        - motor
+      description: 'Reset steering unit'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
 
-### Sounds
+  /motor/steer/counts:
+    post:
+      tags:
+        - motor
+      description: 'Steers in the given turn for the given tacho counts and at the specified speed.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                steering_unit:
+                  $ref: '#/components/schemas/SteeringUnit'
+                speed:
+                  type: integer
+                turn:
+                  type: integer
+                  description: 'The valid range of turn is -100 (hard left) to +100 (hard right)'
+                counts:
+                  type: integer
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
+
+  /motor/steer/duration:
+    post:
+      tags:
+        - motor
+      description: 'Steers in the given turn for the given duration and at the specified speed'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                steering_unit:
+                  $ref: '#/components/schemas/SteeringUnit'
+                speed:
+                  type: integer
+                turn:
+                  type: integer
+                  description: 'The valid range of turn is -100 (hard left) to +100 (hard right)'
+                duration_ms:
+                  type: integer
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Client error'
+        '500':
+          description: 'Server error'
+
+
+### Sensors
+  /sensor:
+    get:
+      tags:
+        - sensor
+      description: '' # TODO
+      responses:
+        200:
+          description: 'List of all connected sensors'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sensor'
+
+  /sensor/{type}:
+    get:
+      tags:
+        - sensor
+      description: '' # TODO
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Details of sensors'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sensor'
+    put:
+      tags:
+        - sensor
+      description: '' # TODO
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sensor'
+      responses:
+        200:
+          description: 'Sensor successfully updated'
+
+  /sensor/{type}/num_value:
+    get:
+      tags:
+        - sensor
+      description: '' # TODO
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: '' # TODO
+          content:
+            application/json:
+              schema:
+                type: number
+        404:
+          description: 'Sensor of that type not found'
+
+  /sensor/{type}/text_values:
+    get:
+      tags:
+        - sensor
+      description: '' # TODO
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: '' # TODO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        404:
+          description: 'Sensor of that type not found'
+
+
+  ### Sounds
   '/sound/beep':
     post:
       tags:
         - sound
+      description: '' # TODO
       responses:
         '200':
           description: 'Beep successfully played'
@@ -112,8 +284,9 @@ paths:
     post:
       tags:
         - sound
+      description: '' # TODO
       requestBody:
-        description: 'Text to be spoken'
+        description: 'Text to be spoken' # TODO
         required: true
         content:
           application/json:
@@ -132,7 +305,7 @@ paths:
       tags:
         - sound
       requestBody:
-        description: 'Tone to be played'
+        description: 'Tone to be played' # TODO
         required: true
         content:
           application/json:
@@ -150,6 +323,7 @@ paths:
     post:
       tags:
         - sound
+      description: '' # TODO
       requestBody:
         description: 'Array of tones to be played'
         required: true
@@ -174,26 +348,81 @@ components:
       properties:
         frequency:
           type: integer
+          description: '' # TODO
         length_ms:
           type: integer
+          description: '' # TODO
 
     Text:
       type: object
       properties:
         text:
           type: string
+          description: '' # TODO
+
+    Sensor:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          description: '' # TODO
+        driver_name:
+          type: string
+          readOnly: true
+          description: '' # TODO
+        port:
+          type: string
+          readOnly: true
+          description: '' # TODO
+        modes:
+          type: array
+          readOnly: true
+          description: '' # TODO
+          items:
+            type: string
+        commands:
+          type: array
+          readOnly: true
+          description: '' # TODO
+          items:
+            type: string
+        mode:
+          type: string
+          description: '' # TODO
+        decimals:
+          type: integer
+          readOnly: true
+          description: '' # TODO
+        poll_rate_ms:
+          type: integer
+          description: '' # TODO
+        units:
+          type: string
+          readOnly: true
+          description: '' # TODO
+
+    SteeringUnit:
+      type: object
+      properties:
+        left:
+          $ref: '#/components/schemas/Motor'
+        right:
+          $ref: '#/components/schemas/Motor'
 
     Motor:
       type: object
       properties:
         size:
           type: string
+          description: '' # TODO
           enum:
             - s
             - m
             - l
         port:
           type: string
+          description: '' # TODO
 
     MotorRequest:
       type: object
@@ -203,6 +432,30 @@ components:
           items:
             $ref: '#/components/schemas/Motor'
         speed:
+          type: integer
+        polarity:
+          type: string
+        position:
+          type: integer
+        time:
+          type: integer
+        position_setpoint:
+          type: integer
+        ramp_up_setpoint:
+          type: integer
+        ramp_down_setpoint:
+          type: integer
+        hold_PID_kd:
+          type: integer
+        hold_PID_ki:
+          type: integer
+        hold_PID_kp:
+          type: integer
+        speed_PID_kd:
+          type: integer
+        speed_PID_ki:
+          type: integer
+        speed_PID_kp:
           type: integer
         command:
           type: string
@@ -221,15 +474,17 @@ components:
             - brake
             - hold
 
-    TachoMotorInfo:
+    TachoMotor:
       type: object
       properties:
         commnds:
           type: array
+          readOnly: true
           items:
             type: string
         stop_actions:
           type: array
+          readOnly: true
           items:
             type: string
         count_per_rot:
@@ -250,6 +505,7 @@ components:
           type: integer
         max_speed:
           type: integer
+          readOnly: true
         position_setpoint:
           type: integer
         current_speed:
@@ -276,24 +532,31 @@ components:
       properties:
         voltage:
           type: number
+          readOnly: true
           description: Voltage returns voltage measured from the power supply in volts.
         current:
           type: number
+          readOnly: true
           description: Current returns the current drawn from the power supply in milliamps.
         voltage_max:
           type: number
+          readOnly: true
           description: VoltageMax returns the maximum design voltage for the power supply in volts.
         voltage_min:
           type: number
+          readOnly: true
           description: VoltageMin returns the minimum design voltage for the power supply in volts.
         technology:
           type: string
+          readOnly: true
           description: Technology returns the battery technology of the power supply.
         type:
           type: string
+          readOnly: true
           description: Type returns the battery type of the power supply.
         u_event:
           type: object
+          readOnly: true
           description: Uevent returns the current uevent state for the power supply.
           additionalProperties:
             type: string

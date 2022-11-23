@@ -1,7 +1,8 @@
-package server_impl
+package powerAPI
 
 import (
 	"EV3-API/internal/gen/openapi"
+	"EV3-API/internal/server_impl"
 	"context"
 	"errors"
 	"github.com/ev3go/ev3dev"
@@ -10,29 +11,29 @@ import (
 	"strings"
 )
 
-// PowerApiService is a service that implements the logic for the DefaultApiServicer
+// ApiService is a service that implements the logic for the DefaultApiServicer
 // This service should implement the business logic for every endpoint for the DefaultApi API.
 // Include any external packages or services that will be required by this service.
-type PowerApiService struct {
+type ApiService struct {
 }
 
 // NewPowerApiService creates a default api service
 func NewPowerApiService() openapi.PowerApiServicer {
-	return &PowerApiService{}
+	return &ApiService{}
 }
 
-func (s *PowerApiService) PowerGet(_ context.Context) (openapi.ImplResponse, error) {
+func (s *ApiService) PowerGet(_ context.Context) (openapi.ImplResponse, error) {
 	p := ev3dev.PowerSupply("lego-ev3-battery")
 	var internalErrors []string
 
 	resp := openapi.PowerInfo{
-		Voltage:    GetFloat32(p.Voltage, &internalErrors),
-		Current:    GetFloat32(p.Current, &internalErrors),
-		VoltageMax: GetFloat32(p.VoltageMax, &internalErrors),
-		VoltageMin: GetFloat32(p.VoltageMax, &internalErrors),
-		Technology: GetString(p.Technology, &internalErrors),
-		Type:       GetString(p.Type, &internalErrors),
-		UEvent:     GetStringMap(p.Uevent, &internalErrors),
+		Voltage:    server_impl.GetFloat32(p.Voltage, &internalErrors),
+		Current:    server_impl.GetFloat32(p.Current, &internalErrors),
+		VoltageMax: server_impl.GetFloat32(p.VoltageMax, &internalErrors),
+		VoltageMin: server_impl.GetFloat32(p.VoltageMax, &internalErrors),
+		Technology: server_impl.GetString(p.Technology, &internalErrors),
+		Type:       server_impl.GetString(p.Type, &internalErrors),
+		UEvent:     server_impl.GetStringMap(p.Uevent, &internalErrors),
 	}
 
 	if len(internalErrors) > 0 {

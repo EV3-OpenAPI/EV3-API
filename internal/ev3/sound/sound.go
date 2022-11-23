@@ -10,7 +10,6 @@ import (
 )
 
 var speaker *ev3dev.Speaker
-var speakers map[string]ev3dev.Speaker
 
 const (
 	soundPath  = "/dev/input/by-path/platform-sound-event"

@@ -14,6 +14,8 @@ var (
 	DCMotors    = make(map[string]*ev3dev.DCMotor)
 )
 
+// Init initializes all connected ev3dev.TachoMotor and exposes them under TachoMotors.
+// Other functions in this package depend on Init having been called first.
 func Init() (err error) {
 	log.Printf("INFO - Initializing motors")
 
@@ -38,6 +40,24 @@ func Init() (err error) {
 	return
 }
 
+// SetSpeedSetpoint sets the speed setpoint for all given ports
+func SetSpeedSetpoint(ports []string, speed int) error {
+	for _, port := range ports {
+		if motor, ok := TachoMotors[port]; ok {
+			motor.SetSpeedSetpoint(speed)
+		} else {
+			return fmt.Errorf("no motor with the port '%s' found", port)
+		}
+
+		if err := TachoMotors[port].Err(); err != nil {
+			return fmt.Errorf("could not set speed setpoint for port %s - error: %v", port, err)
+		}
+	}
+
+	return nil
+}
+
+// StopAll stops all initialized motors
 func StopAll() {
 	for _, motor := range TachoMotors {
 		motor.Command("reset")

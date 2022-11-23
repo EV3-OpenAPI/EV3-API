@@ -1,4 +1,4 @@
-package server_impl
+package soundAPI
 
 import (
 	"EV3-API/internal/ev3"
@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-// SoundApiService is a service that implements the logic for the DefaultApiServicer
+// ApiService is a service that implements the logic for the DefaultApiServicer
 // This service should implement the business logic for every endpoint for the DefaultApi API.
 // Include any external packages or services that will be required by this service.
-type SoundApiService struct {
+type ApiService struct {
 }
 
-func (s *SoundApiService) SoundSpeakPost(_ context.Context, text openapi.Text) (openapi.ImplResponse, error) {
+func (s *ApiService) SoundSpeakPost(_ context.Context, text openapi.Text) (openapi.ImplResponse, error) {
 	if err := sound.Speak(text.Text); err != nil {
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
@@ -24,10 +24,10 @@ func (s *SoundApiService) SoundSpeakPost(_ context.Context, text openapi.Text) (
 
 // NewSoundApiService creates a default api service
 func NewSoundApiService() openapi.SoundApiServicer {
-	return &SoundApiService{}
+	return &ApiService{}
 }
 
-func (s *SoundApiService) SoundBeepPost(_ context.Context) (openapi.ImplResponse, error) {
+func (s *ApiService) SoundBeepPost(_ context.Context) (openapi.ImplResponse, error) {
 	if err := sound.Beep(); err != nil {
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
@@ -35,7 +35,7 @@ func (s *SoundApiService) SoundBeepPost(_ context.Context) (openapi.ImplResponse
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
-func (s *SoundApiService) SoundTonePost(_ context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
+func (s *ApiService) SoundTonePost(_ context.Context, tone openapi.Tone) (openapi.ImplResponse, error) {
 	tones := []sound.Tone{{uint32(tone.Frequency), ev3.DurationMs(tone.LengthMs)}}
 
 	if err := sound.Tones(tones); err != nil {
@@ -45,7 +45,7 @@ func (s *SoundApiService) SoundTonePost(_ context.Context, tone openapi.Tone) (o
 	return openapi.Response(http.StatusOK, nil), nil
 }
 
-func (s *SoundApiService) SoundTonesPost(_ context.Context, tonesReq []openapi.Tone) (openapi.ImplResponse, error) {
+func (s *ApiService) SoundTonesPost(_ context.Context, tonesReq []openapi.Tone) (openapi.ImplResponse, error) {
 	tones := make([]sound.Tone, len(tonesReq))
 
 	// Parse requested tones
