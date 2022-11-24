@@ -68,7 +68,7 @@ func (a ApiService) SensorTypePut(_ context.Context, sensorDriver string, oapiSe
 	return openapi.Response(http.StatusNoContent, nil), nil
 }
 
-func (a ApiService) SensorTypeNumValueGet(_ context.Context, sensorDriver string) (openapi.ImplResponse, error) {
+func (a ApiService) SensorTypeValuesGet(_ context.Context, sensorDriver string) (openapi.ImplResponse, error) {
 	resp, err := sensor.ReadNumValue(sensorDriver)
 	if err != nil { // TODO: check error type if actually not found or something else
 		return openapi.Response(http.StatusNotFound, nil), err
@@ -101,7 +101,7 @@ func getSensorInfo(sensorDriver string) (s openapi.Sensor, internalErrors []stri
 	s.Commands = ev3sensor.Commands()
 	s.Mode = server_impl.GetString(ev3sensor.Mode, &internalErrors)
 	s.Decimals = int32(ev3sensor.Decimals())
-	s.PollRateMs = server_impl.GetDurationAsInt32(ev3sensor.PollRate, &internalErrors)
+	//s.PollRateMs = server_impl.GetDurationAsInt32(ev3sensor.PollRate, &internalErrors)
 	s.Units = ev3sensor.Units()
 
 	return

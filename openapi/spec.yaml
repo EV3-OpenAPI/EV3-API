@@ -221,7 +221,7 @@ paths:
         200:
           description: 'Sensor successfully updated'
 
-  /sensor/{type}/num_value:
+  /sensor/{type}/values:
     get:
       tags:
         - sensor
@@ -238,7 +238,9 @@ paths:
           content:
             application/json:
               schema:
-                type: number
+                type: array
+                items:
+                  type: string
         404:
           description: 'Sensor of that type not found'
 

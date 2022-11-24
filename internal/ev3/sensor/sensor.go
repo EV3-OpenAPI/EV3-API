@@ -72,10 +72,17 @@ func ReadTextValues(driver string) ([]string, error) {
 
 // ReadNumValue returns a number from the sensor with the given driver name.
 // Error if there is no sensor with the given driver.
-func ReadNumValue(driver string) (int, error) {
+func ReadNumValue(driver string) ([]string, error) {
 	if sensor, err := GetSensor(driver); err != nil {
-		return 0, err
+		return make([]string, 0), err
 	} else {
-		return sensor.NumValues(), nil
+		values := make([]string, sensor.NumValues())
+		for i := 0; i < sensor.NumValues(); i++ {
+			val, err := sensor.Value(i)
+			if err == nil {
+				values[i] = val
+			}
+		}
+		return values, nil
 	}
 }
