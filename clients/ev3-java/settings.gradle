@@ -1,0 +1,3 @@
+rootProject.name = 'ev3-java'
+
+include 'ev3api'
