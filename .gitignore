@@ -3,4 +3,4 @@ internal/gen
 .idea
 *.iml
 
-clients/
+clients/ev3-java/ev3api

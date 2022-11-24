@@ -1,7 +1,6 @@
 groupId: ch.zhaw
-apiPackage: ch.zhaw.ev3-api.client.api
-modelPackage: ch.zhaw.ev3-api.client.model
-invokerPackage: ch.zhaw.ev3-api.client.invoker
-artifactId: ev3-api
+apiPackage: ch.zhaw.ev3api.api
+modelPackage: ch.zhaw.ev3api.model
+invokerPackage: ch.zhaw.ev3api.invoker
+artifactId: ev3api
 library: okhttp-gson
-
