@@ -20,6 +20,7 @@ jobs:
 
       - name: Copy generated server code
         run: |
+          mkdir -p internal/gen
           cp -r tmp/openapi internal/gen/.
           cp -r tmp/api internal/gen/.
 
