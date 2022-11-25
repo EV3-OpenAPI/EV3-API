@@ -52,7 +52,7 @@ func (s *ApiService) MotorTachoPost(_ context.Context, request openapi.MotorRequ
 }
 
 func (s *ApiService) MotorTachoGet(_ context.Context) (openapi.ImplResponse, error) {
-	var tachoMotorInfoList []openapi.TachoMotorInfo
+	var tachoMotorInfoList []openapi.TachoMotor
 
 	for key, _ := range ev3motor.TachoMotors {
 		internalErrors, resp := getTachoMotorInfo(key)
@@ -93,7 +93,7 @@ func (s *ApiService) MotorStopAllPost(_ context.Context) (openapi.ImplResponse, 
 
 // helper functions
 
-func getTachoMotorInfo(port string) ([]string, openapi.TachoMotorInfo) {
+func getTachoMotorInfo(port string) ([]string, openapi.TachoMotor) {
 	var internalErrors []string
 
 	m, exists := ev3motor.TachoMotors[port]
@@ -111,7 +111,7 @@ func getTachoMotorInfo(port string) ([]string, openapi.TachoMotorInfo) {
 		internalErrors = append(internalErrors, fmt.Sprintf("Could not get state: %v", err))
 	}
 
-	resp := openapi.TachoMotorInfo{
+	resp := openapi.TachoMotor{
 		Commnds:                 m.Commands(),
 		StopActions:             m.StopActions(),
 		CountPerRot:             int32(m.CountPerRot()),
