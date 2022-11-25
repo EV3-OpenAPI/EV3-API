@@ -31,8 +31,8 @@ jobs:
 
       - name: Lint with goimports
         run: |
-          goimports -l -w internal/openapi
-          gofmt -l -w internal/openapi
+          goimports -l -w internal/gen/openapi
+          gofmt -l -w internal/gen/openapi
 
       - name: Build package
         run: |
