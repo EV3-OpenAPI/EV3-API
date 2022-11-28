@@ -7,8 +7,10 @@ servers:
   - url: 'http://127.0.0.1:8080/api/v1'
 
 tags:
-  - name: power
+  - name: button
+  - name: led
   - name: motor
+  - name: power
   - name: sensor
   - name: sound
 paths:
