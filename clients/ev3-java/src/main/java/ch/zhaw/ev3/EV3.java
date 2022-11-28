@@ -15,10 +15,21 @@ import java.util.Objects;
 public class EV3 {
 
     public enum Motors {
-        A,
-        B,
-        C,
-        D
+        A("A"),
+        B("B"),
+        C("C"),
+        D("D");
+
+        private final String name;
+
+        Motors(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
     private final String host_address;
     ApiClient apiClient;

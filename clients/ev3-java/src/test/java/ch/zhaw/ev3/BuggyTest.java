@@ -10,7 +10,7 @@ public class BuggyTest {
 
     @BeforeAll
     static void beforeAll() throws ApiException {
-        buggy = new Buggy("10.0.100.98:8080", EV3.Motors.A, EV3.Motors.D);
+        buggy = new Buggy("160.85.132.65:8080", EV3.Motors.A, EV3.Motors.D);
     }
 
     @Test
@@ -21,5 +21,24 @@ public class BuggyTest {
     @Test
     void distance() throws ApiException {
         System.out.println(buggy.distance());
+    }
+
+    @Test
+    void on() throws ApiException {
+        buggy.on(20);
+    }
+
+    @Test
+    void stop() throws ApiException {
+        buggy.stop();
+    }
+
+    @Test
+    void startSleepStop() throws ApiException, InterruptedException {
+        buggy.on(5);
+
+        Thread.sleep(3000);
+
+        buggy.stop();
     }
 }

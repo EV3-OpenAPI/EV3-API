@@ -1,22 +1,28 @@
 package ch.zhaw.ev3;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class EV3Test {
     private static EV3 ev3;
 
+    @BeforeAll
+    static void beforeAll() {
+        ev3 = new EV3("160.85.143.143:8080");
+    }
+
     @Test
     void beep() {
-        new EV3("10.0.100.98:8080").beep();
+        ev3.beep();
     }
 
     @Test
     void play_tone() {
-        new EV3("10.0.100.98:8080").play_tone(220, 1000);
+        ev3.play_tone(220, 1000);
     }
 
     @Test
     void speak() {
-        new EV3("10.0.100.98:8080").speak("Hello World");
+        ev3.speak("Hello World");
     }
 }

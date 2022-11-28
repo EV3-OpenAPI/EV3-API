@@ -36,7 +36,7 @@ public class Sensor {
     }
 
     void updateSensor() throws ApiException {
-        sensor = api.sensorTypeGet(driver.name);
+        sensor = api.sensorTypeGet(String.valueOf(driver));
     }
 
     public Drivers getDriver() {
@@ -59,10 +59,10 @@ public class Sensor {
         if (getMode().equals(mode)) {
             return; // No need to change mode
         }
-        api.sensorTypePut(driver.name, new ch.zhaw.ev3api.model.Sensor().mode(mode));
+        api.sensorTypePut(String.valueOf(driver), new ch.zhaw.ev3api.model.Sensor().mode(mode));
     }
 
     List<String> getValues() throws ApiException {
-        return api.sensorTypeValuesGet(driver.name);
+        return api.sensorTypeValuesGet(String.valueOf(driver));
     }
 }

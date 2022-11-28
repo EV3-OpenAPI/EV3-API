@@ -13,27 +13,30 @@ public class Gyro extends Sensor {
         TILT_RATE("TILT-RATE"),
         TILT_ANG("TILT-ANG");
 
-        private final String mode;
+        private final String name;
 
-        Modes(String mode) {
-            this.mode = mode;
+        Modes(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return mode;
+            return name;
         }
     }
+
+    private int offset = 0;
 
     public Gyro(SensorApi sensorApi) throws ApiException {
         super(Drivers.GYRO, sensorApi);
     }
 
     public int getAngle() throws ApiException {
-        setMode(Modes.GYRO_ANG.mode);
-        return Integer.parseInt(getValues().get(0));
+        setMode(Modes.GYRO_ANG.name);
+        return Integer.parseInt(getValues().get(0)) - offset;
     }
 
-    public void reset() {
+    public void reset() throws ApiException {
+        offset = getAngle();
     }
 }
