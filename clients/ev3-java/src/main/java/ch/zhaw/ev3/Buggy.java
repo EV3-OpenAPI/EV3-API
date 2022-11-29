@@ -18,6 +18,11 @@ public class Buggy extends EV3 {
 
     private Gyro gyro;
 
+    /**
+     * Create a new buggy with a specific ip-adress
+     * @param host_address the specific ip-adress
+     * @throws ApiException
+     */
     public Buggy(String host_address) throws ApiException {
         super(host_address);
 
@@ -28,6 +33,13 @@ public class Buggy extends EV3 {
         this.maxSpeed = motorApi.motorTachoTypePortGet(String.valueOf(Motor.SizeEnum.L), right.toString()).getMaxSpeed();
     }
 
+    /**
+     * Create a new buggy with a specific ip_adress, a motor left object and a motor right object.
+     * @param host_address the specific ip-adress
+     * @param left the left motor
+     * @param right the right motor
+     * @throws ApiException
+     */
     public Buggy(String host_address, Motors left, Motors right) throws ApiException {
         super(host_address);
 
@@ -39,6 +51,10 @@ public class Buggy extends EV3 {
         this.maxSpeed = motorApi.motorTachoTypePortGet(String.valueOf(Motor.SizeEnum.L), right.toString()).getMaxSpeed();
     }
 
+    /**
+     * Get the angle measured by the gyro sensor
+     * @return the angle
+     */
     public int gyro() {
         try {
             return gyro.getAngle();
@@ -49,14 +65,29 @@ public class Buggy extends EV3 {
         return -1;
     }
 
+    /**
+     * Get the distance measured by the sonic-sensor,
+     * @return the distance to the next object
+     * @throws ApiException
+     */
     public int distance() throws ApiException {
         return sonic.getDistance();
     }
 
+    /**
+     * This method stops the running motor immediately, whether the motor runs or not.
+     * @throws ApiException
+     */
     public void stop() throws ApiException {
         motorApi.motorStopAllPost();
     }
 
+    /**
+     * This method starts the motor with a specific speed,
+     * the motor will run forever as long the battery has power.
+     * @param speedPercent percent from the maxspeed
+     * @throws ApiException
+     */
     public void on(int speedPercent) throws ApiException {
         MotorRequest mr = getMotors();
         mr.setCommand(MotorRequest.CommandEnum.RUN_FOREVER);
@@ -64,8 +95,13 @@ public class Buggy extends EV3 {
         motorApi.motorTachoPost(mr);
     }
 
-
-
+    /**
+     * This method starts the motor with a specific speed,
+     * the buggy will drives exactly as many seconds as stated
+     * @param speedPercent maxspeed in percent
+     * @param seconds how long the buggy should drive
+     * @throws ApiException
+     */
     public void onForSeconds(int speedPercent, double seconds) throws ApiException {
         // TODO: implement
         MotorRequest mr = getMotors();

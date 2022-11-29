@@ -30,6 +30,12 @@ public class Sonic extends Sensor {
         super(Drivers.SONIC, sensorApi);
     }
 
+    /**
+     * This method will return the measured distance from the sensor
+     * to the next object.
+     * @return the distance to the next object in front of the sensor
+     * @throws ApiException
+     */
     public int getDistance() throws ApiException {
         setMode(Modes.DIST_CM.mode);
         return Integer.parseInt(getValues().get(0));
