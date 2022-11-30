@@ -58,3 +58,17 @@ jobs:
           name: Go-binary
           path: server
           retention-days: 7
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Run build with Gradle Wrapper
+        run: ./gradlew shadowJar
+        working-directory: ./clients/ev3-java
+
+      - name: Upload Java fat jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: Java-Jar
+          path: clients/ev3-java/build/libs/ev3-java-1.0-SNAPSHOT-all.jar
+          retention-days: 7
