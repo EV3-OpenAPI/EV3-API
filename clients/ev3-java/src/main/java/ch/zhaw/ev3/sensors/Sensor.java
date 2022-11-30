@@ -28,6 +28,12 @@ public class Sensor {
 
     private ch.zhaw.ev3api.model.Sensor sensor;
 
+    /**
+     * Create a new sensor with the given driver and sensor
+     * @param driver specific driver
+     * @param sensorApi the sensorAPI
+     * @throws ApiException
+     */
     public Sensor(Drivers driver, SensorApi sensorApi) throws ApiException {
         this.driver = driver;
         this.api = sensorApi;
@@ -35,10 +41,14 @@ public class Sensor {
         this.modes = sensor.getModes();
     }
 
-    void updateSensor() throws ApiException {
+    private void updateSensor() throws ApiException {
         sensor = api.sensorTypeGet(String.valueOf(driver));
     }
 
+    /**
+     * Returns the driver object
+     * @return the driver
+     */
     public Drivers getDriver() {
         return driver;
     }
@@ -52,7 +62,13 @@ public class Sensor {
         return sensor.getMode();
     }
 
-    void setMode(String mode) throws ApiException {
+    /**
+     * This method will set a specific mode for the next operation for
+     * the EV3.
+     * @param mode specific mode
+     * @throws ApiException
+     */
+    public void setMode(String mode) throws ApiException {
         if (!modes.contains(mode)) {
             return; // TODO: error handling
         }
