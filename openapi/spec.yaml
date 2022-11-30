@@ -174,7 +174,7 @@ paths:
     get:
       tags:
         - sensor
-      description: '' # TODO
+      description: 'Get information about the sensor'
       responses:
         200:
           description: 'List of all connected sensors'
@@ -189,7 +189,7 @@ paths:
     get:
       tags:
         - sensor
-      description: '' # TODO
+      description: 'Get details about a specific sensor'
       parameters:
         - name: type
           in: path
@@ -206,7 +206,7 @@ paths:
     put:
       tags:
         - sensor
-      description: '' # TODO
+      description: 'update a sensor with specific values'
       parameters:
         - name: type
           in: path
@@ -227,7 +227,7 @@ paths:
     get:
       tags:
         - sensor
-      description: '' # TODO
+      description: 'Get the values about a specific sensor'
       parameters:
         - name: type
           in: path
@@ -236,7 +236,7 @@ paths:
             type: string
       responses:
         200:
-          description: '' # TODO
+          description: 'Sensor of that type is successfully found'
           content:
             application/json:
               schema:
@@ -250,7 +250,7 @@ paths:
     get:
       tags:
         - sensor
-      description: '' # TODO
+      description: 'Get the values about a specific sensor in textformat'
       parameters:
         - name: type
           in: path
@@ -259,7 +259,7 @@ paths:
             type: string
       responses:
         200:
-          description: '' # TODO
+          description: 'Values in textformat is successfully found'
           content:
             application/json:
               schema:
@@ -275,7 +275,7 @@ paths:
     post:
       tags:
         - sound
-      description: '' # TODO
+      description: 'Output of the roboter is a beep sound'
       responses:
         '200':
           description: 'Beep successfully played'
@@ -288,9 +288,9 @@ paths:
     post:
       tags:
         - sound
-      description: '' # TODO
+      description: 'Output from the roboter is a spoken text'
       requestBody:
-        description: 'Text to be spoken' # TODO
+        description: 'A JSON object containing text'
         required: true
         content:
           application/json:
@@ -309,7 +309,7 @@ paths:
       tags:
         - sound
       requestBody:
-        description: 'Tone to be played' # TODO
+        description: 'A JSON object containing tone'
         required: true
         content:
           application/json:
@@ -327,7 +327,7 @@ paths:
     post:
       tags:
         - sound
-      description: '' # TODO
+      description: 'Output from the roboter are played tones'
       requestBody:
         description: 'Array of tones to be played'
         required: true
@@ -352,17 +352,17 @@ components:
       properties:
         frequency:
           type: integer
-          description: '' # TODO
+          description: 'frequency'
         length_ms:
           type: integer
-          description: '' # TODO
+          description: 'length in ms'
 
     Text:
       type: object
       properties:
         text:
           type: string
-          description: '' # TODO
+          description: ''
 
     Sensor:
       type: object
@@ -370,34 +370,34 @@ components:
         type:
           type: string
           readOnly: true
-          description: '' # TODO
+          description: 'Sensor information are read only and from type string'
         driver_name:
           type: string
           readOnly: true
-          description: '' # TODO
+          description: 'Sensor driver_name information is read only and from type string'
         port:
           type: string
           readOnly: true
-          description: '' # TODO
+          description: 'Sensor portnumber is read only and from type string'
         modes:
           type: array
           readOnly: true
-          description: '' # TODO
+          description: 'Sensor modes information are read only and in a array'
           items:
             type: string
         commands:
           type: array
           readOnly: true
-          description: '' # TODO
+          description: 'Sensor commands are in a array'
           items:
             type: string
         mode:
           type: string
-          description: '' # TODO
+          description: 'Sensor mode'
         decimals:
           type: integer
           readOnly: true
-          description: '' # TODO
+          description: ''
         poll_rate_ms:
           type: integer
           description: '' # TODO
