@@ -62,7 +62,12 @@ jobs:
       - name: Gerate java client
         uses: docker://openapitools/openapi-generator-cli
         with:
-          args: generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
+          args: generate -i openapi/spec.yaml -o clients/java-tmp -g java -c openapi/java-client-config.yaml
+
+      - name: Copy generated java code
+        run: |
+          mkdir -p clients/ev3-java/ev3api
+          cp -r clients/java-tmp/* clients/ev3-java/ev3api/.
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
