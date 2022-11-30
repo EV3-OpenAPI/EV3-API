@@ -59,6 +59,11 @@ jobs:
           path: server
           retention-days: 7
 
+      - name: Gerate java client
+        uses: docker://openapitools/openapi-generator-cli
+        with:
+          args: generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
