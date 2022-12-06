@@ -14,18 +14,40 @@ tags:
   - name: sensor
   - name: sound
 paths:
-  '/power':
+### Button
+  '/button/pressed':
     get:
       tags:
-        - power
-      description: 'Get power info'
+        - led
+      description: 'Get list of sensors currently pressed'
       responses:
-        '200':
+        200:
           description: 'Success'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PowerInfo'
+                type: array
+                items:
+                  type: string
+
+
+### LED
+  /led/flash:
+    post:
+      tags:
+        - led
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/LED'
+      responses:
+        200:
+          description: ''
 
 ### Motor
   '/motor/tacho':
@@ -167,6 +189,21 @@ paths:
           description: 'Client error'
         '500':
           description: 'Server error'
+
+
+### Power
+  '/power':
+    get:
+      tags:
+        - power
+      description: 'Get power info'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerInfo'
 
 
 ### Sensors
@@ -347,6 +384,16 @@ paths:
 
 components:
   schemas:
+    LED:
+      type: object
+      properties:
+        device:
+          type: string
+        red:
+          type: integer
+        green:
+          type: integer
+
     Tone:
       type: object
       properties:
@@ -436,6 +483,8 @@ components:
           items:
             $ref: '#/components/schemas/Motor'
         speed:
+          type: integer
+        speed_pct:
           type: integer
         polarity:
           type: string
