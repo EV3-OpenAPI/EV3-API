@@ -44,8 +44,8 @@ Install goimports tool: `go install golang.org/x/tools/cmd/goimports@latest` for
 
 #### Generate server code
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i spec.yaml -o internal/gen -g go-server -c server-config.yml`  
-Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o internal/gen -g go-server -c server-config.yml`
+Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml`  
+Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml`
 
 Clean up unused imports (go refuses to compile if you don't): `goimports -l -w internal/openapi`  
 Clean up generated code (because why not?): `gofmt -l -w internal/openapi`
@@ -58,14 +58,14 @@ The ldflags option will remove debug code and result in a smaller binary.
 
 #### Generate java client code
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i spec.yaml -o clients/ev3-java/ev3api -g java -c java-client-config.yaml`  
-Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o clients/ev3-java/ev3api -g java -c java-client-config.yaml`
+Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml`  
+Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml`
 
 
 #### Generate python client code
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i spec.yaml -o clients/ev3-python -g python -c python-client-config.yaml`  
-Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o clients/ev3-python -g java -c python-client-config.yaml`
+Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
+Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
 
 
 ### To-Test
