@@ -62,6 +62,12 @@ Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /
 Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o clients/ev3-java/ev3api -g java -c java-client-config.yaml`
 
 
+#### Generate python client code
+
+Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i spec.yaml -o clients/ev3-python -g python -c python-client-config.yaml`  
+Using Openapi-Generator: `openapi-generator generate -i spec.yaml -o clients/ev3-python -g java -c python-client-config.yaml`
+
+
 ### To-Test
 
 Concurrency; what happens if multiple request are made to the library at the same time?
