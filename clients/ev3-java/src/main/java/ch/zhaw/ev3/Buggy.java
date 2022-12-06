@@ -9,8 +9,8 @@ import ch.zhaw.ev3api.model.MotorRequest;
 import java.util.Arrays;
 
 public class Buggy extends EV3 {
-    private Motors left;
-    private Motors right;
+    private final Motors left;
+    private final Motors right;
 
     private int maxSpeed;
 
@@ -103,7 +103,6 @@ public class Buggy extends EV3 {
      * @throws ApiException
      */
     public void onForSeconds(int speedPercent, double seconds) throws ApiException {
-        // TODO: implement
         MotorRequest mr = getMotors();
         mr.command(MotorRequest.CommandEnum.RUN_TIMED);
         mr.time((int) (seconds * 1000));

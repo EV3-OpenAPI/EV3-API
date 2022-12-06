@@ -29,6 +29,11 @@ public class BuggyTest {
     }
 
     @Test
+    void onForSeconds() throws ApiException {
+        buggy.onForSeconds(20, 3.0);
+    }
+
+    @Test
     void stop() throws ApiException {
         buggy.stop();
     }
