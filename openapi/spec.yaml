@@ -18,7 +18,7 @@ paths:
   '/button/pressed':
     get:
       tags:
-        - led
+        - button
       description: 'Get list of sensors currently pressed'
       responses:
         200:
@@ -36,7 +36,7 @@ paths:
     post:
       tags:
         - led
-      description: ''
+      description: '' # TODO
       requestBody:
         required: true
         content:
@@ -47,7 +47,16 @@ paths:
                 $ref: '#/components/schemas/LED'
       responses:
         200:
-          description: ''
+          description: '' # TODO
+
+  /led/off:
+    post:
+      tags:
+        - led
+      description: '' # TODO
+      responses:
+        200:
+          description: '' # TODO
 
 ### Motor
   '/motor/tacho':
@@ -387,12 +396,20 @@ components:
     LED:
       type: object
       properties:
-        device:
+        side:
           type: string
         red:
           type: integer
         green:
           type: integer
+        color:
+          type: string
+          enum:
+            - red
+            - orange
+            - yellow
+            - lime
+            - green
 
     Tone:
       type: object
