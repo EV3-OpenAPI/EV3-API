@@ -39,8 +39,8 @@ public class EV3 {
     SoundApi soundApi;
 
     /**
-     * Creates a new EV3 with a specific ip-adress.
-     * @param host_address the ip-adress
+     * Creates a new EV3 with a specific ip-address.
+     * @param host_address the ip-address
      */
     public EV3(String host_address) {
         this.host_address = host_address;
@@ -54,8 +54,8 @@ public class EV3 {
     }
 
     /**
-     * This method returns the ip-adress from the EV3
-     * @return the ip-adress
+     * This method returns the ip-address from the EV3
+     * @return the ip-address
      */
     public String getHost_address() {
         return host_address;
@@ -74,8 +74,8 @@ public class EV3 {
 
     /**
      * The EV3 will play a tone.
-     * @param frequency the specific frequenz for the tone
-     * @param lengthMs the specific duration of the tone
+     * @param frequency the frequency for the tone
+     * @param lengthMs the duration of the tone
      */
     public void play_tone(int frequency, int lengthMs) {
         try {

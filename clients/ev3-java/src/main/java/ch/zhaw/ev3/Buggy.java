@@ -18,8 +18,8 @@ public class Buggy extends EV3 {
     private Gyro gyro;
 
     /**
-     * Create a new buggy with a specific ip-adress
-     * @param host_address the specific ip-adress
+     * Create a new buggy with a specific ip-address
+     * @param host_address the specific ip-address
      * @throws ApiException
      */
     public Buggy(String host_address) throws ApiException {
@@ -31,8 +31,8 @@ public class Buggy extends EV3 {
     }
 
     /**
-     * Create a new buggy with a specific ip_adress, a motor left object and a motor right object.
-     * @param host_address the specific ip-adress
+     * Create a new buggy with a specific ip_address, a motor left object and a motor right object.
+     * @param host_address the specific ip-address
      * @param left the left motor
      * @param right the right motor
      * @throws ApiException
