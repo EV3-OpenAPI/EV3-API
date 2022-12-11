@@ -1,9 +1,11 @@
 package main
 
 import (
+	"EV3-API/internal/ev3/lcd"
 	"EV3-API/internal/ev3/motor"
 	"EV3-API/internal/ev3/sensor"
 	"EV3-API/internal/ev3/sound"
+	"EV3-API/internal/ev3/status"
 	"EV3-API/internal/gen/openapi"
 	"EV3-API/internal/server_impl/motorAPI"
 	"EV3-API/internal/server_impl/powerAPI"
@@ -12,6 +14,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -19,10 +22,10 @@ func main() {
 
 	_ = sound.Init()
 	defer sound.Close()
-
 	_ = motor.Init()
-
 	_ = sensor.Init()
+	_ = lcd.Init()
+	status.Start(time.Second * 2)
 
 	MotorApiService := motorAPI.NewMotorApiService()
 	MotorApiController := openapi.NewMotorApiController(MotorApiService)
