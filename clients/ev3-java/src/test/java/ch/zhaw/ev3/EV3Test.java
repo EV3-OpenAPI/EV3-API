@@ -8,7 +8,7 @@ class EV3Test {
 
     @BeforeAll
     static void beforeAll() {
-        ev3 = new EV3("160.85.143.143:8080");
+        ev3 = new EV3("10.0.100.98:8080");
     }
 
     @Test
@@ -24,5 +24,10 @@ class EV3Test {
     @Test
     void speak() {
         ev3.speak("Hello World");
+    }
+
+    @Test
+    void getVoltage() {
+        System.out.println(ev3.voltage());
     }
 }
