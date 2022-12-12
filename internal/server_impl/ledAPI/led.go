@@ -28,3 +28,10 @@ func (a ApiService) LedFlashPost(_ context.Context, leds []openapi.Led) (openapi
 
 	return openapi.Response(http.StatusOK, nil), nil
 }
+
+func (a ApiService) LedOffPost(_ context.Context) (openapi.ImplResponse, error) {
+	led.SetColorValues("left", 0, 0, 0)
+	led.SetColorValues("right", 0, 0, 0)
+
+	return openapi.Response(http.StatusOK, nil), nil
+}
