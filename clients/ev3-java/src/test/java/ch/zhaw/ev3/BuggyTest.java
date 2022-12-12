@@ -49,6 +49,16 @@ public class BuggyTest {
     }
 
     @Test
+    void steerCounts() throws ApiException {
+        buggy.steerCounts(20, 2*360, 0);
+    }
+
+    @Test
+    void steerDuration() throws ApiException {
+        buggy.steerDuration(20, 4, 20);
+    }
+
+    @Test
     void startSleepStop() throws ApiException, InterruptedException {
         buggy.on(5);
 

@@ -4,10 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ev3go/ev3dev/motorutil"
+	"log"
 	"time"
 )
 
-var steeringUnit *motorutil.Steering
+var (
+	steeringUnit       *motorutil.Steering
+	defaultWaitTimeout = time.Second * 20
+)
 
 func ResetSteeringUnit() {
 	steeringUnit = nil
@@ -27,7 +31,7 @@ func GetSteeringUnit(left, right string) (*motorutil.Steering, error) {
 	steeringUnit = &motorutil.Steering{
 		Left:    leftM,
 		Right:   rightM,
-		Timeout: 2,
+		Timeout: time.Second * 2,
 	}
 
 	return steeringUnit, nil
@@ -37,7 +41,10 @@ func SteerCounts(left, right string, speed, turn, counts int) error {
 	steeringUnit, _ = GetSteeringUnit(left, right)
 
 	steeringUnit.SteerCounts(speed, turn, counts)
-	if steeringUnit.Wait() != nil {
+	steeringUnit.Timeout = defaultWaitTimeout
+	err := steeringUnit.Wait()
+	if err != nil {
+		log.Printf("ERROR - %v", err)
 		return errors.New("something went wrong during last steering action")
 	}
 
@@ -48,7 +55,10 @@ func SteerDuration(left, right string, speed, turn int, duration time.Duration) 
 	steeringUnit, _ = GetSteeringUnit(left, right)
 
 	steeringUnit.SteerDuration(speed, turn, duration)
-	if steeringUnit.Wait() != nil {
+	steeringUnit.Timeout = defaultWaitTimeout + duration
+	err := steeringUnit.Wait()
+	if err != nil {
+		log.Printf("ERROR - %v", err)
 		return errors.New("something went wrong during last steering action")
 	}
 

@@ -3,11 +3,12 @@ package ch.zhaw.ev3;
 import ch.zhaw.ev3.sensors.Gyro;
 import ch.zhaw.ev3.sensors.Sonic;
 import ch.zhaw.ev3api.invoker.ApiException;
+import ch.zhaw.ev3api.model.MotorSteerCountsPostRequest;
+import ch.zhaw.ev3api.model.MotorSteerDurationPostRequest;
 import ch.zhaw.ev3api.model.SteeringUnit;
 import ch.zhaw.ev3api.model.TachoMotor;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -148,6 +149,26 @@ public class Buggy extends EV3 {
 
         System.out.println(drivingUnit);
         motorApi.motorTachoPost(drivingUnit);
+    }
+
+    public void steerCounts(int speedPercent, int counts, int turn) throws ApiException {
+        MotorSteerCountsPostRequest r = new MotorSteerCountsPostRequest();
+        r.steeringUnit(steeringUnit);
+        r.setSpeed((int) (maxSpeed / 100.0 * speedPercent));
+        r.setCounts(counts);
+        r.setTurn(turn);
+
+        motorApi.motorSteerCountsPost(r);
+    }
+
+    public void steerDuration(int speedPercent, double durationSec, int turn) throws ApiException {
+        MotorSteerDurationPostRequest r = new MotorSteerDurationPostRequest();
+        r.steeringUnit(steeringUnit);
+        r.setSpeed((int) (maxSpeed / 100.0 * speedPercent));
+        r.setDurationMs((int) (durationSec * 1000));
+        r.setTurn(turn);
+
+        motorApi.motorSteerDurationPost(r);
     }
 
 }
