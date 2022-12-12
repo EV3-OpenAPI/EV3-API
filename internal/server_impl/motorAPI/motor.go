@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // ApiService is a service that implements the logic for the DefaultApiServicer
@@ -41,10 +42,14 @@ func (s *ApiService) MotorTachoTypePortGet(_ context.Context, mType string, port
 	return openapi.Response(http.StatusOK, resp), nil
 }
 
-func (s *ApiService) MotorTachoPost(_ context.Context, request openapi.MotorRequest) (openapi.ImplResponse, error) {
-	for _, m := range request.Motors {
+func (s *ApiService) MotorTachoPost(_ context.Context, tachoMotors []openapi.TachoMotor) (openapi.ImplResponse, error) {
+	for _, m := range tachoMotors {
 		if motor := ev3motor.TachoMotors[m.Port]; motor.Driver()[9] == m.Size[0] {
-			motor.SetSpeedSetpoint(int(request.Speed)).Command(request.Command)
+			motor.SetSpeedSetpoint(int(m.SpeedSetpoint))
+			motor.SetPositionSetpoint(int(m.PositionSetpoint))
+			motor.SetTimeSetpoint(time.Duration(m.TimeSetpoint) * 1000 * 1000)
+
+			motor.Command(m.Command)
 		}
 	}
 
@@ -112,27 +117,30 @@ func getTachoMotorInfo(port string) ([]string, openapi.TachoMotor) {
 	}
 
 	resp := openapi.TachoMotor{
-		Commnds:                 m.Commands(),
-		StopActions:             m.StopActions(),
-		CountPerRot:             int32(m.CountPerRot()),
-		DutyCycle:               server_impl.GetInt32(m.DutyCycle, &internalErrors),
-		DutyCycleSetpoint:       server_impl.GetInt32(m.DutyCycleSetpoint, &internalErrors),
-		Polarity:                string(pol),
-		Position:                server_impl.GetInt32(m.Position, &internalErrors),
-		HoldPIDKd:               server_impl.GetInt32(m.HoldPIDKd, &internalErrors),
-		HoldPIDKi:               server_impl.GetInt32(m.HoldPIDKi, &internalErrors),
-		HoldPIDKp:               server_impl.GetInt32(m.HoldPIDKp, &internalErrors),
-		MaxSpeed:                int32(m.MaxSpeed()),
-		PositionSetpoint:        server_impl.GetInt32(m.PositionSetpoint, &internalErrors),
-		CurrentSpeed:            server_impl.GetInt32(m.Speed, &internalErrors),
-		CurrentSpeedSetpoint:    server_impl.GetInt32(m.SpeedSetpoint, &internalErrors),
-		CurrentRampUpSetpoint:   server_impl.GetDurationAsInt32(m.RampUpSetpoint, &internalErrors),
-		CurrentRampDownSetpoint: server_impl.GetDurationAsInt32(m.RampDownSetpoint, &internalErrors),
-		SpeedPIDKd:              server_impl.GetInt32(m.SpeedPIDKd, &internalErrors),
-		SpeedPIDKi:              server_impl.GetInt32(m.SpeedPIDKi, &internalErrors),
-		SpeedPIDKp:              server_impl.GetInt32(m.SpeedPIDKp, &internalErrors),
-		State:                   int32(state),
-		TimeSetpoint:            server_impl.GetDurationAsInt32(m.TimeSetpoint, &internalErrors),
+		Size:              string(m.Driver()[9]),
+		Port:              port,
+		Commands:          m.Commands(),
+		StopActions:       m.StopActions(),
+		CountPerRot:       int32(m.CountPerRot()),
+		DutyCycle:         server_impl.GetInt32(m.DutyCycle, &internalErrors),
+		DutyCycleSetpoint: server_impl.GetInt32(m.DutyCycleSetpoint, &internalErrors),
+		Polarity:          string(pol),
+		Position:          server_impl.GetInt32(m.Position, &internalErrors),
+		HoldPIDKd:         server_impl.GetInt32(m.HoldPIDKd, &internalErrors),
+		HoldPIDKi:         server_impl.GetInt32(m.HoldPIDKi, &internalErrors),
+		HoldPIDKp:         server_impl.GetInt32(m.HoldPIDKp, &internalErrors),
+		MaxSpeed:          int32(m.MaxSpeed()),
+		PositionSetpoint:  server_impl.GetInt32(m.PositionSetpoint, &internalErrors),
+		Speed:             server_impl.GetInt32(m.Speed, &internalErrors),
+		SpeedPct:          server_impl.GetInt32(m.Speed, &internalErrors) / int32(m.MaxSpeed()) * 100,
+		SpeedSetpoint:     server_impl.GetInt32(m.SpeedSetpoint, &internalErrors),
+		RampUpSetpoint:    server_impl.GetDurationAsInt32(m.RampUpSetpoint, &internalErrors),
+		RampDownSetpoint:  server_impl.GetDurationAsInt32(m.RampDownSetpoint, &internalErrors),
+		SpeedPIDKd:        server_impl.GetInt32(m.SpeedPIDKd, &internalErrors),
+		SpeedPIDKi:        server_impl.GetInt32(m.SpeedPIDKi, &internalErrors),
+		SpeedPIDKp:        server_impl.GetInt32(m.SpeedPIDKp, &internalErrors),
+		State:             int32(state),
+		TimeSetpoint:      server_impl.GetDurationAsInt32(m.TimeSetpoint, &internalErrors),
 	}
 	return internalErrors, resp
 }

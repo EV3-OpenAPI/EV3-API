@@ -1,21 +1,28 @@
 package ch.zhaw.ev3;
 
-import ch.zhaw.ev3.motors.TachoMotor;
 import ch.zhaw.ev3.sensors.Gyro;
 import ch.zhaw.ev3.sensors.Sonic;
 import ch.zhaw.ev3api.invoker.ApiException;
-import ch.zhaw.ev3api.model.Motor;
-import ch.zhaw.ev3api.model.MotorRequest;
+import ch.zhaw.ev3api.model.SteeringUnit;
+import ch.zhaw.ev3api.model.TachoMotor;
 
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Buggy extends EV3 {
     private final TachoMotor left;
     private final TachoMotor right;
+    private SteeringUnit steeringUnit;
+    private List<TachoMotor> drivingUnit;
 
     private Sonic sonic;
 
     private Gyro gyro;
+
+    private int maxSpeed;
+    private int countsPerRot;
 
     /**
      * Create a new buggy with a specific ip-address
@@ -25,9 +32,9 @@ public class Buggy extends EV3 {
     public Buggy(String host_address) throws ApiException {
         super(host_address);
 
-        // TODO: verify default config
-        this.left = new TachoMotor(motorApi, TachoMotor.Port.A);
-        this.right = new TachoMotor(motorApi, TachoMotor.Port.D);
+        this.left = new TachoMotor().port(TachoMotor.PortEnum.A).size(TachoMotor.SizeEnum.L);
+        this.right = new TachoMotor().port(TachoMotor.PortEnum.D).size(TachoMotor.SizeEnum.L);
+        init();
     }
 
     /**
@@ -42,6 +49,17 @@ public class Buggy extends EV3 {
 
         this.left = left;
         this.right = right;
+        init();
+    }
+
+    private void init() throws ApiException {
+        this.steeringUnit = new SteeringUnit().left(this.left).right(this.right);
+        this.drivingUnit = Arrays.asList(this.left, this.right);
+
+        TachoMotor motor = motorApi.motorTachoGet().get(0);
+        this.maxSpeed = motor.getMaxSpeed();
+        this.countsPerRot = motor.getCountPerRot();
+
         this.sonic = new Sonic(this.sensorApi);
         this.gyro = new Gyro(this.sensorApi);
     }
@@ -84,75 +102,34 @@ public class Buggy extends EV3 {
      * @throws ApiException
      */
     public void on(int speedPercent) throws ApiException {
-        MotorRequest mr = getMotors();
-        mr.setCommand(MotorRequest.CommandEnum.RUN_FOREVER);
-        mr.setSpeed((int) (maxSpeed / 100.0 * speedPercent));
-        motorApi.motorTachoPost(mr);
+        left.command(TachoMotor.CommandEnum.RUN_FOREVER).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        right.command(TachoMotor.CommandEnum.RUN_FOREVER).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        motorApi.motorTachoPost(drivingUnit);
     }
 
-    private void setRelativePositionSetpoint(int degrees, TachoMotor motor) throws ApiException {
-        int pos_delta = (int) Math.round((degrees * motor.getCountsPerRot()) / 360.0);
-
+    private void setRelativePositionSetpoint(int degrees, TachoMotor motor) {
+        int pos_delta = (int) Math.round((degrees * countsPerRot) / 360.0);
+        motor.positionSetpoint(pos_delta);
     }
 
     public void onForDegrees(int speedPercent, int degrees) throws ApiException {
         degrees = speedPercent < 0 ? degrees * -1 : degrees;
         setRelativePositionSetpoint(degrees, left);
         setRelativePositionSetpoint(degrees, right);
-        /*
-        def _set_rel_position_degrees_and_speed_sp(self, degrees, speed):
-            degrees = degrees if speed >= 0 else -degrees
-            speed = abs(speed)
 
-            position_delta = int(round((degrees * self.count_per_rot) / 360))
-            speed_sp = int(round(speed))
-
-            self.position_sp = position_delta
-            self.speed_sp = speed_sp
-
-        def _set_brake(self, brake):
-            if brake:
-                self.stop_action = self.STOP_ACTION_HOLD
-            else:
-                self.stop_action = self.STOP_ACTION_COAST
-
-        def on_for_degrees(self, speed, degrees, brake=True, block=True):
-            """
-            Rotate the motor at ``speed`` for ``degrees``
-            ``speed`` can be a percentage or a :class:`ev3dev2.motor.SpeedValue`
-            object, enabling use of other units.
-            """
-            speed_sp = self._speed_native_units(speed)
-            self._set_rel_position_degrees_and_speed_sp(degrees, speed_sp)
-            self._set_brake(brake)
-            self.run_to_rel_pos()
-
-            if block:
-                self.wait_until('running', timeout=WAIT_RUNNING_TIMEOUT)
-                self.wait_until_not_moving()
-         */
-        MotorRequest mr = getMotors();
+        left.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        right.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        motorApi.motorTachoPost(drivingUnit);
     }
 
-    public void onForRotations(int speedPercent, int rotations) {
-        // TODO: implement
-        /*
-        def on_for_rotations(self, speed, rotations, brake=True, block=True):
-            """
-            Rotate the motor at ``speed`` for ``rotations``
-            ``speed`` can be a percentage or a :class:`ev3dev2.motor.SpeedValue`
-            object, enabling use of other units.
-            """
-            speed_sp = self._speed_native_units(speed)
-            self._set_rel_position_degrees_and_speed_sp(rotations * 360, speed_sp)
-            self._set_brake(brake)
-            self.run_to_rel_pos()
+    public void onForRotations(int speedPercent, int rotations) throws ApiException {
+        setRelativePositionSetpoint(rotations * 360, left);
+        setRelativePositionSetpoint(rotations * 360, right);
 
-            if block:
-                self.wait_until('running', timeout=WAIT_RUNNING_TIMEOUT)
-                self.wait_until_not_moving()
-        */
-        MotorRequest mr = getMotors();
+        left.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        right.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        motorApi.motorTachoPost(drivingUnit);
+
     }
 
     /**
@@ -163,18 +140,14 @@ public class Buggy extends EV3 {
      * @throws ApiException
      */
     public void onForSeconds(int speedPercent, double seconds) throws ApiException {
-        MotorRequest mr = getMotors();
-        mr.command(MotorRequest.CommandEnum.RUN_TIMED);
-        mr.time((int) (seconds * 1000));
-        mr.speed((int) (left.getMaxSpeed() / 100.0 * speedPercent));
-        motorApi.motorTachoPost(mr);
+        left.command(TachoMotor.CommandEnum.RUN_TIMED).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        right.command(TachoMotor.CommandEnum.RUN_TIMED).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+
+        left.timeSetpoint((int) (seconds * 1000));
+        right.timeSetpoint((int) (seconds * 1000));
+
+        System.out.println(drivingUnit);
+        motorApi.motorTachoPost(drivingUnit);
     }
 
-    private MotorRequest getMotors() {
-        MotorRequest mr = new MotorRequest();
-        Motor l = new Motor().port(String.valueOf(left)).size(Motor.SizeEnum.L); // FIXME
-        Motor r = new Motor().port(String.valueOf(right)).size(Motor.SizeEnum.L);
-        mr.motors(Arrays.asList(l, r));
-        return mr;
-    }
 }

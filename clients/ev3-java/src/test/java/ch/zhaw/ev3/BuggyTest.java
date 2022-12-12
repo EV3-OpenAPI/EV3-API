@@ -1,6 +1,5 @@
 package ch.zhaw.ev3;
 
-import ch.zhaw.ev3.motors.TachoMotor;
 import ch.zhaw.ev3api.invoker.ApiException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,7 @@ public class BuggyTest {
 
     @BeforeAll
     static void beforeAll() throws ApiException {
-        buggy = new Buggy("160.85.132.65:8080");
+        buggy = new Buggy("10.0.100.98:8080");
     }
 
     @Test
@@ -37,6 +36,16 @@ public class BuggyTest {
     @Test
     void stop() throws ApiException {
         buggy.stop();
+    }
+
+    @Test
+    void onForDegrees() throws ApiException {
+        buggy.onForDegrees(20, 360);
+    }
+
+    @Test
+    void onForRotations() throws ApiException {
+        buggy.onForRotations(20, 2);
     }
 
     @Test

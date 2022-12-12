@@ -19,7 +19,7 @@ paths:
     get:
       tags:
         - button
-      description: 'Get list of sensors currently pressed'
+      description: 'Get list of buttons currently pressed'
       responses:
         200:
           description: 'Success'
@@ -58,6 +58,7 @@ paths:
         200:
           description: '' # TODO
 
+
 ### Motor
   '/motor/tacho':
     get:
@@ -82,7 +83,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MotorRequest'
+              type: array
+              items:
+                $ref: '#/components/schemas/TachoMotor'
       responses:
         '200':
           description: 'Success'
@@ -474,11 +477,11 @@ components:
       type: object
       properties:
         left:
-          $ref: '#/components/schemas/Motor'
+          $ref: '#/components/schemas/TachoMotor'
         right:
-          $ref: '#/components/schemas/Motor'
+          $ref: '#/components/schemas/TachoMotor'
 
-    Motor:
+    TachoMotor:
       type: object
       properties:
         size:
@@ -491,41 +494,67 @@ components:
         port:
           type: string
           description: '' # TODO
-
-    MotorRequest:
-      type: object
-      properties:
-        motors:
+          enum:
+            - A
+            - B
+            - C
+            - D
+        commands:
           type: array
+          readOnly: true
           items:
-            $ref: '#/components/schemas/Motor'
-        speed:
+            type: string
+        stop_actions:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        count_per_rot:
           type: integer
-        speed_pct:
+          readOnly: true
+        duty_cycle:
+          type: integer
+          readOnly: true
+        duty_cycle_setpoint:
           type: integer
         polarity:
           type: string
         position:
           type: integer
-        time:
+          readOnly: true
+        hold_PID_kd:
           type: integer
+          readOnly: true
+        hold_PID_ki:
+          type: integer
+          readOnly: true
+        hold_PID_kp:
+          type: integer
+          readOnly: true
+        max_speed:
+          type: integer
+          readOnly: true
         position_setpoint:
+          type: integer
+        speed:
+          type: integer
+        speed_pct:
+          type: integer
+        speed_setpoint:
           type: integer
         ramp_up_setpoint:
           type: integer
         ramp_down_setpoint:
-          type: integer
-        hold_PID_kd:
-          type: integer
-        hold_PID_ki:
-          type: integer
-        hold_PID_kp:
           type: integer
         speed_PID_kd:
           type: integer
         speed_PID_ki:
           type: integer
         speed_PID_kp:
+          type: integer
+        state:
+          type: integer
+        time_setpoint:
           type: integer
         command:
           type: string
@@ -543,59 +572,6 @@ components:
             - coast
             - brake
             - hold
-
-    TachoMotor:
-      type: object
-      properties:
-        commnds:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        stop_actions:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        count_per_rot:
-          type: integer
-        duty_cycle:
-          type: integer
-        duty_cycle_setpoint:
-          type: integer
-        polarity:
-          type: string
-        position:
-          type: integer
-        hold_PID_kd:
-          type: integer
-        hold_PID_ki:
-          type: integer
-        hold_PID_kp:
-          type: integer
-        max_speed:
-          type: integer
-          readOnly: true
-        position_setpoint:
-          type: integer
-        current_speed:
-          type: integer
-        current_speed_setpoint:
-          type: integer
-        current_ramp_up_setpoint:
-          type: integer
-        current_ramp_down_setpoint:
-          type: integer
-        speed_PID_kd:
-          type: integer
-        speed_PID_ki:
-          type: integer
-        speed_PID_kp:
-          type: integer
-        state:
-          type: integer
-        time_setpoint:
-          type: integer
 
     PowerInfo:
       type: object
