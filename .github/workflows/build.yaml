@@ -179,4 +179,4 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./ev3api-0.1.0-py3-none-any.whl
           asset_name: ev3api-0.1.0-py3-none-any.whl
-          asset_content_type: application/java-archive
+          asset_content_type: application/zip
