@@ -3,7 +3,7 @@ package buttonAPI
 import (
 	"EV3-API/internal/gen/openapi"
 	"context"
-	"github.com/ev3go/ev3dev"
+	"net/http"
 )
 
 type ApiService struct {
@@ -14,8 +14,7 @@ func NewButtonApiService() openapi.ButtonApiServicer {
 	return &ApiService{}
 }
 
-func (a ApiService) ButtonPressedGet(ctx context.Context) (openapi.ImplResponse, error) {
-	ev3dev.ButtonEvent{}
-	//TODO implement me
-	panic("implement me")
+func (a ApiService) ButtonPressedGet(_ context.Context) (openapi.ImplResponse, error) {
+	// TODO: implement
+	return openapi.Response(http.StatusNotImplemented, nil), nil
 }
