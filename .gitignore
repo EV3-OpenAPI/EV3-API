@@ -1,5 +1,6 @@
-internal
+internal/gen
 
-!internal/server_impl/**
 .idea
 *.iml
+
+clients/ev3-java/ev3api
