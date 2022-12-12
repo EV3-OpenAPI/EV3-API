@@ -17,6 +17,9 @@ var (
 		{"US", getUS},
 		{"Gyro", getGyro},
 	}
+
+	lastDText string
+	interval  time.Duration
 )
 
 type update struct {
@@ -27,10 +30,11 @@ type update struct {
 // Start the update loop with the given interval between updates.
 // The update loop runs in a separate go routine (almost like a thread).
 // The duration between updates can go to 0 if the update takes longer than the interval
-func Start(interval time.Duration) {
+func Start(interv time.Duration) {
 	findWlanInterface()
 
-	go startLoop(interval)
+	interval = interv
+	go startLoop()
 }
 
 func findWlanInterface() {
@@ -46,7 +50,7 @@ func findWlanInterface() {
 	}
 }
 
-func startLoop(interval time.Duration) {
+func startLoop() {
 	for true {
 		start := time.Now()
 		displayStatus()
@@ -57,19 +61,24 @@ func startLoop(interval time.Duration) {
 }
 
 func displayStatus() {
-	start := time.Now()
-
 	dLines := make([]string, len(updates))
 	for i, u := range updates {
 		dLines[i] = fmt.Sprintf("%s: %s", u.Name, u.Fn())
 	}
 
-	err := lcd.Write(strings.Join(dLines, "\n"))
-	if err != nil {
-		log.Println(err)
+	dText := strings.Join(dLines, "\n")
+	if dText != lastDText {
+		err := lcd.Write(dText)
+		if err != nil {
+			log.Println(err)
+		}
+		lastDText = dText
+	} else {
+		err := lcd.FastWrite(dText)
+		if err != nil {
+			log.Println(err)
+		}
 	}
-
-	log.Printf("INFO - time to draw: %v", time.Now().Sub(start))
 }
 
 func getIP() string {

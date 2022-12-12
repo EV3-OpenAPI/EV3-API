@@ -71,18 +71,24 @@ func SetImage(image *image.RGBA) {
 	}
 }
 
-// Write the given text to the EV3 LCD (display)
+// Write the given text to the EV3 LCD (display) after clearing the screen
 func Write(textContent string) (err error) {
-	fgColor := color.Black
 	bgColor := color.White
+	bg := image.NewUniform(bgColor)
+	draw.Draw(ev3.LCD, ev3.LCD.Bounds(), bg, image.Pt(0, 0), draw.Src)
+
+	return FastWrite(textContent)
+}
+
+// FastWrite the given text to the EV3 LCD (display) without clearing the screen first
+func FastWrite(textContent string) (err error) {
+	fgColor := color.Black
 	fontSize := float64(13)
 
 	code := strings.Replace(textContent, "\t", "    ", -1) // convert tabs into spaces
 	text := strings.Split(code, "\n")                      // split newlines into arrays
 
 	fg := image.NewUniform(fgColor)
-	bg := image.NewUniform(bgColor)
-	draw.Draw(ev3.LCD, ev3.LCD.Bounds(), bg, image.Pt(0, 0), draw.Src)
 
 	c := freetype.NewContext()
 	c.SetDPI(72)
@@ -93,8 +99,8 @@ func Write(textContent string) (err error) {
 	c.SetSrc(fg)
 	c.SetHinting(font.HintingNone)
 
-	textXOffset := 10
-	textYOffset := 10 + int(c.PointToFixed(fontSize)>>6) // Note shift/truncate 6 bits first
+	textXOffset := 0
+	textYOffset := 0 + int(c.PointToFixed(fontSize)>>6) // Note shift/truncate 6 bits first
 
 	pt := freetype.Pt(textXOffset, textYOffset)
 	for _, s := range text {
@@ -102,7 +108,7 @@ func Write(textContent string) (err error) {
 		if err != nil {
 			return
 		}
-		pt.Y += c.PointToFixed(fontSize * 1.5)
+		pt.Y += c.PointToFixed(fontSize * 1.2)
 	}
 
 	return
