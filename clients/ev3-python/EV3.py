@@ -1,9 +1,9 @@
 from enum import Enum
-from ev3api.apis.tags.motor_api import MotorApi
-from ev3api.apis.tags.power_api import PowerApi
-from ev3api.apis.tags.sensor_api import SensorApi
-from ev3api.apis.tags.sound_api import SoundApi
-from ev3api.apis.tags.led_api import LedApi
+from ev3api.api.motor_api import MotorApi
+from ev3api.api.power_api import PowerApi
+from ev3api.api.sensor_api import SensorApi
+from ev3api.api.sound_api import SoundApi
+from ev3api.api.led_api import LedApi
 from ev3api.model.led import LED
 from ev3api.model.tone import Tone
 from ev3api.model.text import Text
@@ -19,12 +19,6 @@ class EV3:
         C = "C"
         D = "D"
 
-        def __init__(self, name):
-            self.name = name
-
-        def __str__(self):
-            return self.name
-
     def __init__(self, host_address):
         self.configuration = Configuration(
             host=f"http://{host_address}/api/v1"
@@ -38,8 +32,8 @@ class EV3:
         self.ledApi = LedApi(self.api_client)
 
     """
-    This method returns the ip-adress from the EV3
-    @return the ip-adress   
+    This method returns the ip-address from the EV3
+    @return the ip-address   
     """
 
     def get_host_address(self):
@@ -57,15 +51,15 @@ class EV3:
 
     """
     * The EV3 will play a tone.
-    * @param frequency the specific frequenz for the tone
+    * @param frequency the specific frequency for the tone
     * @param lengthMs the specific duration of the tone
     """
 
-    def play_tone(self, frequenz, lengthMs):
+    def play_tone(self, frequency, length_ms):
         try:
             self.soundApi.sound_tone_post(Tone(
-                frequency=frequenz,
-                length_ms=lengthMs,
+                frequency=frequency,
+                length_ms=length_ms,
             ))
         except ApiException as e:
             print(e)
@@ -78,7 +72,7 @@ class EV3:
     def speak(self, text):
         try:
             self.soundApi.sound_speak_post(Text(
-                content_type=text,
+                text=text,
             ))
         except ApiException as e:
             print(e)
@@ -90,7 +84,7 @@ class EV3:
 
     def voltage(self):
         try:
-            return self.powerApi.power_get().body["voltage"]
+            return self.powerApi.power_get()["voltage"]
         except ApiException as e:
             print(e)
         return -1
@@ -102,7 +96,7 @@ class EV3:
 
     def current(self):
         try:
-            return self.powerApi.power_get().body["current"]
+            return self.powerApi.power_get()["current"]
         except ApiException as e:
             print(e)
         return -1
@@ -114,7 +108,7 @@ class EV3:
 
     def max_voltage(self):
         try:
-            return self.powerApi.power_get().body["voltage_max"]
+            return self.powerApi.power_get()["voltage_max"]
         except ApiException as e:
             print(e)
         return -1
@@ -126,7 +120,7 @@ class EV3:
 
     def min_voltage(self):
         try:
-            return self.powerApi.power_get().body["voltage_min"]
+            return self.powerApi.power_get()["voltage_min"]
         except ApiException as e:
             print(e)
         return -1
@@ -138,7 +132,7 @@ class EV3:
 
     def technology(self):
         try:
-            return self.powerApi.power_get().body["technology"]
+            return self.powerApi.power_get()["technology"]
         except ApiException as e:
             print(e)
         return None
@@ -150,7 +144,7 @@ class EV3:
 
     def button(self):
         try:
-            return self.ledApi.button_pressed_get()
+            pass  # return self.buttonApi.button_pressed_get()
         except ApiException as e:
             print(e)
         return None
@@ -160,17 +154,14 @@ class EV3:
     """
 
     def flash(self):
-        body = [
+        leds = [
             LED(
-                device="device_example",
-                red=1,
-                green=1,
+                side="left",
+                red=255,
             )
         ]
         try:
-            return self.ledApi.led_flash_post(
-                body=body,
-            )
+            return self.ledApi.led_flash_post(leds)  # FIXME: this gives a 404
         except ApiException as e:
             print(e)
         return None
