@@ -17,7 +17,7 @@ jobs:
         with:
           go-version: 1.18
 
-      - name: Gerate go server
+      - name: Generate go server
         uses: docker://openapitools/openapi-generator-cli
         with:
           args: generate -i openapi/spec.yaml -g go-server -o tmp -c openapi/server-config.yml
@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Gerate java client
+      - name: Generate java client
         uses: docker://openapitools/openapi-generator-cli
         with:
           args: generate -i openapi/spec.yaml -o clients/java-tmp -g java -c openapi/java-client-config.yaml
