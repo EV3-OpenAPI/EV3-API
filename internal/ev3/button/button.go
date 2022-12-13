@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+var (
+	lastButtonEvent *ev3dev.ButtonEvent
+)
+
 func Poll() {
 	var b ev3dev.ButtonPoller
 
@@ -18,4 +22,30 @@ func Poll() {
 		fmt.Printf("%6b\n", b)
 		time.Sleep(5 * time.Second)
 	}
+}
+
+func Wait() {
+	go wait()
+}
+
+func wait() {
+	w, err := ev3dev.NewButtonWaiter()
+	if err != nil {
+		log.Fatalf("failed to create button waiter: %v", err)
+	}
+
+	for e := range w.Events {
+		lastButtonEvent = &e
+		log.Printf("DEBUG - %+v\n", e)
+	}
+}
+
+// GetLastButtonEvent gets last ev3dev.ButtonEvent
+func GetLastButtonEvent(clear bool) (btnEvt *ev3dev.ButtonEvent) {
+	*btnEvt = *lastButtonEvent
+	if clear {
+		lastButtonEvent = nil
+	}
+
+	return btnEvt
 }

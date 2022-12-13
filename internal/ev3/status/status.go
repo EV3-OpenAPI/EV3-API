@@ -1,6 +1,8 @@
 package status
 
 import (
+	"EV3-API/internal/ev3"
+	"EV3-API/internal/ev3/button"
 	"EV3-API/internal/ev3/lcd"
 	"EV3-API/internal/ev3/sensor"
 	"fmt"
@@ -11,7 +13,6 @@ import (
 )
 
 var (
-	ifIdx   = -1
 	updates = []update{
 		{"IP", getIP},
 		{"US", getUS},
@@ -31,32 +32,26 @@ type update struct {
 // The update loop runs in a separate go routine (almost like a thread).
 // The duration between updates can go to 0 if the update takes longer than the interval
 func Start(interv time.Duration) {
-	findWlanInterface()
-
 	interval = interv
 	go startLoop()
 }
 
-func findWlanInterface() {
-	interfaces, err := net.Interfaces()
-	if err != nil {
-		log.Printf("ERROR - No WLAN interface found. Info will not be avaiable")
-	}
-
-	for _, intf := range interfaces {
-		if strings.HasPrefix(intf.Name, "wlx") {
-			ifIdx = intf.Index
-		}
-	}
-}
-
 func startLoop() {
+	lcd.ShowSystemTTY(false)      // Hide system screen
+	defer lcd.ShowSystemTTY(true) // Show system screen on exit
+
 	for true {
 		start := time.Now()
 		displayStatus()
+
+		if evt := button.GetLastButtonEvent(false); evt.TimeStamp < interval {
+			break
+		}
+
 		duration := time.Now().Sub(start)
 		log.Printf("DEBUG - displayStatus: duration %v", duration)
 		time.Sleep(interval - duration)
+
 	}
 }
 
@@ -82,9 +77,7 @@ func displayStatus() {
 }
 
 func getIP() string {
-	if ifIdx == -1 {
-		findWlanInterface()
-	}
+	ifIdx := ev3.GetWlanInterfaceIndex()
 
 	if intf, err := net.InterfaceByIndex(ifIdx); err == nil {
 		if addrs, err := intf.Addrs(); err == nil {

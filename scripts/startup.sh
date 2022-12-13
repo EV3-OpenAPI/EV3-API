@@ -29,9 +29,8 @@ if [[ ! -f "${host_name}" ]]; then  # first boot only
 fi
 
 # update
-rm server
 download_url=$(curl https://api.github.com/repos/PA-arslasel-machitic/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
-wget $download_url
+curl -o server $download_url
 chmod +x server
 
 # robots
