@@ -42,6 +42,10 @@ func wait() {
 
 // GetLastButtonEvent gets last ev3dev.ButtonEvent
 func GetLastButtonEvent(clear bool) (btnEvt *ev3dev.ButtonEvent) {
+	if lastButtonEvent == nil {
+		return nil
+	}
+
 	*btnEvt = *lastButtonEvent
 	if clear {
 		lastButtonEvent = nil
