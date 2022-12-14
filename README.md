@@ -3,7 +3,7 @@
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
 
 
-# Lego Robot Mindstorm EV3-REST
+# LEGO MINDSTORMS EV3-REST
 
 This project deals with the goal to design the Lego Robot of the type mindstorm EV3 for the promotion of programming knowledge for non-informaticians, in such a way that the implemented methods in the server are callable over several programming technologies. The implemented methods should be callable via an application programming interface.
 The server which is the Lego robot is implemented with [OpenAPI Specification](https://www.openapis.org/), which allows to automatically generate libraries for the client in several programming languages.
