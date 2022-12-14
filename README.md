@@ -18,6 +18,19 @@ TODO
 
 TODO
 
+# Java-Setup for students
+If you want to code with Java, then use this instruction.
+
+## Prerequisites
+
+1. Download from [Github](https://github.com/PA-arslasel-machitic/EV3-API/releases/) the latest .jar-file realease
+2. Start you IDE and generate a new project.
+3. After you generate a new project, you have to add the .jar-file to the project. **See example**:
+![image info](./picture/IDE_add_library.png)
+4. Now you are ready to import the library in your project. Open your project and import the library. **See example**: `import ch.zhaw.ev3.*;` and `import ch.zhaw.ev3api.invoker.ApiException;` ![image info](./picture/import_library.png)
+
+
+
 # Participation
 
 The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
