@@ -10,13 +10,11 @@ The server which is the Lego robot is implemented with [OpenAPI Specification](h
 
 This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt. Here you will find the information you need about the Lego Robot, simple examples of what it looks like, and some general information regarding the project.
 
-# Current Version 1.0
-
-TODO
-
 # Tools and Libraries
 
-TODO
+Openapi generator
+
+GO-library
 
 # Setup for students
 If you want to code with **Java**, then use this instruction:
@@ -75,8 +73,3 @@ Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o cli
 
 Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
 Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
-
-
-### To-Test
-
-Concurrency; what happens if multiple request are made to the library at the same time?
