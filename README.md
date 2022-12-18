@@ -1,4 +1,4 @@
-[![Go binary](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml)
+[![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml)
 
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
 
@@ -12,9 +12,9 @@ This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt.
 
 # Tools and Libraries
 
-Openapi generator
+Openapi generator TODO SELIM
 
-GO-library
+GO-library TODO SELIM
 
 # Setup for students
 If you want to code with **Java**, then use this instruction:
@@ -23,7 +23,7 @@ If you want to code with **Java**, then use this instruction:
 
 If you want to code with **Python**, then use this instruction:
 
-* [Setup for Python](./SetupJava.md)
+* [Setup for Python](./SetupJava.md) TODO MATTHEW
 
 # Participation
 
@@ -34,8 +34,8 @@ The ZHAW holds every 2 weeks web conferences to review to code and open pull req
 The Lego Robot EV3 encourages participation from individuals and companies alike. If you want to participate in the evolution of the Lego Robot, consider taking the following actions:
 
 * Review the current specification. The human-readable markdown file is the source of truth for the specification.
-* Review the [development](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md) process, so you understand how the spec is evolving.
-* Check the [issues](https://github.com/PA-arslasel-machitic/EV3-API/issues) and [pull requests](https://github.com/PA-arslasel-machitic/EV3-API/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
+* Review the [development](https://github.com/EV3-OpenAPI/EV3-API/blob/master/DEVELOPMENT.md) process, so you understand how the spec is evolving.
+* Check the [issues](https://github.com/EV3-OpenAPI/EV3-API/issues) and [pull requests](https://github.com/EV3-OpenAPI/EV3-API/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
 * Create an issue to describe a new concern. If possible, propose a solution.
 
 Not all feedback can be accommodated and there may be solid arguments for or against a change being appropriate for the specification.
