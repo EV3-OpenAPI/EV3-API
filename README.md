@@ -12,9 +12,11 @@ This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt.
 
 # Tools and Libraries
 
-Openapi generator TODO SELIM
+For this project, **OpenAPI generator** is used and the **EV3 Golang library**.
 
-GO-library TODO SELIM
+* [OpenAPI Generator](https://openapi-generator.tech/)
+
+* [EV3 Golang library](https://github.com/ev3go)
 
 # Setup for students
 If you want to code with **Java**, then use this instruction:
