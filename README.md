@@ -73,3 +73,14 @@ Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o cli
 
 Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
 Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
+
+#### Release and Deployment
+
+If a new release is to be created, the new version number must first be entered in the following files:
+
+* openapi/spec.yaml
+* clients/ev3-java/build.gradle
+* clients/ev3-python/setup.py
+
+After that, a new release can be published via the GitHub. The repository has a GitHub action that automatically creates the Golang, Java and Python artifacts and attaches the release.
+Every time the LEGO robot is started, the [GitHub](https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest) is used to check whether the latest release is newer than the currently installed version. If this is the case, the latest GO binary can be downloaded via the Assets API. This replaces the old binary and will be executed in its place in the future.
