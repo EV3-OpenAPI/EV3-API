@@ -74,7 +74,7 @@ Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o cli
 Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
 Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
 
-#### Release and Deployment
+## Release and Deployment
 
 If a new release is to be created, the new version number must first be entered in the following files:
 
