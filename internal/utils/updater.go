@@ -8,9 +8,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 )
 
 const RELEASE_URL = "https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest"
+const VERSION_FILE_NAME = "version"
+const SERVER_FILE_NAME = "ev3api-server"
 
 type release struct {
 	Id              int      `json:"id"`
@@ -31,6 +34,9 @@ type asset struct {
 	State              string `json:"state"`
 }
 
+// CheckForNewVersion checks if there is a new release, if there is, downloads it.
+// After the download it starts the executable, and if that is successful it replaces
+// the original executable and exits, causing systemd to restart this application.
 func CheckForNewVersion() {
 	res, err := http.Get(RELEASE_URL)
 	if err != nil {
@@ -52,16 +58,29 @@ func CheckForNewVersion() {
 		return
 	}
 
-	currVer := getCurrentVersion()
+	currVer := readCurrentVersion()
 	if semver.Compare(currVer, rel.TagName) == -1 {
 		log.Printf("INFO - Newer version found. Current: %s, New: %s", currVer, rel.TagName)
 
 		downloadUrl, err := getAssetWithName(rel.Assets, "server")
 		if err != nil {
-			log.Printf("ERROR - No server binary in release")
+			log.Printf("ERROR - No server binary in release. %v", err)
 			return
 		}
-		downloadVersion(downloadUrl)
+		err = downloadVersion(downloadUrl)
+		if err != nil {
+			log.Printf("ERROR - Update unsuccessful, continue with current version. %v", err)
+			return
+		}
+
+		// Update version file
+		err = writeCurrentVersion(rel.TagName)
+		if err != nil {
+			log.Printf("WARNING - new version string could not be written. %v", err)
+		}
+
+		log.Printf("INFO - Update successful, restarting")
+		os.Exit(2) // exit with error code to cause systemd to restart the new executable
 	}
 }
 
@@ -75,49 +94,92 @@ func getAssetWithName(assets *[]asset, name string) (string, error) {
 	return "", fmt.Errorf("no asset with the given name found")
 }
 
-func downloadVersion(url string) {
+func downloadVersion(url string) error {
+	newFilePath := fmt.Sprintf("./%s.new", SERVER_FILE_NAME)
+	oldFilePath := fmt.Sprintf("./%s", SERVER_FILE_NAME)
+
 	// Create blank, executable file
-	file, err := os.Create("ev3api-server.new")
-	os.Chmod(file.Name(), 0744)
+	file, err := os.Create(newFilePath)
 	if err != nil {
-		log.Printf("ERROR - cannot create new server binary file. %v", err)
-		return
+		return fmt.Errorf("cannot create new server binary file. %v", err)
 	}
 
-	// Put content on file
+	// Change permission to be executable
+	err = os.Chmod(newFilePath, 0744)
+	if err != nil {
+		return fmt.Errorf("cannot make new server binary file executable. %v", err)
+	}
+
+	// Download file content
 	res, err := http.Get(url)
 	if err != nil {
-		log.Printf("ERROR - cannot create new server binary file. %v", err)
-		return
+		return fmt.Errorf("cannot create new server binary file. %v", err)
 	}
 	defer res.Body.Close()
 
+	// Write download body to file
 	size, err := io.Copy(file, res.Body)
 	if err != nil {
-		log.Printf("ERROR - cannot write new server binary file. %v", err)
+		return fmt.Errorf("cannot write new server binary file. %v", err)
 	}
 	defer file.Close()
 
-	if !isExecutable(file) {
-		log.Printf("ERROR - new server binary is not executable, aborting")
-		os.Remove(file.Name())
+	// Check if new file is executable
+	if !isExecutable(newFilePath) {
+		os.Remove(newFilePath)
+		return fmt.Errorf("new server binary is not executable, aborting")
 	}
 
-	fmt.Printf("Downloaded a file %s with size %d", file.Name(), size)
-	// TODO: replace current server file with new one
+	fmt.Printf("INFO - Downloaded a file %s with size %d", newFilePath, size)
+
+	// Replace old executable with new one
+	if err = os.Rename(newFilePath, oldFilePath); err != nil {
+		return fmt.Errorf("")
+	}
+
+	return nil
 }
 
-func isExecutable(file *os.File) bool {
-	stat, err := file.Stat()
-	log.Printf("stat: %v, err: %v", stat, err)
+func isExecutable(filePath string) bool {
+	cmd := exec.Command(filePath, "-verify")
+
+	if err := cmd.Start(); err != nil {
+		log.Printf("ERROR - cmd.Start: %v", err)
+		return false
+	}
+
+	if err := cmd.Run(); err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			return exitError.ExitCode() == 0
+		}
+	}
+
 	return false
 }
 
-func getCurrentVersion() string {
-	file, err := os.ReadFile("version")
+func readCurrentVersion() string {
+	fileContent, err := os.ReadFile(VERSION_FILE_NAME)
 	if err != nil {
 		return "0.0.0"
 	}
 
-	return string(file)
+	return string(fileContent)
+}
+
+func writeCurrentVersion(version string) error {
+	file, err := os.Open(VERSION_FILE_NAME)
+	if err != nil {
+		file, err = os.Create(VERSION_FILE_NAME)
+		if err != nil {
+			return fmt.Errorf("could not open version file. %v", err)
+		}
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(version)
+	if err != nil {
+		return fmt.Errorf("could write to version file. %v", err)
+	}
+
+	return nil
 }

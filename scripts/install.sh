@@ -1,12 +1,24 @@
 #!/bin/bash
 
+# Cleanup old files
+crontab -u robot -l | grep -v '@reboot /home/robot/startup.sh'  | crontab -u robot -
+mkdir -p /home/robot/bak
+mv /home/robot/get_host_name_by_mac.py /home/robot/bak/.
+mv /home/robot/host.name               /home/robot/bak/.
+mv /home/robot/rpyc_robots.py          /home/robot/bak/.
+mv /home/robot/rpyc_start.sh           /home/robot/bak/.
+mv /home/robot/startup.sh              /home/robot/bak/.
+
 # Create directory for ev3api-server
 mkdir -p /opt/ev3api-server/
 
+# Download files
 curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/startup.sh
-curl -o /opt/ev3api-server/get_hostname_by_mac.py https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/get_hostname_by_mac.py
 chmod +x /opt/ev3api-server/startup.sh
-chmod +x /opt/ev3api-server/get_hostname_by_mac.py
+
+download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
+curl -o server $download_url
+chmod +x server
 
 chown -R robot:robot /opt/ev3api-server
 

@@ -10,13 +10,11 @@ The server which is the Lego robot is implemented with [OpenAPI Specification](h
 
 This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt. Here you will find the information you need about the Lego Robot, simple examples of what it looks like, and some general information regarding the project.
 
-# Current Version 1.0
+# Installation
 
-TODO
-
-# Tools and Libraries
-
-TODO
+1. Connect to your EV3 robot with SSH or with a directly attached keyboard and monitor.
+2. Ensure that the EV3 has an internet connection
+3. Run the install-script with elevated privileges `curl -sf -L https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/install.sh | sudo sh`
 
 # Participation
 

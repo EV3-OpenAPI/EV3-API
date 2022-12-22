@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -25,13 +26,19 @@ func main() {
 
 	getHostname := flag.Bool("get-hostname", false, "only return hostname for this device")
 	noMonitor := flag.Bool("no-monitor", false, "do not create a display overlay")
+	verify := flag.Bool("verify", false, "exit with status code 0, check if executable")
 	update := flag.Bool("update", false, "check if new versions are available")
 	port := flag.Int("port", 8080, "port to listen on")
 	flag.Parse()
 
+	if *verify {
+		log.Printf("INFO - Verify mode, exiting...")
+		os.Exit(0)
+	}
+
 	if *getHostname {
 		fmt.Print(ev3.GetHostname())
-		return
+		os.Exit(0)
 	}
 
 	if *update {
