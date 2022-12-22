@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-const RELEASE_URL = "https://api.github.com/repos/PA-arslasel-machitic/EV3-API/releases/latest"
+const RELEASE_URL = "https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest"
 
 type release struct {
 	Id              int      `json:"id"`

@@ -29,7 +29,7 @@ if [[ ! -f "${host_name}" ]]; then  # first boot only
 fi
 
 # update
-download_url=$(curl https://api.github.com/repos/PA-arslasel-machitic/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
+download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
 curl -o server $download_url
 chmod +x server
 

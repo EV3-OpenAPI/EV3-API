@@ -1,4 +1,4 @@
-[![Go binary](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml)
+[![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml)
 
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
 
@@ -20,15 +20,15 @@ TODO
 
 # Participation
 
-The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
+The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/EV3-OpenAPI/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
 
 The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving Lego Robot. 
 
 The Lego Robot EV3 encourages participation from individuals and companies alike. If you want to participate in the evolution of the Lego Robot, consider taking the following actions:
 
 * Review the current specification. The human-readable markdown file is the source of truth for the specification.
-* Review the [development](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md) process, so you understand how the spec is evolving.
-* Check the [issues](https://github.com/PA-arslasel-machitic/EV3-API/issues) and [pull requests](https://github.com/PA-arslasel-machitic/EV3-API/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
+* Review the [development](https://github.com/EV3-OpenAPI/EV3-API/blob/master/DEVELOPMENT.md) process, so you understand how the spec is evolving.
+* Check the [issues](https://github.com/EV3-OpenAPI/EV3-API/issues) and [pull requests](https://github.com/EV3-OpenAPI/EV3-API/pulls) to see if someone has already documented your idea or feedback on the specification. You can follow an existing conversation by subscribing to the existing issue or PR.
 * Create an issue to describe a new concern. If possible, propose a solution.
 
 Not all feedback can be accommodated and there may be solid arguments for or against a change being appropriate for the specification.

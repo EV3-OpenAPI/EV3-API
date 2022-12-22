@@ -3,8 +3,8 @@
 # Create directory for ev3api-server
 mkdir -p /opt/ev3api-server/
 
-curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/PA-arslasel-machitic/EV3-API/master/scripts/startup.sh
-curl -o /opt/ev3api-server/get_hostname_by_mac.py https://raw.githubusercontent.com/PA-arslasel-machitic/EV3-API/master/scripts/get_hostname_by_mac.py
+curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/startup.sh
+curl -o /opt/ev3api-server/get_hostname_by_mac.py https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/get_hostname_by_mac.py
 chmod +x /opt/ev3api-server/startup.sh
 chmod +x /opt/ev3api-server/get_hostname_by_mac.py
 
