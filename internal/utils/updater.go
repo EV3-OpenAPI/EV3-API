@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"golang.org/x/mod/semver"
@@ -9,11 +10,30 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"time"
 )
 
 const RELEASE_URL = "https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest"
 const VERSION_FILE_NAME = "version"
 const SERVER_FILE_NAME = "ev3api-server"
+
+var client = &http.Client{
+	Transport: &http.Transport{
+		TLSHandshakeTimeout: 20 * time.Second,
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+			CipherSuites: []uint16{
+				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, // Go 1.8 only
+				tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,   // Go 1.8 only
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			},
+		},
+	},
+	Timeout: 30 * time.Second,
+}
 
 type release struct {
 	Id              int      `json:"id"`
@@ -38,7 +58,9 @@ type asset struct {
 // After the download it starts the executable, and if that is successful it replaces
 // the original executable and exits, causing systemd to restart this application.
 func CheckForNewVersion() {
-	res, err := http.Get(RELEASE_URL)
+	log.Printf("INFO - Check for new versions")
+
+	res, err := client.Get(RELEASE_URL)
 	if err != nil {
 		log.Printf("ERROR - Failed to fetch newest version, continung with existing. %v", err)
 		return
@@ -81,6 +103,8 @@ func CheckForNewVersion() {
 
 		log.Printf("INFO - Update successful, restarting")
 		os.Exit(2) // exit with error code to cause systemd to restart the new executable
+	} else {
+		log.Printf("INFO - Already at newest version. %s", currVer)
 	}
 }
 
@@ -111,7 +135,7 @@ func downloadVersion(url string) error {
 	}
 
 	// Download file content
-	res, err := http.Get(url)
+	res, err := client.Get(url)
 	if err != nil {
 		return fmt.Errorf("cannot create new server binary file. %v", err)
 	}
@@ -122,7 +146,11 @@ func downloadVersion(url string) error {
 	if err != nil {
 		return fmt.Errorf("cannot write new server binary file. %v", err)
 	}
-	defer file.Close()
+
+	err = file.Close()
+	if err != nil {
+		return fmt.Errorf("could not close new executable file")
+	}
 
 	// Check if new file is executable
 	if !isExecutable(newFilePath) {
@@ -154,13 +182,13 @@ func isExecutable(filePath string) bool {
 		}
 	}
 
-	return false
+	return true
 }
 
 func readCurrentVersion() string {
 	fileContent, err := os.ReadFile(VERSION_FILE_NAME)
 	if err != nil {
-		return "0.0.0"
+		return "v0.0.0"
 	}
 
 	return string(fileContent)

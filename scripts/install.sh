@@ -17,8 +17,8 @@ curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/EV3-Open
 chmod +x /opt/ev3api-server/startup.sh
 
 download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
-curl -o server $download_url
-chmod +x server
+curl -o /opt/ev3api-server/ev3api-server $download_url
+chmod +x /opt/ev3api-server/ev3api-server
 
 chown -R robot:robot /opt/ev3api-server
 
@@ -26,7 +26,7 @@ chown -R robot:robot /opt/ev3api-server
 echo "robot ALL=NOPASSWD: /usr/bin/hostnamectl set-hostname*, /bin/chvt 2, /bin/chvt 5" > /etc/sudoers.d/ev3api-server
 
 # Create systemd service
-cat <<EOT >> /etc/systemd/system/ev3api-server.service
+cat <<EOT > /etc/systemd/system/ev3api-server.service
 [Unit]
 Description=EV3API server
 After=network.target
@@ -36,6 +36,8 @@ Type=simple
 ExecStart=/opt/ev3api-server/startup.sh
 WorkingDirectory=/opt/ev3api-server/
 User=robot
+Restart=on-failure
+RestartSec=1s
 
 [Install]
 WantedBy=multi-user.target
