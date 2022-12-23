@@ -32,7 +32,7 @@ setup(
     description="EV3 API",
     author="OpenAPI Generator community",
     author_email="accounts@machivenyika.ch",
-    url="https://github.com/PA-arslasel-machitic/EV3-API",
+    url="https://github.com/EV3-OpenAPI/EV3-API",
     keywords=["OpenAPI", "OpenAPI-Generator", "EV3 API"],
     python_requires=">=3.6",
     install_requires=REQUIRES,

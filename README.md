@@ -1,4 +1,5 @@
-[![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/PA-arslasel-machitic/EV3-API/actions/workflows/build.yaml)
+[![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml)
+
 
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
 
@@ -10,6 +11,13 @@ The server which is the Lego robot is implemented with [OpenAPI Specification](h
 
 This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt. Here you will find the information you need about the Lego Robot, simple examples of what it looks like, and some general information regarding the project.
 
+# Installation
+
+1. Connect to your EV3 robot with SSH or with a directly attached keyboard and monitor.
+2. Ensure that the EV3 has an internet connection
+3. Run the install-script with elevated privileges `curl -sf -L https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/install.sh | sudo sh`
+
+
 # Tools and Libraries
 
 For this project, **OpenAPI generator** is used and the **EV3 Golang library**.
@@ -17,6 +25,7 @@ For this project, **OpenAPI generator** is used and the **EV3 Golang library**.
 * [OpenAPI Generator](https://openapi-generator.tech/)
 
 * [EV3 Golang library](https://github.com/ev3go)
+
 
 # Setup for students
 If you want to code with **Java**, then use this instruction:
@@ -29,7 +38,7 @@ If you want to code with **Python**, then use this instruction:
 
 # Participation
 
-The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/PA-arslasel-machitic/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
+The current process for development of the Lego Robot is described in [Development Guidelines](https://github.com/EV3-OpenAPI/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the Lego Robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
 
 The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving Lego Robot. 
 

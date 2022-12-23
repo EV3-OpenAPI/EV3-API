@@ -1,6 +1,7 @@
 package lcd
 
 import (
+	"fmt"
 	"github.com/ev3go/ev3"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
@@ -10,6 +11,7 @@ import (
 	"image/draw"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -112,6 +114,27 @@ func FastWrite(textContent string) (err error) {
 	}
 
 	return
+}
+
+func ShowStatusTTY(b bool) {
+	ShowSystemTTY(!b)
+}
+
+func ShowSystemTTY(b bool) {
+	tty := 5
+	if b {
+		tty = 2
+	}
+	cmd := exec.Command("/bin/sh", "-c", fmt.Sprintf("echo %s | sudo -S chvt %d", "maker", tty))
+
+	if err := cmd.Start(); err != nil {
+		log.Printf("ERROR - cmd.Start: %v", err)
+	}
+	if err := cmd.Run(); err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok && exitError.ExitCode() != 0 {
+			log.Printf("ERROR - error running chvt cmd. %v", err)
+		}
+	}
 }
 
 func loadFont() (f *truetype.Font, err error) {

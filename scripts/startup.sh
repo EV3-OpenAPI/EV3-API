@@ -5,6 +5,7 @@
 # delete hostname.config file to re-assign host name
 
 # 2021-09-20 @metl
+# 2022-12-22 @machitic
 
 # variables
 check_ip=160.85.104.112  # ping test: zhaw.ch IP
@@ -22,19 +23,13 @@ if [[ ! -f "${host_name}" ]]; then  # first boot only
     echo
     echo "2 get hostname form git"
     touch ${host_name}
-    ev3=$(./get_host_name_by_mac.py)
+    ev3=$(./ev3api-server -get-hostname)
     echo ${ev3} >> ${host_name}
     hostnamectl set-hostname ${ev3}
     echo " > host name set to '${ev3}'"
 fi
 
-# update
-rm server
-download_url=$(curl https://api.github.com/repos/PA-arslasel-machitic/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
-wget $download_url
-chmod +x server
-
 # robots
 echo
-echo "4 start rpyc robots"
-./server
+echo "3 start ev3api-server"
+./ev3api-server -update

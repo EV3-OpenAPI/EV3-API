@@ -8,7 +8,11 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 	github.com/gorilla/mux v1.8.0
+)
+
+require (
 	golang.org/x/image v0.2.0
+	golang.org/x/mod v0.6.0
 )
 
 require golang.org/x/sys v0.1.0 // indirect
