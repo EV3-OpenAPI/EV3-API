@@ -70,7 +70,7 @@ func startServer(port int) {
 
 	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController)
 
-	sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
+	_ = sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
 
 	log.Printf("INFO - Starting server on port %d", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router))
@@ -89,5 +89,5 @@ func initDevices(noMonitor bool) {
 }
 
 func closeDevices() {
-	sound.Close()
+	_ = sound.Close()
 }

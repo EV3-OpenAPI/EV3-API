@@ -47,8 +47,8 @@ func SetPixels(pixels []Pixel) {
 
 func SetColor2DArray(xycolors [][]color.Color) {
 	for x, ycolors := range xycolors {
-		for y, color := range ycolors {
-			ev3.LCD.Set(x, y, color)
+		for y, c := range ycolors {
+			ev3.LCD.Set(x, y, c)
 		}
 	}
 }

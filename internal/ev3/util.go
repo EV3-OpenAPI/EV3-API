@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	mac_mappings = map[string]string{
+	macMappings = map[string]string{
 		"74:DA:38:CD:33:C6": "ev3-001",
 		"74:DA:38:CD:33:AE": "ev3-002",
 		"74:DA:38:F4:51:51": "ev3-003",
@@ -99,7 +99,7 @@ func GetHostname() string {
 
 func GetHostnameForMac(mac string) string {
 	mac = strings.ToUpper(mac)
-	if hostname, ok := mac_mappings[mac]; ok {
+	if hostname, ok := macMappings[mac]; ok {
 		return hostname
 	}
 

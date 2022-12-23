@@ -154,7 +154,7 @@ func downloadVersion(url string) error {
 
 	// Check if new file is executable
 	if !isExecutable(newFilePath) {
-		os.Remove(newFilePath)
+		_ = os.Remove(newFilePath)
 		return fmt.Errorf("new server binary is not executable, aborting")
 	}
 

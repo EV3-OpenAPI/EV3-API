@@ -25,7 +25,7 @@ func NewMotorApiService() openapi.MotorApiServicer {
 	return &ApiService{}
 }
 
-func (s *ApiService) MotorSteerResetPost(ctx context.Context) (openapi.ImplResponse, error) {
+func (s *ApiService) MotorSteerResetPost(_ context.Context) (openapi.ImplResponse, error) {
 	ev3motor.ResetSteeringUnit()
 
 	return openapi.Response(http.StatusNoContent, nil), nil
