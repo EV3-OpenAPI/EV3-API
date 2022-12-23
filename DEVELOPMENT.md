@@ -1,5 +1,5 @@
 # Development Guidelines
-This document intends to establish guidelines which build a transparent, open mechanism for deciding how to evolve the Lego Robot Mindstorm EV3.
+This document intends to establish guidelines which build a transparent, open mechanism for deciding how to evolve the LEGO® MINDSTORMS® EV3-REST.
 [ZHAW](https://www.zhaw.ch/en/engineering/) will initially follow these processes when merging changes from external contributors or from the
 ZHAW itself. This guideline document will be adjusted as practicality dictates.
 
@@ -31,7 +31,7 @@ The specification will *evolve over time*. Changes may be made when any of the f
 
   -  v2.0.0 - The next MAJOR version.
 
-- The main branch shall remain the current, released Lego Robot Mindstorm EV3. We will describe and link the work branch(es) on the default README.md on main.
+- The main branch shall remain the current, released LEGO® MINDSTORMS® EV3-REST. We will describe and link the work branch(es) on the default README.md on main.
 
 - Examples of how something is described *currently* vs. the proposed solution should accompany any change proposal.
 
