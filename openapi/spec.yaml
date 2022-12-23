@@ -36,7 +36,7 @@ paths:
     post:
       tags:
         - led
-      description: '' # TODO
+      description: 'Flashes the LEDs for a short amount of time'
       requestBody:
         required: true
         content:
@@ -47,16 +47,16 @@ paths:
                 $ref: '#/components/schemas/LED'
       responses:
         200:
-          description: '' # TODO
+          description: 'Flashing the LEDs was successful'
 
   /led/off:
     post:
       tags:
         - led
-      description: '' # TODO
+      description: 'Turn off all LEDs'
       responses:
         200:
-          description: '' # TODO
+          description: 'Turning off LEDs was successful'
 
 
 ### Motor
@@ -464,14 +464,14 @@ components:
         decimals:
           type: integer
           readOnly: true
-          description: ''
+          description: 'Number of decimal places for the sensors values'
         poll_rate_ms:
           type: integer
-          description: '' # TODO
+          description: 'Poll rate of the sensor in ms'
         units:
           type: string
           readOnly: true
-          description: '' # TODO
+          description: 'Unit of the values that are returned by the sensor'
 
     SteeringUnit:
       type: object
