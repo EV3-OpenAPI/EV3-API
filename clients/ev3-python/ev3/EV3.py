@@ -103,11 +103,7 @@ class EV3:
         Returns the technology of the battery
         :return: the technology of the battery
         """
-        try:
-            return self.powerApi.power_get()["technology"]
-        except ApiException as e:
-            print(e)
-        return None
+        return self.powerApi.power_get()["technology"]
 
     def button(self) -> bool:
         """

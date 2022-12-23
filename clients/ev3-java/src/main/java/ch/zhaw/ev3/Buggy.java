@@ -8,8 +8,6 @@ import ch.zhaw.ev3api.model.MotorSteerDurationPostRequest;
 import ch.zhaw.ev3api.model.SteeringUnit;
 import ch.zhaw.ev3api.model.TachoMotor;
 
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,7 +81,7 @@ public class Buggy extends EV3 {
     }
 
     /**
-     * Get the distance measured by the sonic-sensor,
+     * Get the distance measured by the sonic sensor,
      * @return the distance to the next object
      */
     public int distance() {
