@@ -35,14 +35,12 @@ class EV3:
     This method returns the ip-address from the EV3
     @return the ip-address   
     """
-
     def get_host_address(self):
         return self.hostAddress
 
     """
     The EV3 will do a beep sound.
     """
-
     def beep(self):
         try:
             self.soundApi.sound_beep_post()
@@ -54,7 +52,6 @@ class EV3:
     * @param frequency the specific frequency for the tone
     * @param lengthMs the specific duration of the tone
     """
-
     def play_tone(self, frequency, length_ms):
         try:
             self.soundApi.sound_tone_post(Tone(
@@ -68,7 +65,6 @@ class EV3:
     The EV3 will speak a specific text.
     @param text the spoken text for the EV3
     """
-
     def speak(self, text):
         try:
             self.soundApi.sound_speak_post(Text(
@@ -81,7 +77,6 @@ class EV3:
     This method always returns immediately, whether or not the battery voltage level exists.
     @return the battery voltage level.
     """
-
     def voltage(self):
         try:
             return self.powerApi.power_get()["voltage"]
@@ -93,7 +88,6 @@ class EV3:
     This method always returns immediately, whether or not the battery current level exists.
     @return the battery current level.
     """
-
     def current(self):
         try:
             return self.powerApi.power_get()["current"]
@@ -105,7 +99,6 @@ class EV3:
     This method always returns immediately, whether or not the maximal battery voltage exists.
     @return the maximal battery voltage
     """
-
     def max_voltage(self):
         try:
             return self.powerApi.power_get()["voltage_max"]
@@ -117,7 +110,6 @@ class EV3:
     This method always returns immediately, whether or not the minimal battery voltage exists.
     @return the minimal battery voltage.
     """
-
     def min_voltage(self):
         try:
             return self.powerApi.power_get()["voltage_min"]
@@ -129,7 +121,6 @@ class EV3:
     This method always returns immediately, whether or not the battery technology description exists.
     @return the battery technology description
     """
-
     def technology(self):
         try:
             return self.powerApi.power_get()["technology"]
@@ -141,7 +132,6 @@ class EV3:
     This method returns an flag, if the button is pressed or not
     @return the boolean if pressed or not
     """
-
     def button(self):
         try:
             pass  # return self.buttonApi.button_pressed_get()
@@ -152,7 +142,6 @@ class EV3:
     """
     The EV3 will flash the LEDs immediately.
     """
-
     def flash(self):
         leds = [
             LED(
@@ -169,7 +158,6 @@ class EV3:
     """
     This method will set the LEDs of from the EV3
     """
-
     def led(self):
         # TODO
         return None
@@ -177,7 +165,6 @@ class EV3:
     """
     This method will switch off the LEDs of from the EV3.
     """
-
     def led_off(self):
         # TODO
         return None
@@ -185,7 +172,6 @@ class EV3:
     """
     This method will turn on the monitor from the EV3
     """
-
     def monitor_on(self):
         # TODO
         return None
@@ -193,7 +179,6 @@ class EV3:
     """
     This method will turn off the monitor from the EV3
     """
-
     def monitor_off(self):
         # TODO
         return None

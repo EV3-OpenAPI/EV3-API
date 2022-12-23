@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from EV3 import EV3
+from ev3.EV3 import EV3
 
 
 class TestEV3(TestCase):
