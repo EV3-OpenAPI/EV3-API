@@ -13,11 +13,6 @@ from ev3api.api_client import ApiClient
 
 
 class EV3:
-    class Motors(Enum):
-        A = "A"
-        B = "B"
-        C = "C"
-        D = "D"
 
     def __init__(self, host_address):
         self.configuration = Configuration(
@@ -31,154 +26,111 @@ class EV3:
         self.soundApi = SoundApi(self.api_client)
         self.ledApi = LedApi(self.api_client)
 
-    """
-    This method returns the ip-address from the EV3
-    @return the ip-address   
-    """
-    def get_host_address(self):
+    def get_host_address(self) -> str:
+        """
+        This method returns the ip-address from the EV3
+
+        :return: the host address
+        """
+
         return self.hostAddress
 
-    """
-    The EV3 will do a beep sound.
-    """
-    def beep(self):
-        try:
-            self.soundApi.sound_beep_post()
-        except ApiException as e:
-            print(e)
+    def beep(self) -> None:
+        """
+        The EV3 will beep.
+        """
 
-    """
-    * The EV3 will play a tone.
-    * @param frequency the specific frequency for the tone
-    * @param lengthMs the specific duration of the tone
-    """
-    def play_tone(self, frequency, length_ms):
-        try:
-            self.soundApi.sound_tone_post(Tone(
-                frequency=frequency,
-                length_ms=length_ms,
-            ))
-        except ApiException as e:
-            print(e)
+        self.soundApi.sound_beep_post()
 
-    """
-    The EV3 will speak a specific text.
-    @param text the spoken text for the EV3
-    """
-    def speak(self, text):
-        try:
-            self.soundApi.sound_speak_post(Text(
-                text=text,
-            ))
-        except ApiException as e:
-            print(e)
+    def play_tone(self, frequency: int, length_ms: int) -> None:
+        """
+        The EV3 will play a tone.
 
-    """
-    This method always returns immediately, whether or not the battery voltage level exists.
-    @return the battery voltage level.
-    """
-    def voltage(self):
-        try:
-            return self.powerApi.power_get()["voltage"]
-        except ApiException as e:
-            print(e)
-        return -1
+        :param frequency: in herz
+        :param length_ms: duration in ms
+        """
 
-    """
-    This method always returns immediately, whether or not the battery current level exists.
-    @return the battery current level.
-    """
-    def current(self):
-        try:
-            return self.powerApi.power_get()["current"]
-        except ApiException as e:
-            print(e)
-        return -1
+        self.soundApi.sound_tone_post(Tone(
+            frequency=frequency,
+            length_ms=length_ms,
+        ))
 
-    """
-    This method always returns immediately, whether or not the maximal battery voltage exists.
-    @return the maximal battery voltage
-    """
-    def max_voltage(self):
-        try:
-            return self.powerApi.power_get()["voltage_max"]
-        except ApiException as e:
-            print(e)
-        return -1
+    def speak(self, text: str) -> None:
+        """
+        The EV3 will speak a specific text.
 
-    """
-    This method always returns immediately, whether or not the minimal battery voltage exists.
-    @return the minimal battery voltage.
-    """
-    def min_voltage(self):
-        try:
-            return self.powerApi.power_get()["voltage_min"]
-        except ApiException as e:
-            print(e)
-        return -1
+        :param text: the text to be spoken
+        """
 
-    """
-    This method always returns immediately, whether or not the battery technology description exists.
-    @return the battery technology description
-    """
-    def technology(self):
+        self.soundApi.sound_speak_post(Text(
+            text=text,
+        ))
+
+    def voltage(self) -> float:
+        """
+        Returns the current voltage of the battery.
+
+        :return: voltage of the battery
+        """
+        return self.powerApi.power_get()["voltage"]
+
+    def current(self) -> float:
+        """
+        Returns the current current of the battery
+
+        :return: current of the battery
+        """
+        return self.powerApi.power_get()["current"]
+
+    def max_voltage(self) -> float:
+        """
+        Returns the maximum voltage for the battery
+
+        :return: maximum voltage of the battery
+        """
+        return self.powerApi.power_get()["voltage_max"]
+
+    def min_voltage(self) -> float:
+        """
+        Returns the minimum voltage for the battery
+
+        :return: minimum voltage of the battery
+        """
+        return self.powerApi.power_get()["voltage_min"]
+
+    def technology(self) -> str:
+        """
+        Returns the technology of the battery
+        :return: the technology of the battery
+        """
         try:
             return self.powerApi.power_get()["technology"]
         except ApiException as e:
             print(e)
         return None
 
-    """
-    This method returns an flag, if the button is pressed or not
-    @return the boolean if pressed or not
-    """
-    def button(self):
-        try:
-            pass  # return self.buttonApi.button_pressed_get()
-        except ApiException as e:
-            print(e)
-        return None
+    def button(self) -> bool:
+        """
+        Returns true if any buttons are currently pressed
 
-    """
-    The EV3 will flash the LEDs immediately.
-    """
-    def flash(self):
+        :return: True if any buttons are currently pressed
+        """
+        return self.buttonApi.button_pressed_get()
+
+    def flash(self) -> None:
+        """
+        The EV3 will flash the LEDs immediately.
+        """
         leds = [
             LED(
                 side="left",
-                red=255,
+                color="orange",
             )
         ]
-        try:
-            return self.ledApi.led_flash_post(leds)  # FIXME: this gives a 404
-        except ApiException as e:
-            print(e)
-        return None
+        self.ledApi.led_flash_post(leds)
 
-    """
-    This method will set the LEDs of from the EV3
-    """
-    def led(self):
-        # TODO
-        return None
-
-    """
-    This method will switch off the LEDs of from the EV3.
-    """
-    def led_off(self):
-        # TODO
-        return None
-
-    """
-    This method will turn on the monitor from the EV3
-    """
-    def monitor_on(self):
-        # TODO
-        return None
-
-    """
-    This method will turn off the monitor from the EV3
-    """
-    def monitor_off(self):
-        # TODO
-        return None
+    def led_off(self) -> None:
+        """
+        This method will switch off the LEDs of from the EV3.
+        """
+        self.ledApi.led_off_post()

@@ -14,23 +14,6 @@ import java.util.Objects;
 
 public class EV3 {
 
-    public enum Motors {
-        A("A"),
-        B("B"),
-        C("C"),
-        D("D");
-
-        private final String name;
-
-        Motors(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
     private final String host_address;
     ApiClient apiClient;
     MotorApi motorApi;
@@ -66,7 +49,7 @@ public class EV3 {
     }
 
     /**
-     * The EV3 will do a beep sound.
+     * The EV3 will beep.
      */
     public void beep() {
         try {

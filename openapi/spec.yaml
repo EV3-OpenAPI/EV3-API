@@ -419,7 +419,7 @@ components:
       properties:
         frequency:
           type: integer
-          description: 'frequency'
+          description: 'frequency in herz'
         length_ms:
           type: integer
           description: 'length in ms'
