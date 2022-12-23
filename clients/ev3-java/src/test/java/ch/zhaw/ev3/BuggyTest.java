@@ -66,4 +66,24 @@ public class BuggyTest {
 
         buggy.stop();
     }
+
+    @Test
+    void testOn() throws InterruptedException {
+        buggy.on(buggy.left, 10);
+    }
+
+    @Test
+    void testOnForDegrees() {
+        buggy.onForDegrees(buggy.left, 10, 360);
+    }
+
+    @Test
+    void testOnForRotations() {
+        buggy.onForRotations(buggy.left, 10, 2);
+    }
+
+    @Test
+    void testOnForSeconds() {
+        buggy.onForSeconds(buggy.left, 10, 3);
+    }
 }

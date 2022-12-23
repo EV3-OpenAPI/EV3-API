@@ -9,12 +9,13 @@ import ch.zhaw.ev3api.model.SteeringUnit;
 import ch.zhaw.ev3api.model.TachoMotor;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Buggy extends EV3 {
-    private final TachoMotor left;
-    private final TachoMotor right;
+    public final TachoMotor left;
+    public final TachoMotor right;
     private SteeringUnit steeringUnit;
     private List<TachoMotor> drivingUnit;
 
@@ -28,9 +29,8 @@ public class Buggy extends EV3 {
     /**
      * Create a new buggy with a specific ip-address
      * @param host_address the specific ip-address
-     * @throws ApiException
      */
-    public Buggy(String host_address) throws ApiException {
+    public Buggy(String host_address) {
         super(host_address);
 
         this.left = new TachoMotor().port(TachoMotor.PortEnum.A).size(TachoMotor.SizeEnum.L);
@@ -43,9 +43,8 @@ public class Buggy extends EV3 {
      * @param host_address the specific ip-address
      * @param left the left motor
      * @param right the right motor
-     * @throws ApiException
      */
-    public Buggy(String host_address, TachoMotor left, TachoMotor right) throws ApiException {
+    public Buggy(String host_address, TachoMotor left, TachoMotor right) {
         super(host_address);
 
         this.left = left;
@@ -53,16 +52,20 @@ public class Buggy extends EV3 {
         init();
     }
 
-    private void init() throws ApiException {
+    private void init() {
         this.steeringUnit = new SteeringUnit().left(this.left).right(this.right);
         this.drivingUnit = Arrays.asList(this.left, this.right);
 
-        TachoMotor motor = motorApi.motorTachoGet().get(0);
-        this.maxSpeed = motor.getMaxSpeed();
-        this.countsPerRot = motor.getCountPerRot();
+        try {
+            TachoMotor motor = motorApi.motorTachoGet().get(0);
+            this.maxSpeed = motor.getMaxSpeed();
+            this.countsPerRot = motor.getCountPerRot();
 
-        this.sonic = new Sonic(this.sensorApi);
-        this.gyro = new Gyro(this.sensorApi);
+            this.sonic = new Sonic(this.sensorApi);
+            this.gyro = new Gyro(this.sensorApi);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -82,30 +85,56 @@ public class Buggy extends EV3 {
     /**
      * Get the distance measured by the sonic-sensor,
      * @return the distance to the next object
-     * @throws ApiException
      */
-    public int distance() throws ApiException {
-        return sonic.getDistance();
+    public int distance() {
+        try {
+            return sonic.getDistance();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * This method stops the running motor immediately, whether the motor runs or not.
-     * @throws ApiException
      */
-    public void stop() throws ApiException {
-        motorApi.motorStopAllPost();
+    public void stop() {
+        try {
+            motorApi.motorStopAllPost();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * This method starts the motor with a specific speed,
      * the motor will run forever as long the battery has power.
-     * @param speedPercent percent from the maxspeed
-     * @throws ApiException
+     * @param speedPercent of the max speed
      */
-    public void on(int speedPercent) throws ApiException {
+    public void on(int speedPercent) {
         left.command(TachoMotor.CommandEnum.RUN_FOREVER).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
         right.command(TachoMotor.CommandEnum.RUN_FOREVER).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
-        motorApi.motorTachoPost(drivingUnit);
+
+        try {
+            motorApi.motorTachoPost(drivingUnit);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * This method starts the given motor with a specific speed,
+     * the motor will run forever as long the battery has power.
+     * @param speedPercent of the max speed
+     */
+    public void on(TachoMotor side, int speedPercent) {
+        side.command(TachoMotor.CommandEnum.RUN_FOREVER).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        List<TachoMotor> motors = Arrays.asList(side);
+
+        try {
+            motorApi.motorTachoPost(motors);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setRelativePositionSetpoint(int degrees, TachoMotor motor) {
@@ -113,62 +142,167 @@ public class Buggy extends EV3 {
         motor.positionSetpoint(pos_delta);
     }
 
-    public void onForDegrees(int speedPercent, int degrees) throws ApiException {
+    /**
+     * This method turns on the motors with the given speed percent.
+     * They will be on until they rotated for the specified degrees.
+     * @param speedPercent of the max speed
+     * @param degrees to turn before turning off
+     */
+    public void onForDegrees(int speedPercent, int degrees) {
         degrees = speedPercent < 0 ? degrees * -1 : degrees;
         setRelativePositionSetpoint(degrees, left);
         setRelativePositionSetpoint(degrees, right);
 
         left.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
         right.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
-        motorApi.motorTachoPost(drivingUnit);
+
+        try {
+            motorApi.motorTachoPost(drivingUnit);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void onForRotations(int speedPercent, int rotations) throws ApiException {
+    /**
+     * This method turns on the given motor with the given speed percent.
+     * They will be on until they rotated for the specified degrees.
+     * @param speedPercent of the max speed
+     * @param degrees to turn before turning off
+     */
+    public void onForDegrees(TachoMotor side, int speedPercent, int degrees) {
+        degrees = speedPercent < 0 ? degrees * -1 : degrees;
+        setRelativePositionSetpoint(degrees, side);
+
+        side.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        List<TachoMotor> motors = Arrays.asList(side);
+
+        try {
+            motorApi.motorTachoPost(motors);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * This method turns on the motors with the given speed percent.
+     * They will be on until they rotated for the specified number of rotations.
+     * @param speedPercent of the max speed
+     * @param rotations to turn before turning off
+     */
+    public void onForRotations(int speedPercent, int rotations) {
         setRelativePositionSetpoint(rotations * 360, left);
         setRelativePositionSetpoint(rotations * 360, right);
 
         left.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
         right.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
-        motorApi.motorTachoPost(drivingUnit);
+
+        try {
+            motorApi.motorTachoPost(drivingUnit);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     /**
-     * This method starts the motor with a specific speed,
-     * the buggy will drives exactly as many seconds as stated
-     * @param speedPercent maxspeed in percent
-     * @param seconds how long the buggy should drive
-     * @throws ApiException
+     * This method turns on the given motor with the given speed percent.
+     * They will be on until they rotated for the specified number of rotations.
+     * @param speedPercent of the max speed
+     * @param rotations to turn before turning off
      */
-    public void onForSeconds(int speedPercent, double seconds) throws ApiException {
+    public void onForRotations(TachoMotor side, int speedPercent, int rotations) {
+        setRelativePositionSetpoint(rotations * 360, side);
+
+        side.command(TachoMotor.CommandEnum.RUN_TO_REL_POS).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        List<TachoMotor> motors = Arrays.asList(side);
+
+        try {
+            motorApi.motorTachoPost(motors);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * This method turns on the motors with the given speed percent.
+     * They will be on until they ran for the specified amount of seconds.
+     * @param speedPercent of the max speed
+     * @param seconds to run before turning off
+     */
+    public void onForSeconds(int speedPercent, double seconds) {
         left.command(TachoMotor.CommandEnum.RUN_TIMED).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
         right.command(TachoMotor.CommandEnum.RUN_TIMED).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
 
         left.timeSetpoint((int) (seconds * 1000));
         right.timeSetpoint((int) (seconds * 1000));
 
-        System.out.println(drivingUnit);
-        motorApi.motorTachoPost(drivingUnit);
+        try {
+            motorApi.motorTachoPost(drivingUnit);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void steerCounts(int speedPercent, int counts, int turn) throws ApiException {
+    /**
+     * This method turns on the given motor with the given speed percent.
+     * They will be on until they ran for the specified amount of seconds.
+     * @param speedPercent of the max speed
+     * @param seconds to run before turning off
+     */
+    public void onForSeconds(TachoMotor side, int speedPercent, double seconds) {
+        side.command(TachoMotor.CommandEnum.RUN_TIMED).speedSetpoint((int) (maxSpeed / 100.0 * speedPercent));
+        List<TachoMotor> motors = Arrays.asList(side);
+
+        side.timeSetpoint((int) (seconds * 1000));
+
+        try {
+            motorApi.motorTachoPost(motors);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Turns the robot at the given speed for the given tacho counts
+     * to the given degree left or right.
+     * @param speedPercent of the max speed
+     * @param counts tacho counts to rotate before stopping the turn
+     * @param turn from -100 (hard left) to +100 (hard right)
+     */
+    public void steerCounts(int speedPercent, int counts, int turn) {
         MotorSteerCountsPostRequest r = new MotorSteerCountsPostRequest();
         r.steeringUnit(steeringUnit);
         r.setSpeed((int) (maxSpeed / 100.0 * speedPercent));
         r.setCounts(counts);
         r.setTurn(turn);
 
-        motorApi.motorSteerCountsPost(r);
+        try {
+            motorApi.motorSteerCountsPost(r);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void steerDuration(int speedPercent, double durationSec, int turn) throws ApiException {
+    /**
+     * Turns the robot at the given speed for the given number of seconds
+     * to the given degree left or right.
+     * @param speedPercent of the max speed
+     * @param durationSec to run before stopping the turn
+     * @param turn from -100 (hard left) to +100 (hard right)
+     */
+    public void steerDuration(int speedPercent, double durationSec, int turn) {
         MotorSteerDurationPostRequest r = new MotorSteerDurationPostRequest();
         r.steeringUnit(steeringUnit);
         r.setSpeed((int) (maxSpeed / 100.0 * speedPercent));
         r.setDurationMs((int) (durationSec * 1000));
         r.setTurn(turn);
 
-        motorApi.motorSteerDurationPost(r);
+        try {
+            motorApi.motorSteerDurationPost(r);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

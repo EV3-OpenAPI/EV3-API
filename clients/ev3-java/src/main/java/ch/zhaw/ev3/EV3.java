@@ -1,15 +1,15 @@
 package ch.zhaw.ev3;
 
 
-import ch.zhaw.ev3api.api.MotorApi;
-import ch.zhaw.ev3api.api.PowerApi;
-import ch.zhaw.ev3api.api.SensorApi;
-import ch.zhaw.ev3api.api.SoundApi;
+import ch.zhaw.ev3api.api.*;
 import ch.zhaw.ev3api.invoker.ApiClient;
 import ch.zhaw.ev3api.invoker.ApiException;
+import ch.zhaw.ev3api.model.LED;
 import ch.zhaw.ev3api.model.Text;
 import ch.zhaw.ev3api.model.Tone;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class EV3 {
@@ -37,6 +37,8 @@ public class EV3 {
     PowerApi powerApi;
     SensorApi sensorApi;
     SoundApi soundApi;
+    ButtonApi buttonApi;
+    LedApi ledApi;
 
     /**
      * Creates a new EV3 with a specific ip-address.
@@ -51,6 +53,8 @@ public class EV3 {
         this.powerApi = new PowerApi(this.apiClient);
         this.sensorApi = new SensorApi(this.apiClient);
         this.soundApi = new SoundApi(this.apiClient);
+        this.buttonApi = new ButtonApi(this.apiClient);
+        this.ledApi = new LedApi(this.apiClient);
     }
 
     /**
@@ -66,9 +70,9 @@ public class EV3 {
      */
     public void beep() {
         try {
-            this.soundApi.soundBeepPost();
+            soundApi.soundBeepPost();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -79,9 +83,9 @@ public class EV3 {
      */
     public void play_tone(int frequency, int lengthMs) {
         try {
-            this.soundApi.soundTonePost(new Tone().frequency(frequency).lengthMs(lengthMs));
+            soundApi.soundTonePost(new Tone().frequency(frequency).lengthMs(lengthMs));
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -91,9 +95,9 @@ public class EV3 {
      */
     public void speak(String text) {
         try {
-            this.soundApi.soundSpeakPost(new Text().text(text));
+            soundApi.soundSpeakPost(new Text().text(text));
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -103,12 +107,10 @@ public class EV3 {
      */
     public int voltage() {
         try {
-            return Objects.requireNonNull(this.powerApi.powerGet().getVoltage()).intValue();
+            return Objects.requireNonNull(powerApi.powerGet().getVoltage()).intValue();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
-
-        return -1;
     }
 
     /**
@@ -117,12 +119,10 @@ public class EV3 {
      */
     public int current() {
         try {
-            return Objects.requireNonNull(this.powerApi.powerGet().getCurrent()).intValue();
+            return Objects.requireNonNull(powerApi.powerGet().getCurrent()).intValue();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
-
-        return -1;
     }
 
     /**
@@ -131,12 +131,10 @@ public class EV3 {
      */
     public int max_voltage() {
         try {
-            return Objects.requireNonNull(this.powerApi.powerGet().getVoltageMax()).intValue();
+            return Objects.requireNonNull(powerApi.powerGet().getVoltageMax()).intValue();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
-
-        return -1;
     }
 
     /**
@@ -145,12 +143,10 @@ public class EV3 {
      */
     public int min_voltage() {
         try {
-            return Objects.requireNonNull(this.powerApi.powerGet().getVoltageMin()).intValue();
+            return Objects.requireNonNull(powerApi.powerGet().getVoltageMin()).intValue();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
-
-        return -1;
     }
 
     /**
@@ -159,55 +155,78 @@ public class EV3 {
      */
     public String technology() {
         try {
-            return this.powerApi.powerGet().getTechnology();
+            return powerApi.powerGet().getTechnology();
         } catch (ApiException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     /**
-     * This method returns an flag, if the button is pressed or not
+     * This method returns a flag, if the button is pressed or not
      * @return the boolean if pressed or not
      */
     public boolean button() {
-        // TODO: implement
-        return false;
+        try {
+            List<String> pressedButtons = buttonApi.buttonPressedGet();
+            return pressedButtons.size() == 0;
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * The EV3 will flash the LEDs immediately.
      */
     public void flash() {
-        // TODO: implement
+        List<LED> leds = new ArrayList<>();
+        leds.add(new LED().side("left").color(LED.ColorEnum.ORANGE));
+        leds.add(new LED().side("right").color(LED.ColorEnum.ORANGE));
+
+        try {
+            ledApi.ledFlashPost(leds);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
-     * This method will set the LEDs of from the EV3
+     * The EV3 will flash the LEDs immediately.
      */
-    public void led() {
-        // TODO: implement
+    public void flash(int red, int green) {
+        List<LED> leds = new ArrayList<>();
+        leds.add(new LED().side("left").red(red).green(green));
+        leds.add(new LED().side("right").red(red).green(green));
+
+        try {
+            ledApi.ledFlashPost(leds);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * The EV3 will flash the LEDs immediately.
+     */
+    public void flash(LED.ColorEnum color) {
+        List<LED> leds = new ArrayList<>();
+        leds.add(new LED().side("left").color(color));
+        leds.add(new LED().side("right").color(color));
+
+        try {
+            ledApi.ledFlashPost(leds);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * This method will switch off the LEDs of from the EV3.
      */
     public void led_off() {
-        // TODO: implement
-    }
-
-    /**
-     * This method will turn on the monitor from the EV3
-     */
-    public void monitor_on() {
-        // TODO: implement
-    }
-
-    /**
-     * This method will turn off the monitor from the EV3
-     */
-    public void monitor_off() {
-        // TODO: implement
+        try {
+            ledApi.ledOffPost();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
