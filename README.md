@@ -1,9 +1,10 @@
 [![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml)
 
+
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
 
 
-# Lego Robot Mindstorm EV3-REST
+# LEGO MINDSTORMS EV3-REST
 
 This project deals with the goal to design the Lego Robot of the type mindstorm EV3 for the promotion of programming knowledge for non-informaticians, in such a way that the implemented methods in the server are callable over several programming technologies. The implemented methods should be callable via an application programming interface.
 The server which is the Lego robot is implemented with [OpenAPI Specification](https://www.openapis.org/), which allows to automatically generate libraries for the client in several programming languages.
@@ -15,6 +16,25 @@ This GitHub project is the starting point for the Lego Robot Mindstorm EV3-RESt.
 1. Connect to your EV3 robot with SSH or with a directly attached keyboard and monitor.
 2. Ensure that the EV3 has an internet connection
 3. Run the install-script with elevated privileges `curl -sf -L https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/install.sh | sudo sh`
+
+
+# Tools and Libraries
+
+For this project, **OpenAPI generator** is used and the **EV3 Golang library**.
+
+* [OpenAPI Generator](https://openapi-generator.tech/)
+
+* [EV3 Golang library](https://github.com/ev3go)
+
+
+# Setup for students
+If you want to code with **Java**, then use this instruction:
+
+* [Setup for Java](./SetupJava.md)
+
+If you want to code with **Python**, then use this instruction:
+
+* [Setup for Python](./SetupJava.md) TODO MATTHEW
 
 # Participation
 
@@ -65,7 +85,13 @@ Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o cli
 Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
 Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
 
+## Release and Deployment
 
-### To-Test
+If a new release is to be created, the new version number must first be entered in the following files:
 
-Concurrency; what happens if multiple request are made to the library at the same time?
+* openapi/spec.yaml
+* clients/ev3-java/build.gradle
+* clients/ev3-python/setup.py
+
+After that, a new release can be published via the GitHub. The repository has a GitHub action that automatically creates the Golang, Java and Python artifacts and attaches the release.
+Every time the LEGO robot is started, the [GitHub](https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest) is used to check whether the latest release is newer than the currently installed version. If this is the case, the latest GO binary can be downloaded via the Assets API. This replaces the old binary and will be executed in its place in the future.
