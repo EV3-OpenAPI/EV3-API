@@ -34,7 +34,7 @@ If you want to code with **Java**, then use this instruction:
 
 If you want to code with **Python**, then use this instruction:
 
-* [Setup for Python](./SetupJava.md) TODO MATTHEW
+* [Setup for Python](./SetupPython.md)
 
 # Participation
 
