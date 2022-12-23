@@ -9,6 +9,7 @@ import (
 	"EV3-API/internal/ev3/sound"
 	"EV3-API/internal/ev3/status"
 	"EV3-API/internal/gen/openapi"
+	"EV3-API/internal/server_impl/buttonAPI"
 	"EV3-API/internal/server_impl/motorAPI"
 	"EV3-API/internal/server_impl/powerAPI"
 	"EV3-API/internal/server_impl/sensorAPI"
@@ -64,7 +65,10 @@ func startServer(port int) {
 	SensorApiService := sensorAPI.NewSensorApiService()
 	SensorApiController := openapi.NewSensorApiController(SensorApiService)
 
-	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController)
+	ButtonApiService := buttonAPI.NewButtonApiService()
+	ButtonApiController := openapi.NewButtonApiController(ButtonApiService)
+
+	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController)
 
 	sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
 
