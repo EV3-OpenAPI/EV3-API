@@ -50,9 +50,8 @@ func startLoop() {
 		}
 
 		duration := time.Now().Sub(start)
-		log.Printf("DEBUG - displayStatus: duration %v", duration)
+		// log.Printf("DEBUG - displayStatus: duration %v", duration)
 		time.Sleep(interval - duration)
-
 	}
 }
 
