@@ -3,10 +3,10 @@ import math
 from ev3.EV3 import EV3
 from ev3.sensors.Gyro import Gyro
 from ev3.sensors.Sonic import Sonic
-from ev3api.model.steering_unit import SteeringUnit
-from ev3api.model.tacho_motor import TachoMotor
 from ev3api.model.motor_steer_counts_post_request import MotorSteerCountsPostRequest
 from ev3api.model.motor_steer_duration_post_request import MotorSteerDurationPostRequest
+from ev3api.model.steering_unit import SteeringUnit
+from ev3api.model.tacho_motor import TachoMotor
 
 
 class Buggy(EV3):

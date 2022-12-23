@@ -1,15 +1,13 @@
-from enum import Enum
+from ev3api.api.led_api import LedApi
 from ev3api.api.motor_api import MotorApi
 from ev3api.api.power_api import PowerApi
 from ev3api.api.sensor_api import SensorApi
 from ev3api.api.sound_api import SoundApi
-from ev3api.api.led_api import LedApi
-from ev3api.model.led import LED
-from ev3api.model.tone import Tone
-from ev3api.model.text import Text
-from ev3api.exceptions import ApiException
-from ev3api.configuration import Configuration
 from ev3api.api_client import ApiClient
+from ev3api.configuration import Configuration
+from ev3api.model.led import LED
+from ev3api.model.text import Text
+from ev3api.model.tone import Tone
 
 
 class EV3:
