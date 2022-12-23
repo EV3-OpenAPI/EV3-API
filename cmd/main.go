@@ -46,6 +46,7 @@ func main() {
 	}
 
 	initDevices(*noMonitor)
+	defer closeDevices()
 	startServer(*port)
 }
 
@@ -64,13 +65,14 @@ func startServer(port int) {
 
 	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController)
 
+	sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
+
 	log.Printf("INFO - Starting server on port %d", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router))
 }
 
 func initDevices(noMonitor bool) {
 	_ = sound.Init()
-	defer sound.Close()
 	_ = motor.Init()
 	_ = sensor.Init()
 	_ = lcd.Init()
@@ -78,4 +80,8 @@ func initDevices(noMonitor bool) {
 	if !noMonitor {
 		status.Start(time.Second * 2)
 	}
+}
+
+func closeDevices() {
+	sound.Close()
 }
