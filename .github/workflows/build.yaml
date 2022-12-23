@@ -131,7 +131,7 @@ jobs:
           retention-days: 7
 
 
-  create-release:
+  upload-release-assets:
     runs-on: ubuntu-latest
     needs: [build-go-server, build-java-client, build-python-client]
     if: github.event_name == 'release' # && github.event.action == 'created'
