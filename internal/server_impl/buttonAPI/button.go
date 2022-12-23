@@ -1,9 +1,11 @@
 package buttonAPI
 
 import (
+	"EV3-API/internal/ev3/button"
 	"EV3-API/internal/gen/openapi"
 	"context"
 	"net/http"
+	"time"
 )
 
 type ApiService struct {
@@ -15,6 +17,12 @@ func NewButtonApiService() openapi.ButtonApiServicer {
 }
 
 func (a ApiService) ButtonPressedGet(_ context.Context) (openapi.ImplResponse, error) {
-	// TODO: implement
-	return openapi.Response(http.StatusNotImplemented, nil), nil
+	var resp []string
+
+	evt := button.GetLastButtonEvent(false)
+	if evt != nil && time.Now().Sub(evt.TimeStamp) < time.Second*3 {
+		resp = append(resp, "button")
+	}
+
+	return openapi.Response(http.StatusOK, resp), nil
 }

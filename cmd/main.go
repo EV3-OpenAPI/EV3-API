@@ -2,6 +2,7 @@ package main
 
 import (
 	"EV3-API/internal/ev3"
+	"EV3-API/internal/ev3/button"
 	"EV3-API/internal/ev3/lcd"
 	"EV3-API/internal/ev3/motor"
 	"EV3-API/internal/ev3/sensor"
@@ -76,6 +77,7 @@ func initDevices(noMonitor bool) {
 	_ = motor.Init()
 	_ = sensor.Init()
 	_ = lcd.Init()
+	_ = button.Init()
 
 	if !noMonitor {
 		status.Start(time.Second * 2)

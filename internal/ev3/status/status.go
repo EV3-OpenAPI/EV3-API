@@ -45,7 +45,7 @@ func startLoop() {
 		displayStatus()
 
 		evt := button.GetLastButtonEvent(false)
-		if evt != nil && evt.TimeStamp < interval {
+		if evt != nil && time.Now().Sub(evt.TimeStamp) < interval {
 			break
 		}
 

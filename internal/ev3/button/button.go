@@ -7,8 +7,13 @@ import (
 	"time"
 )
 
+type Event struct {
+	ev3dev.ButtonEvent
+	TimeStamp time.Time
+}
+
 var (
-	lastButtonEvent *ev3dev.ButtonEvent
+	lastButtonEvent *Event
 )
 
 func Poll() {
@@ -24,8 +29,10 @@ func Poll() {
 	}
 }
 
-func Wait() {
+func Init() error {
 	go wait()
+
+	return nil
 }
 
 func wait() {
@@ -35,21 +42,25 @@ func wait() {
 	}
 
 	for e := range w.Events {
-		lastButtonEvent = &e
+
+		lastButtonEvent = &Event{
+			ButtonEvent: e,
+			TimeStamp:   time.Now(),
+		}
 		log.Printf("DEBUG - %+v\n", e)
 	}
 }
 
 // GetLastButtonEvent gets last ev3dev.ButtonEvent
-func GetLastButtonEvent(clear bool) (btnEvt *ev3dev.ButtonEvent) {
+func GetLastButtonEvent(clear bool) *Event {
 	if lastButtonEvent == nil {
 		return nil
 	}
 
-	*btnEvt = *lastButtonEvent
+	btnEvt := *lastButtonEvent
 	if clear {
 		lastButtonEvent = nil
 	}
 
-	return btnEvt
+	return &btnEvt
 }
