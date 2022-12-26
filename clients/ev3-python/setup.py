@@ -22,7 +22,7 @@ REQUIRES = [
     "urllib3 ~= 1.25.3",
     "python-dateutil ~= 2.8.2",
     "nulltype ~= 2.3.1",
-    "requests ~= 2.27.1",
+    "requests >= 2.27.1,< 2.29.0",
     "typing-extensions ~= 4.4.0",
     "frozendict ~= 2.3.4"
 ]
