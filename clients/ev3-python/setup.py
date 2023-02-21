@@ -23,7 +23,7 @@ REQUIRES = [
     "python-dateutil ~= 2.8.2",
     "nulltype ~= 2.3.1",
     "requests ~= 2.27.1",
-    "typing-extensions ~= 4.4.0",
+    "typing-extensions >= 4.4,< 4.6",
     "frozendict ~= 2.3.4"
 ]
 
