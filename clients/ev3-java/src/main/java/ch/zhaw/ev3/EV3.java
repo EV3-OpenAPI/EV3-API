@@ -30,6 +30,11 @@ public class EV3 {
     public EV3(String host_address) {
         this.host_address = host_address;
         this.apiClient = new ApiClient();
+
+        String[] parts = host_address.split(":");
+        if (parts.length == 1) {
+            host_address += ":" + 8080;
+        }
         this.apiClient.setBasePath(String.format("http://%s/api/v1", host_address));
 
         this.motorApi = new MotorApi(this.apiClient);
