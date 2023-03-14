@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Java-Jar
-          path: clients/ev3-java/build/libs/ev3-java-1.0-SNAPSHOT-all.jar
+          path: clients/ev3-java/build/libs/ev3-java-${{ github.ref_name }}-all.jar
           retention-days: 7
 
 
@@ -167,8 +167,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./ev3-java-1.0-SNAPSHOT-all.jar
-          asset_name: ev3-java-1.0-SNAPSHOT-all.jar
+          asset_path: ./ev3-java-${{ github.ref_name }}-all.jar
+          asset_name: ev3-java-${{ github.ref_name }}-all.jar
           asset_content_type: application/java-archive
 
       - name: Upload Python Client Release Asset
