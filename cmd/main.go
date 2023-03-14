@@ -28,6 +28,7 @@ func main() {
 
 	getHostname := flag.Bool("get-hostname", false, "only return hostname for this device")
 	noMonitor := flag.Bool("no-monitor", false, "do not create a display overlay")
+	noButton := flag.Bool("no-button", false, "do not create a button event listener loop")
 	verify := flag.Bool("verify", false, "exit with status code 0, check if executable")
 	update := flag.Bool("update", false, "check if new versions are available")
 	port := flag.Int("port", 8080, "port to listen on")
@@ -47,7 +48,7 @@ func main() {
 		utils.CheckForNewVersion()
 	}
 
-	initDevices(*noMonitor)
+	initDevices(*noMonitor, *noButton)
 	defer closeDevices()
 	startServer(*port)
 }
@@ -76,12 +77,15 @@ func startServer(port int) {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router))
 }
 
-func initDevices(noMonitor bool) {
+func initDevices(noMonitor, noButton bool) {
 	_ = sound.Init()
 	_ = motor.Init()
 	_ = sensor.Init()
 	_ = lcd.Init()
-	_ = button.Init()
+
+	if !noButton {
+		_ = button.Init()
+	}
 
 	if !noMonitor {
 		status.Start(time.Second * 2)
