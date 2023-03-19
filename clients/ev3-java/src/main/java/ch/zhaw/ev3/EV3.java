@@ -159,7 +159,7 @@ public class EV3 {
     public boolean button() {
         try {
             List<String> pressedButtons = buttonApi.buttonPressedGet();
-            return pressedButtons.size() == 0;
+            return pressedButtons != null && pressedButtons.size() > 0;
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
