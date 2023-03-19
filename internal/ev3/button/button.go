@@ -13,7 +13,8 @@ type Event struct {
 }
 
 var (
-	lastButtonEvent *Event
+	lastButtonEvent  *Event
+	currentlyPressed map[ev3dev.Button]*ev3dev.ButtonEvent
 )
 
 func Poll() {
@@ -47,6 +48,14 @@ func wait() {
 			ButtonEvent: e,
 			TimeStamp:   time.Now(),
 		}
+
+		switch e.Value {
+		case 0:
+			delete(currentlyPressed, e.Button)
+		case 1:
+			currentlyPressed[e.Button] = &e
+		}
+
 		log.Printf("DEBUG - %+v\n", e)
 	}
 }
