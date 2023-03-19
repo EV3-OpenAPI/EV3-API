@@ -90,12 +90,13 @@ public class EV3 {
     }
 
     /**
-     * This method always returns immediately, whether or not the battery voltage level exists.
+     * Voltage returns voltage measured from the power supply in milli volts.
      * @return the battery voltage level.
      */
     public int voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltage()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltage()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
@@ -114,24 +115,26 @@ public class EV3 {
     }
 
     /**
-     * This method always returns immediately, whether or not the maximal battery voltage exists.
+     * VoltageMax returns the maximum design voltage for the power supply in milli volts.
      * @return the maximal battery voltage
      */
     public int max_voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltageMax()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltageMax()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * This method always returns immediately, whether or not the minimal battery voltage exists.
+     * VoltageMax returns the minimum design voltage for the power supply in milli volts.
      * @return the minimal battery voltage.
      */
     public int min_voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltageMin()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltageMin()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
