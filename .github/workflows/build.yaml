@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Java-Jar
-          path: clients/ev3-java/build/libs/ev3-java-1.0-SNAPSHOT-all.jar
+          path: clients/ev3-java/build/libs/ev3-java-${{ github.ref_name }}-all.jar
           retention-days: 7
 
 
@@ -127,7 +127,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Python-Wheel
-          path: clients/ev3-python/dist/ev3api-0.1.0-py3-none-any.whl
+          path: clients/ev3-python/dist/ev3api-*-py3-none-any.whl
           retention-days: 7
 
 
@@ -167,8 +167,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./ev3-java-1.0-SNAPSHOT-all.jar
-          asset_name: ev3-java-1.0-SNAPSHOT-all.jar
+          asset_path: ./ev3-java-${{ github.ref_name }}-all.jar
+          asset_name: ev3-java-${{ github.ref_name }}-all.jar
           asset_content_type: application/java-archive
 
       - name: Upload Python Client Release Asset
@@ -177,6 +177,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./ev3api-0.1.0-py3-none-any.whl
-          asset_name: ev3api-0.1.0-py3-none-any.whl
+          asset_path: ./ev3api-${{ github.ref_name }}-py3-none-any.whl
+          asset_name: ev3api-${{ github.ref_name }}-py3-none-any.whl
           asset_content_type: application/zip
