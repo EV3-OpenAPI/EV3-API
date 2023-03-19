@@ -102,7 +102,7 @@ public class EV3 {
     }
 
     /**
-     * This method always returns immediately, whether or not the battery current level exists.
+     * Current returns the current drawn from the power supply in milli ampere.
      * @return the battery current level.
      */
     public int current() {
