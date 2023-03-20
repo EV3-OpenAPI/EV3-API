@@ -4,6 +4,7 @@ import (
 	"EV3-API/internal/ev3/led"
 	"EV3-API/internal/gen/openapi"
 	"context"
+	"log"
 	"net/http"
 )
 
@@ -20,9 +21,9 @@ func (a ApiService) LedFlashPost(_ context.Context, leds []openapi.Led) (openapi
 
 	for _, l := range leds {
 		if l.Color != "" {
-			_ = led.SetColorString(l.Side, l.Color, 200)
+			_ = led.FlashString(l.Side, l.Color)
 		} else {
-			_ = led.SetColorValues(l.Side, int(l.Red), int(l.Green), 200)
+			_ = led.Flash(l.Side, int(l.Red), int(l.Green))
 		}
 	}
 
