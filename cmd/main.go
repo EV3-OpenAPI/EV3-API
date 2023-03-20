@@ -4,12 +4,14 @@ import (
 	"EV3-API/internal/ev3"
 	"EV3-API/internal/ev3/button"
 	"EV3-API/internal/ev3/lcd"
+	"EV3-API/internal/ev3/led"
 	"EV3-API/internal/ev3/motor"
 	"EV3-API/internal/ev3/sensor"
 	"EV3-API/internal/ev3/sound"
 	"EV3-API/internal/ev3/status"
 	"EV3-API/internal/gen/openapi"
 	"EV3-API/internal/server_impl/buttonAPI"
+	"EV3-API/internal/server_impl/ledAPI"
 	"EV3-API/internal/server_impl/motorAPI"
 	"EV3-API/internal/server_impl/powerAPI"
 	"EV3-API/internal/server_impl/sensorAPI"
@@ -69,7 +71,10 @@ func startServer(port int) {
 	ButtonApiService := buttonAPI.NewButtonApiService()
 	ButtonApiController := openapi.NewButtonApiController(ButtonApiService)
 
-	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController)
+	LedApiService := ledAPI.NewLedApiService()
+	LedApiController := openapi.NewLedApiController(LedApiService)
+
+	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController, LedApiController)
 
 	_ = sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
 
@@ -82,6 +87,7 @@ func initDevices(noMonitor, noButton bool) {
 	_ = motor.Init()
 	_ = sensor.Init()
 	_ = lcd.Init()
+	_ = led.Init()
 
 	if !noButton {
 		_ = button.Init()
