@@ -40,7 +40,7 @@ jobs:
 
       - name: Build package
         run: |
-          go build -v -o server -ldflags="-s -w" EV3-API/cmd
+          go build -v -o ev3api-server -ldflags="-s -w" EV3-API/cmd
         env:
           GOOS: linux
           GOARCH: arm
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Go-binary
-          path: server
+          path: ev3api-server
           retention-days: 7
 
 
@@ -157,8 +157,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./server
-          asset_name: server
+          asset_path: ./ev3api-server
+          asset_name: ev3api-server
           asset_content_type: application/octet-stream
 
       - name: Upload Java Client Release Asset
