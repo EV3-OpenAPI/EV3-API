@@ -153,13 +153,13 @@ public class EV3 {
     }
 
     /**
-     * This method returns a flag, if the button is pressed or not
+     * This method returns true if a button is currently pressed or has been pressed in the last 3 seconds
      * @return the boolean if pressed or not
      */
     public boolean button() {
         try {
             List<String> pressedButtons = buttonApi.buttonPressedGet();
-            return pressedButtons.size() == 0;
+            return pressedButtons != null && pressedButtons.size() > 0;
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
