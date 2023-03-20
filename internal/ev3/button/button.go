@@ -14,7 +14,16 @@ type Event struct {
 
 var (
 	lastButtonEvent  *Event
-	currentlyPressed map[ev3dev.Button]*ev3dev.ButtonEvent
+	currentlyPressed = map[ev3dev.Button]*Event{}
+
+	ButtonNames = map[ev3dev.Button]string{
+		1:  "Back",
+		2:  "Left",
+		4:  "Middle",
+		8:  "Right",
+		16: "Up",
+		32: "Down",
+	}
 )
 
 func Poll() {
@@ -53,7 +62,7 @@ func wait() {
 		case 0:
 			delete(currentlyPressed, e.Button)
 		case 1:
-			currentlyPressed[e.Button] = &e
+			currentlyPressed[e.Button] = lastButtonEvent
 		}
 
 		log.Printf("DEBUG - %+v\n", e)
@@ -72,4 +81,9 @@ func GetLastButtonEvent(clear bool) *Event {
 	}
 
 	return &btnEvt
+}
+
+// GetPressedButtons returns a map of all currently pressed buttons with the button id as the key and the Event of button press as value
+func GetPressedButtons() *map[ev3dev.Button]*Event {
+	return &currentlyPressed
 }
