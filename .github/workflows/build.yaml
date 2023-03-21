@@ -74,6 +74,13 @@ jobs:
         with:
           args: generate -i openapi/spec.yaml -o clients/java-tmp -g java -c openapi/java-client-config.yaml
 
+      - name: Run kusk
+        run: |
+          wget https://raw.githubusercontent.com/kubeshop/kusk-gateway/main/cmd/kusk/scripts/install.sh
+          chmod +x install.sh
+          ./install.sh kusk-bin
+          kusk-bin/kusk mock -i openapi/spec.yaml
+
       - name: Copy generated java code
         run: |
           mkdir -p clients/ev3-java/ev3api
