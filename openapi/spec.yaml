@@ -292,7 +292,7 @@ paths:
                 type: array
                 items:
                   type: string
-                  example: 12
+                  example: "12"
         404:
           description: 'Sensor of that type not found'
 
