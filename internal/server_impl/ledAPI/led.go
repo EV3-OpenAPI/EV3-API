@@ -20,9 +20,9 @@ func (a ApiService) LedFlashPost(_ context.Context, leds []openapi.Led) (openapi
 
 	for _, l := range leds {
 		if l.Color != "" {
-			_ = led.SetColorString(l.Side, l.Color, 200)
+			_ = led.FlashString(l.Side, l.Color)
 		} else {
-			_ = led.SetColorValues(l.Side, int(l.Red), int(l.Green), 200)
+			_ = led.Flash(l.Side, int(l.Red), int(l.Green))
 		}
 	}
 
@@ -30,8 +30,8 @@ func (a ApiService) LedFlashPost(_ context.Context, leds []openapi.Led) (openapi
 }
 
 func (a ApiService) LedOffPost(_ context.Context) (openapi.ImplResponse, error) {
-	_ = led.SetColorValues("left", 0, 0, 0)
-	_ = led.SetColorValues("right", 0, 0, 0)
+	_ = led.SetColorValues("left", 0, 0)
+	_ = led.SetColorValues("right", 0, 0)
 
 	return openapi.Response(http.StatusOK, nil), nil
 }
