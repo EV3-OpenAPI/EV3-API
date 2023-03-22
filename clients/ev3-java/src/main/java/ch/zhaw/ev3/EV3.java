@@ -30,6 +30,11 @@ public class EV3 {
     public EV3(String host_address) {
         this.host_address = host_address;
         this.apiClient = new ApiClient();
+
+        String[] parts = host_address.split(":");
+        if (parts.length == 1) {
+            host_address += ":" + 8080;
+        }
         this.apiClient.setBasePath(String.format("http://%s/api/v1", host_address));
 
         this.motorApi = new MotorApi(this.apiClient);
@@ -85,19 +90,20 @@ public class EV3 {
     }
 
     /**
-     * This method always returns immediately, whether or not the battery voltage level exists.
+     * Voltage returns voltage measured from the power supply in milli volts.
      * @return the battery voltage level.
      */
     public int voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltage()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltage()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * This method always returns immediately, whether or not the battery current level exists.
+     * Current returns the current drawn from the power supply in milli ampere.
      * @return the battery current level.
      */
     public int current() {
@@ -109,24 +115,26 @@ public class EV3 {
     }
 
     /**
-     * This method always returns immediately, whether or not the maximal battery voltage exists.
+     * VoltageMax returns the maximum design voltage for the power supply in milli volts.
      * @return the maximal battery voltage
      */
     public int max_voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltageMax()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltageMax()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * This method always returns immediately, whether or not the minimal battery voltage exists.
+     * VoltageMax returns the minimum design voltage for the power supply in milli volts.
      * @return the minimal battery voltage.
      */
     public int min_voltage() {
         try {
-            return Objects.requireNonNull(powerApi.powerGet().getVoltageMin()).intValue();
+            float v = Objects.requireNonNull(powerApi.powerGet().getVoltageMin()).floatValue();
+            return (int) (v * 1000);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
@@ -145,13 +153,13 @@ public class EV3 {
     }
 
     /**
-     * This method returns a flag, if the button is pressed or not
+     * This method returns true if a button is currently pressed or has been pressed in the last 3 seconds
      * @return the boolean if pressed or not
      */
     public boolean button() {
         try {
             List<String> pressedButtons = buttonApi.buttonPressedGet();
-            return pressedButtons.size() == 0;
+            return pressedButtons != null && pressedButtons.size() > 0;
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
