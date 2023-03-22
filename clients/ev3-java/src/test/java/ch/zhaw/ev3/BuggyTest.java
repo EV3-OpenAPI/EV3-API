@@ -9,7 +9,7 @@ public class BuggyTest {
     private static Buggy buggy;
 
     @BeforeAll
-    static void beforeAll() throws ApiException {
+    static void beforeAll() {
         buggy = new Buggy("10.0.100.98:8080");
     }
 

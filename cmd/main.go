@@ -4,12 +4,14 @@ import (
 	"EV3-API/internal/ev3"
 	"EV3-API/internal/ev3/button"
 	"EV3-API/internal/ev3/lcd"
+	"EV3-API/internal/ev3/led"
 	"EV3-API/internal/ev3/motor"
 	"EV3-API/internal/ev3/sensor"
 	"EV3-API/internal/ev3/sound"
 	"EV3-API/internal/ev3/status"
 	"EV3-API/internal/gen/openapi"
 	"EV3-API/internal/server_impl/buttonAPI"
+	"EV3-API/internal/server_impl/ledAPI"
 	"EV3-API/internal/server_impl/motorAPI"
 	"EV3-API/internal/server_impl/powerAPI"
 	"EV3-API/internal/server_impl/sensorAPI"
@@ -28,6 +30,7 @@ func main() {
 
 	getHostname := flag.Bool("get-hostname", false, "only return hostname for this device")
 	noMonitor := flag.Bool("no-monitor", false, "do not create a display overlay")
+	noButton := flag.Bool("no-button", false, "do not create a button event listener loop")
 	verify := flag.Bool("verify", false, "exit with status code 0, check if executable")
 	update := flag.Bool("update", false, "check if new versions are available")
 	port := flag.Int("port", 8080, "port to listen on")
@@ -47,7 +50,7 @@ func main() {
 		utils.CheckForNewVersion()
 	}
 
-	initDevices(*noMonitor)
+	initDevices(*noMonitor, *noButton)
 	defer closeDevices()
 	startServer(*port)
 }
@@ -68,7 +71,10 @@ func startServer(port int) {
 	ButtonApiService := buttonAPI.NewButtonApiService()
 	ButtonApiController := openapi.NewButtonApiController(ButtonApiService)
 
-	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController)
+	LedApiService := ledAPI.NewLedApiService()
+	LedApiController := openapi.NewLedApiController(LedApiService)
+
+	router := openapi.NewRouter(MotorApiController, PowerApiController, SoundApiController, SensorApiController, ButtonApiController, LedApiController)
 
 	_ = sound.Speak(fmt.Sprintf("%s at your service", ev3.GetHostname()))
 
@@ -76,12 +82,16 @@ func startServer(port int) {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router))
 }
 
-func initDevices(noMonitor bool) {
+func initDevices(noMonitor, noButton bool) {
 	_ = sound.Init()
 	_ = motor.Init()
 	_ = sensor.Init()
 	_ = lcd.Init()
-	_ = button.Init()
+	_ = led.Init()
+
+	if !noButton {
+		_ = button.Init()
+	}
 
 	if !noMonitor {
 		status.Start(time.Second * 2)

@@ -21,7 +21,11 @@ func (a ApiService) ButtonPressedGet(_ context.Context) (openapi.ImplResponse, e
 
 	evt := button.GetLastButtonEvent(false)
 	if evt != nil && time.Now().Sub(evt.TimeStamp) < time.Second*3 {
-		resp = append(resp, "button")
+		resp = append(resp, button.ButtonNames[evt.Button])
+	}
+
+	for _, event := range *button.GetPressedButtons() {
+		resp = append(resp, button.ButtonNames[event.Button])
 	}
 
 	return openapi.Response(http.StatusOK, resp), nil
