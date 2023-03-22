@@ -1,11 +1,11 @@
 package led
 
 import (
-	ev32 "EV3-API/internal/ev3"
 	"fmt"
 	"github.com/ev3go/ev3"
 	"github.com/ev3go/ev3dev"
 	"log"
+	"time"
 )
 
 const (
@@ -37,6 +37,7 @@ func Init() error {
 	log.Printf("INFO - Checking LEDs")
 
 	for _, led := range leds {
+		log.Printf("DEBUG - %v", led.Name)
 		if bright, err := led.MaxBrightness(); err != nil {
 			log.Printf("ERROR - failed to read %v led, err: %v", led, err)
 		} else if bright != maxBrightness {
@@ -47,33 +48,59 @@ func Init() error {
 	return nil
 }
 
-func SetColorString(side string, color string, onDuration int32) error {
-	if colRG, ok := colors[color]; !ok {
-		return fmt.Errorf("color not found")
-	} else {
-		return SetColorValues(side, colRG.Red, colRG.Green, onDuration)
-	}
-}
-
-func SetColorValues(side string, red, green int, onDuration int32) error {
+func SetColorValues(side string, red, green int) error {
 	if !betweenMinMax(red) || !betweenMinMax(green) {
 		return fmt.Errorf("red %d or green %d value not between %d and %d", red, green, minBrightness, maxBrightness)
 	}
 
 	switch side {
 	case "left":
-		ev3.RedLeft.SetDelayOff(ev32.DurationMs(onDuration))
-		ev3.GreenLeft.SetDelayOff(ev32.DurationMs(onDuration))
 		ev3.RedLeft.SetBrightness(red)
 		ev3.GreenLeft.SetBrightness(green)
 	case "right":
-		ev3.RedRight.SetDelayOff(ev32.DurationMs(onDuration))
-		ev3.GreenRight.SetDelayOff(ev32.DurationMs(onDuration))
 		ev3.RedRight.SetBrightness(red)
 		ev3.GreenRight.SetBrightness(green)
 	default:
 		return fmt.Errorf("side %s not found, allowed are 'left' and 'right'", side)
 	}
+
+	return nil
+}
+
+func FlashString(side string, color string) error {
+	if colRG, ok := colors[color]; !ok {
+		return fmt.Errorf("color not found")
+	} else {
+		return Flash(side, colRG.Red, colRG.Green)
+	}
+}
+
+func Flash(side string, red, green int) (err error) {
+	go func() {
+		err = flashAsync(side, red, green)
+	}()
+
+	return
+}
+
+func flashAsync(side string, red, green int) error {
+	prev := colorRG{}
+	switch side {
+	case "left":
+		prev.Red, _ = ev3.RedLeft.Brightness()
+		prev.Green, _ = ev3.GreenLeft.Brightness()
+	case "right":
+		prev.Red, _ = ev3.RedRight.Brightness()
+		prev.Green, _ = ev3.GreenRight.Brightness()
+	}
+	defer SetColorValues(side, prev.Red, prev.Green)
+
+	err := SetColorValues(side, red, green)
+	if err != nil {
+		return err
+	}
+
+	time.Sleep(300 * time.Millisecond)
 
 	return nil
 }

@@ -8,9 +8,11 @@
 """
 
 from setuptools import setup, find_packages  # noqa: H301
+import os
 
 NAME = "ev3api"
-VERSION = "0.1.0"
+is_tag = os.environ.get("GITHUB_REF_TYPE") == "tag"
+VERSION = os.environ.get("GITHUB_REF_NAME") if is_tag else "0.0.0-dev"
 # To install the library, run the following
 #
 # python setup.py install
@@ -19,7 +21,7 @@ VERSION = "0.1.0"
 # http://pypi.python.org/pypi/setuptools
 
 REQUIRES = [
-    "urllib3 ~= 1.25.3",
+    "urllib3 >= 1.25.3,< 1.27.0",
     "python-dateutil ~= 2.8.2",
     "nulltype ~= 2.3.1",
     "requests ~= 2.27.1",

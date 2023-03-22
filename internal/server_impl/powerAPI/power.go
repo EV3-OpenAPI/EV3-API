@@ -29,8 +29,8 @@ func (s *ApiService) PowerGet(_ context.Context) (openapi.ImplResponse, error) {
 	resp := openapi.PowerInfo{
 		Voltage:    server_impl.GetFloat32(p.Voltage, &internalErrors),
 		Current:    server_impl.GetFloat32(p.Current, &internalErrors),
-		VoltageMax: server_impl.GetFloat32(p.VoltageMax, &internalErrors),
-		VoltageMin: server_impl.GetFloat32(p.VoltageMax, &internalErrors),
+		VoltageMax: server_impl.GetFloat32(p.VoltageMax, &internalErrors) * 1e-1, // It seems that our battery reports the wrong max and min voltages
+		VoltageMin: server_impl.GetFloat32(p.VoltageMin, &internalErrors) * 1e-1, // It seems that our battery reports the wrong max and min voltages
 		Technology: server_impl.GetString(p.Technology, &internalErrors),
 		Type:       server_impl.GetString(p.Type, &internalErrors),
 		UEvent:     server_impl.GetStringMap(p.Uevent, &internalErrors),
