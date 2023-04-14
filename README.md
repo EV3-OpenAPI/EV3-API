@@ -1,8 +1,6 @@
 [![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml)
 
-
 ![ZHAW-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ZHAW_Logo.svg/206px-ZHAW_Logo.svg.png)
-
 
 # LEGO® MINDSTORMS® EV3-REST
 
@@ -11,23 +9,25 @@ The server which runs on the LEGO® robot is implemented with [OpenAPI Specifica
 
 This GitHub project is the starting point for the LEGO® MINDSTORMS® EV3 robot REST implementation. Here you will find the information you need about the LEGO® Robot, simple examples of what it looks like, and some general information regarding the project.
 
-# Installation
+## Installation
 
 1. Connect to your EV3 robot with SSH or with a directly attached keyboard and monitor.
 2. Ensure that the EV3 has an internet connection
-3. Run the install-script with elevated privileges `curl -sf -L https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/install.sh | sudo sh`
+3. Run the install-script with elevated privileges 
 
+```bash
+curl -sf -L https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/install.sh | sudo sh
+```
 
-# Tools and Libraries
+## Tools and Libraries
 
 For this project, **OpenAPI generator** is used and the **EV3 Golang library**.
 
 * [OpenAPI Generator](https://openapi-generator.tech/)
-
 * [EV3 Golang library](https://github.com/ev3go)
 
+## Setup for Students
 
-# Setup for students
 If you want to code with **Java**, then use this instruction:
 
 * [Setup for Java](./SetupJava.md)
@@ -51,39 +51,72 @@ The LEGO® EV3 robot encourages participation from individuals and companies ali
 
 Not all feedback can be accommodated and there may be solid arguments for or against a change being appropriate for the specification.
 
-
 ## Setup development
 
 ### Prerequisites
 
 Install GO: [Offical website](https://go.dev/dl/), version >= 1.18  
 Install either [Docker](https://docs.docker.com/engine/install/) or [Openapi-Generator](https://openapi-generator.tech/docs/installation) for genrating the server code.  
-Install goimports tool: `go install golang.org/x/tools/cmd/goimports@latest` for fixing unused imports ing enerated code.
+Install `goimports` tool: `go install golang.org/x/tools/cmd/goimports@latest` for fixing unused imports in generated code.
 
-#### Generate server code
+#### Generate Server Code
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml`  
-Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml`
+Using Docker:
 
-Clean up unused imports (go refuses to compile if you don't): `goimports -l -w internal/openapi`  
+```bash
+docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml
+```
+
+Using Openapi-Generator: 
+
+```bash
+openapi-generator generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml
+```
+
+Clean up unused imports (go refuses to compile if you don't): 
+
+```bash
+goimports -l -w internal/openapi
+```
+
 Clean up generated code (because why not?): `gofmt -l -w internal/openapi`
 
-#### Compile server binary
+#### Compile Server Binary
 
-The ldflags option will remove debug code and result in a smaller binary.  
-`go build -o server -ldflags="-s -w" EV3-API/cmd`
+The `ldflags` option will remove debug code and result in a smaller binary.  
+
+```bash
+go build -o server -ldflags="-s -w" EV3-API/cmd
+```
+
+#### Generate Java Client Code
+
+Using Docker:
+
+```bash
+docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
+```
+
+Using Openapi-Generator:
+
+```bash
+openapi-generator generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
+```
 
 
-#### Generate java client code
+#### Generate Python Client Code
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml`  
-Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml`
+Using Docker:
 
+```bash
+docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml
+```
 
-#### Generate python client code
+Using Openapi-Generator:
 
-Using Docker: `docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml`  
-Using Openapi-Generator: `openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml`
+```bash
+openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml
+```
 
 ## Release and Deployment
 
@@ -96,4 +129,5 @@ If a new release is to be created, the new version number must first be entered 
 * clients/ev3-python/setup.py
 
 After that, a new release can be published via the [GitHub GUI](https://github.com/EV3-OpenAPI/EV3-API/releases/new). The repository has a GitHub action that automatically creates the Golang, Java and Python artifacts and attaches them to the release.
+
 Every time the LEGO robot is started, the [GitHub API](https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest) is used to check whether the latest release is newer than the currently installed version. If this is the case, the latest GO binary will be downloaded via the Assets API. This replaces the old binary and will be executed in its place in the future.

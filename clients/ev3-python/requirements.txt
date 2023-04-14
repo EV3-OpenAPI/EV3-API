@@ -4,4 +4,4 @@ setuptools>=65.6.3
 urllib3~=1.26.15
 requests~=2.28.2
 typing-extensions~=4.5.0
-frozendict~=2.3.6
+frozendict~=2.3.7
