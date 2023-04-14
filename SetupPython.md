@@ -6,7 +6,6 @@
 - Have pip for Python3 installed
 - (optional) Have venv for Python3 installed
 
-
 ## Setup
 
 1. (optional) setup new venv env `python3 -m venv venv`
