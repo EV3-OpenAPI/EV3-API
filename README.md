@@ -40,8 +40,6 @@ If you want to code with **Python**, then use this instruction:
 
 The current process for development of the LEGO® robot is described in [Development Guidelines](https://github.com/EV3-OpenAPI/EV3-API/blob/master/DEVELOPMENT.md). Development of the next version of the LEGO® robot is guided by the [ZHAW School of Engineering](https://www.zhaw.ch/en/engineering/). This group of committers bring their API expertise, incorporate feedback from the community, and expand the group of committers as appropriate. All development activity on the future specification will be performed as features and merged into this branch. Upon release of the future specification, this branch will be merged to <code>main</code>.
 
-The ZHAW holds every 2 weeks web conferences to review to code and open pull requests and discuss open issues related to the evolving LEGO® robot. 
-
 The LEGO® EV3 robot encourages participation from individuals and companies alike. If you want to participate in the evolution of the LEGO® robot, consider taking the following actions:
 
 * Review the current specification. The human-readable markdown file is the source of truth for the specification.
@@ -56,7 +54,7 @@ Not all feedback can be accommodated and there may be solid arguments for or aga
 ### Prerequisites
 
 Install GO: [Offical website](https://go.dev/dl/), version >= 1.18  
-Install either [Docker](https://docs.docker.com/engine/install/) or [Openapi-Generator](https://openapi-generator.tech/docs/installation) for genrating the server code.  
+Install either [Docker](https://docs.docker.com/engine/install/) or [Openapi-Generator](https://openapi-generator.tech/docs/installation) for generating the server code.  
 Install `goimports` tool: `go install golang.org/x/tools/cmd/goimports@latest` for fixing unused imports in generated code.
 
 #### Generate Server Code
@@ -79,13 +77,17 @@ Using Openapi-Generator:
 openapi-generator generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml
 ```
 
-Clean up unused imports (go refuses to compile if you don't): 
+Clean up unused imports (go refuses to compile if you don't):
 
 ```bash
-goimports -l -w internal/openapi
+goimports -l -w internal/gen/openapi
 ```
 
-Clean up generated code (because why not?): `gofmt -l -w internal/openapi`
+Clean up generated code (because why not?): 
+
+```bash
+gofmt -l -w internal/gen/openapi
+```
 
 #### Compile Server Binary
 
@@ -114,7 +116,6 @@ Using Openapi-Generator:
 ```bash
 openapi-generator generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
 ```
-
 
 #### Generate Python Client Code
 
