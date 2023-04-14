@@ -64,10 +64,16 @@ Install `goimports` tool: `go install golang.org/x/tools/cmd/goimports@latest` f
 Using Docker:
 
 ```bash
-docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml
+docker run --rm \
+  --name openapi-generator -u 1000 -w /local \
+  -v $PWD:/local openapitools/openapi-generator-cli generate \
+  -i /local/openapi/spec.yaml \
+  -g go-server \
+  -o /local/internal/gen \
+  -c /local/openapi/server-config.yml
 ```
 
-Using Openapi-Generator: 
+Using Openapi-Generator:
 
 ```bash
 openapi-generator generate -i openapi/spec.yaml -o internal/gen -g go-server -c openapi/server-config.yml
@@ -94,7 +100,13 @@ go build -o server -ldflags="-s -w" EV3-API/cmd
 Using Docker:
 
 ```bash
-docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g java -c openapi/java-client-config.yaml
+docker run --rm \
+  --name openapi-generator -u 1000 -w /local \
+  -v $PWD:/local openapitools/openapi-generator-cli generate \
+  -i /local/openapi/spec.yaml \
+  -g java \
+  -o clients/ev3-java/ev3api \
+  -c openapi/java-client-config.yaml
 ```
 
 Using Openapi-Generator:
@@ -109,7 +121,13 @@ openapi-generator generate -i openapi/spec.yaml -o clients/ev3-java/ev3api -g ja
 Using Docker:
 
 ```bash
-docker run -v ${pwd}:/local --name openapi-generator -u 1000 -w /local openapitools/openapi-generator-cli:latest generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml
+docker run --rm \
+  --name openapi-generator -u 1000 -w /local \
+  -v $PWD:/local openapitools/openapi-generator-cli generate \
+  -i /local/openapi/spec.yaml \
+  -g python \
+  -o clients/ev3-python \
+  -c openapi/python-client-config.yaml
 ```
 
 Using Openapi-Generator:
