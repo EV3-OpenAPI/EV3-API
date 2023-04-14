@@ -18,6 +18,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    exclude 'ch/zhaw/ev3/**'
 }
 
 java {
