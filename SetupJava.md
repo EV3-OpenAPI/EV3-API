@@ -4,10 +4,9 @@
 
 - Have [BlueJ](https://www.bluej.org/) installed on your system
 
-
 ## Setup
 
-1. Download from [GitHub](https://github.com/PA-arslasel-machitic/EV3-API/releases/) the latest .jar-file release
+1. Download from [GitHub](https://github.com/EV3-OpenAPI/EV3-API/releases/) the latest .jar-file release
 2. Start your IDE and create a new project (Project > New Project...)
 3. After your generate a new project, you have to add the .jar-file to the project. **See example**:
 ![image info](./picture/IDE_add_library.png)
