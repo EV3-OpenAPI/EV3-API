@@ -1,9 +1,10 @@
 # Development Guidelines
+
 This document intends to establish guidelines which build a transparent, open mechanism for deciding how to evolve the LEGO® MINDSTORMS® EV3-REST.
 [ZHAW](https://www.zhaw.ch/en/engineering/) will initially follow these processes when merging changes from external contributors or from the
 ZHAW itself. This guideline document will be adjusted as practicality dictates.
 
-# Specification Change Criteria
+## Specification Change Criteria
 
 The specification will *evolve over time*. Changes may be made when any of the following criteria are met:
 
@@ -15,7 +16,7 @@ The specification will *evolve over time*. Changes may be made when any of the f
 
 - Forward-looking designs. We should always consider what the next important functionality should be.
 
-# Tracking Process
+## Tracking Process
 
 - GitHub is the medium of record for all spec designs, use cases, and so on.
 
@@ -23,13 +24,13 @@ The specification will *evolve over time*. Changes may be made when any of the f
 
 - At any given time, there would be at most 4 work branches. The branches would exist if work has started on them. Assuming a current version of 1.0.0:
 
-  -  **main** - Current stable version. No PRs would be accepted directly to modify the specification. PRs against supporting files can be accepted.
+- **main** - Current stable version. No PRs would be accepted directly to modify the specification. PRs against supporting files can be accepted.
 
-  -  v1.0.1-dev - The next PATCH version of the specification. This would include non-breaking changes such as typo fixes, document fixes, wording clarifications.
+- v1.0.1-dev - The next PATCH version of the specification. This would include non-breaking changes such as typo fixes, document fixes, wording clarifications.
 
-  -  v1.1.0 - The next MINOR version.
+- v1.1.0 - The next MINOR version.
 
-  -  v2.0.0 - The next MAJOR version.
+- v2.0.0 - The next MAJOR version.
 
 - The main branch shall remain the current, released LEGO® MINDSTORMS® EV3-REST. We will describe and link the work branch(es) on the default README.md on main.
 
@@ -45,6 +46,6 @@ The specification will *evolve over time*. Changes may be made when any of the f
 
 - When the work branch is ready and approved, the branch will be merged to main.
 
-# Participation
+## Participation
 
 The evolution of the specification happens through the participation of members of the developer community at large. Any person willing to contribute to the effort is welcome, and contributions may include filing or participating in issues, creating pull requests, or helping others with such activities.
