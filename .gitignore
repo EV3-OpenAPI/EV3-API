@@ -3,4 +3,15 @@ internal/gen
 .idea
 *.iml
 
+clients/ev3-java/build
 clients/ev3-java/ev3api
+clients/ev3-java/.gradle
+
+clients/ev3-python/.openapi-generator-ignore
+clients/ev3-python/.openapi-generator/
+clients/ev3-python/ev3api/
+clients/ev3-python/ev3api_README.md
+clients/ev3-python/test/
+
+server
+
