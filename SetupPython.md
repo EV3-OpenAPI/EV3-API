@@ -10,7 +10,7 @@
 
 1. (optional) setup new venv env `python3 -m venv venv`
 2. (optional) activate venv `source venv/bin/activate`
-3. Install EV3-API package `pip3 install https://github.com/EV3-OpenAPI/EV3-API/releases/download/1.0.4/ev3api-1.0.4-py3-none-any.whl`
+3. Install EV3-API package `pip3 install https://github.com/EV3-OpenAPI/EV3-API/releases/download/1.0.5/ev3api-1.0.5-py3-none-any.whl`
 4. Done
 
 You can now use the EV3-API client library. For example:
