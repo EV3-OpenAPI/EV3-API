@@ -8,6 +8,9 @@ mv /home/robot/host.name               /home/robot/bak/.
 mv /home/robot/rpyc_robots.py          /home/robot/bak/.
 mv /home/robot/rpyc_start.sh           /home/robot/bak/.
 mv /home/robot/startup.sh              /home/robot/bak/.
+mv /home/robot/server                  /home/robot/bak/.
+mv /home/robot/server.log              /home/robot/bak/.
+mv /home/robot/lcd_monitor.py          /home/robot/bak/.
 
 # Create directory for ev3api-server
 mkdir -p /opt/ev3api-server/
