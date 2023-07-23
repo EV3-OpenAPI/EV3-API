@@ -20,7 +20,7 @@ curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/EV3-Open
 chmod +x /opt/ev3api-server/startup.sh
 
 download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "ev3api-server") | .browser_download_url')
-curl -o /opt/ev3api-server/ev3api-server $download_url
+curl -L $download_url > /opt/ev3api-server/ev3api-server # Fixes empty downloads from GitHub
 chmod +x /opt/ev3api-server/ev3api-server
 
 chown -R robot:robot /opt/ev3api-server
