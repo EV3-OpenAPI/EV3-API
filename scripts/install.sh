@@ -16,7 +16,7 @@ mkdir -p /opt/ev3api-server/
 curl -o /opt/ev3api-server/startup.sh https://raw.githubusercontent.com/EV3-OpenAPI/EV3-API/master/scripts/startup.sh
 chmod +x /opt/ev3api-server/startup.sh
 
-download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "server") | .browser_download_url')
+download_url=$(curl https://api.github.com/repos/EV3-OpenAPI/EV3-API/releases/latest | jq -r '.assets[] | select(.name == "ev3api-server") | .browser_download_url')
 curl -o /opt/ev3api-server/ev3api-server $download_url
 chmod +x /opt/ev3api-server/ev3api-server
 
