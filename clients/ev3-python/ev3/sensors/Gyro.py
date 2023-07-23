@@ -1,11 +1,11 @@
-from enum import StrEnum
+from enum import Enum
 
 from ev3.sensors.Sensor import Sensor
 from ev3api.api.sensor_api import SensorApi
 
 
 class Gyro(Sensor):
-    class Modes(StrEnum):
+    class Modes(Enum):
         GYRO_ANG = "GYRO-ANG"
         GYRO_RATE = "GYRO-RATE"
         GYRO_FAS = "GYRO-FAS"
