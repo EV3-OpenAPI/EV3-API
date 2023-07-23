@@ -1,11 +1,11 @@
-from enum import StrEnum
+from enum import Enum
 
 from ev3.sensors.Sensor import Sensor
 from ev3api.api.sensor_api import SensorApi
 
 
 class Sonic(Sensor):
-    class MODES(StrEnum):
+    class MODES(Enum):
         DIST_CM = "US-DIST-CM"
         DIST_IN = "US-DIST-IN"
         LISTEN = "US-LISTEN"
