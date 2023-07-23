@@ -24,6 +24,7 @@ VERSION = os.environ.get("GITHUB_REF_NAME") if is_tag else "0.0.0-dev"
 #
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
+
 PYTHON_REQUIRES = ">=3.10"
 REQUIRES = [
     "urllib3 >= 1.25.3, < 2.1.0",
@@ -44,8 +45,6 @@ setup(
     packages=find_packages(exclude=["test", "tests"]),
     include_package_data=True,
     license="",
-    long_description_content_type="text/markdown",
     long_description="""\
-    """,
-    package_data={"ev3api": ["py.typed"]},
+    """
 )
