@@ -1,3 +1,4 @@
+tmp
 internal/gen
 
 .idea
@@ -13,5 +14,4 @@ clients/ev3-python/ev3api/
 clients/ev3-python/ev3api_README.md
 clients/ev3-python/test/
 
-server
-
+ev3api-server
