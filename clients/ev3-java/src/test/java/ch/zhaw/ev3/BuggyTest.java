@@ -10,7 +10,7 @@ public class BuggyTest {
 
     @BeforeAll
     static void beforeAll() {
-        buggy = new Buggy("10.0.100.98:8080");
+        buggy = new Buggy("192.168.1.251:8080");
     }
 
     @Test

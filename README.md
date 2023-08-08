@@ -134,7 +134,7 @@ docker run --rm \
 Using Openapi-Generator:
 
 ```bash
-openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g java -c openapi/python-client-config.yaml
+openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g python -c openapi/python-client-config.yaml
 ```
 
 ## Release and Deployment

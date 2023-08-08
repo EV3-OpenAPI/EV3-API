@@ -9,7 +9,7 @@ class EV3Test {
 
     @BeforeAll
     static void beforeAll() {
-        ev3 = new EV3("10.0.100.98");
+        ev3 = new EV3("192.168.1.251");
     }
 
     @Test

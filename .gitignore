@@ -1,8 +1,10 @@
 tmp
 internal/gen
+node_modules
 
 .idea
 *.iml
+openapitools.json
 
 clients/ev3-java/build
 clients/ev3-java/ev3api
