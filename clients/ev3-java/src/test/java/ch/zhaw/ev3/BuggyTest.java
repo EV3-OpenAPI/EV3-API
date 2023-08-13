@@ -19,47 +19,47 @@ public class BuggyTest {
     }
 
     @Test
-    void distance() throws ApiException {
+    void distance() {
         System.out.println(buggy.distance());
     }
 
     @Test
-    void on() throws ApiException {
+    void on() {
         buggy.on(20);
     }
 
     @Test
-    void onForSeconds() throws ApiException {
+    void onForSeconds() {
         buggy.onForSeconds(20, 3.0);
     }
 
     @Test
-    void stop() throws ApiException {
+    void stop() {
         buggy.stop();
     }
 
     @Test
-    void onForDegrees() throws ApiException {
+    void onForDegrees() {
         buggy.onForDegrees(20, 360);
     }
 
     @Test
-    void onForRotations() throws ApiException {
+    void onForRotations() {
         buggy.onForRotations(20, 2);
     }
 
     @Test
-    void steerCounts() throws ApiException {
-        buggy.steerCounts(20, 2*360, 0);
+    void steerCounts() {
+        buggy.steerCounts(20, 2 * 360, 0);
     }
 
     @Test
-    void steerDuration() throws ApiException {
+    void steerDuration() {
         buggy.steerDuration(20, 4, 20);
     }
 
     @Test
-    void startSleepStop() throws ApiException, InterruptedException {
+    void startSleepStop() , InterruptedException {
         buggy.on(5);
 
         Thread.sleep(3000);
