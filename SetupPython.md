@@ -23,7 +23,7 @@ from ev3.EV3 import EV3
 
 class TestEV3(TestCase):
     def test_beep(self):
-        EV3("10.0.100.98:8080").beep()
+        EV3("10.0.100.98").beep()
 ```
 
 or
@@ -36,5 +36,5 @@ from ev3.Buggy import Buggy
 
 class TestBuggy(TestCase):
     def test_on_for_seconds(self):
-        Buggy("10.0.100.98:8080").on_for_seconds(20, 2)
+        Buggy("10.0.100.98").on_for_seconds(20, 2)
 ```
