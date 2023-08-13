@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from ev3.EV3 import EV3
 
-hostname = "10.0.100.98:8080"
+hostname = "10.0.100.98"
 
 
 class TestEV3(TestCase):

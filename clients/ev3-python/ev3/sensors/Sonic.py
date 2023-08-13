@@ -1,5 +1,4 @@
 from enum import Enum
-
 from ev3.sensors.Sensor import Sensor
 from ev3api.api.sensor_api import SensorApi
 
@@ -15,8 +14,8 @@ class Sonic(Sensor):
         DC_IN = "US-DC-IN"
 
     def __init__(self, sensor_api: SensorApi):
-        super().__init__(sensor_api)
+        super(Sonic, self).__init__(sensor_api, Sensor.Drivers.SONIC)
 
     def get_distance(self) -> int:
-        self.set_mode(self.MODES.DIST_CM)
+        self.set_mode(self.MODES.DIST_CM.value)
         return int(self.get_values()[0])

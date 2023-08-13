@@ -117,12 +117,9 @@ Class | Method | HTTP request | Description
  - [Text](docs/Text.md)
  - [Tone](docs/Tone.md)
 
-
-<a id="documentation-for-authorization"></a>
 ## Documentation For Authorization
 
 Endpoints do not require authorization.
-
 
 ## Author
 
