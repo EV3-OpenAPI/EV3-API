@@ -105,7 +105,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Generate java client
-        uses: docker://openapitools/openapi-generator-cli:v6.6.0
+        # Downgrade for Python needed, since in never version files are missing
+        uses: docker://openapitools/openapi-generator-cli:v6.1.0
         with:
           args: generate -i openapi/spec.yaml -o clients/python-tmp -g python -c openapi/python-client-config.yaml
 
