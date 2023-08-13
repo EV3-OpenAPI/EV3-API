@@ -1,3 +1,4 @@
+from ev3api.api.button_api import ButtonApi
 from ev3api.api.led_api import LedApi
 from ev3api.api.motor_api import MotorApi
 from ev3api.api.power_api import PowerApi
@@ -11,13 +12,14 @@ from ev3api.model.tone import Tone
 
 
 class EV3:
-
     def __init__(self, host_address):
-        self.configuration = Configuration(
-            host=f"http://{host_address}/api/v1"
-        )
+        parts = host_address.split(":")
+        if parts.length == 1:
+            host_address += ":" + 8080
+        self.configuration = Configuration(host=f"http://{host_address}/api/v1")
         self.hostAddress = host_address
         self.api_client = ApiClient(self.configuration)
+        self.buttonApi = ButtonApi(self.api_client)
         self.motorApi = MotorApi(self.api_client)
         self.powerApi = PowerApi(self.api_client)
         self.sensorApi = SensorApi(self.api_client)
@@ -48,10 +50,12 @@ class EV3:
         :param length_ms: duration in ms
         """
 
-        self.soundApi.sound_tone_post(Tone(
-            frequency=frequency,
-            length_ms=length_ms,
-        ))
+        self.soundApi.sound_tone_post(
+            Tone(
+                frequency=frequency,
+                length_ms=length_ms,
+            )
+        )
 
     def speak(self, text: str) -> None:
         """
@@ -60,9 +64,11 @@ class EV3:
         :param text: the text to be spoken
         """
 
-        self.soundApi.sound_speak_post(Text(
-            text=text,
-        ))
+        self.soundApi.sound_speak_post(
+            Text(
+                text=text,
+            )
+        )
 
     def voltage(self) -> float:
         """

@@ -8,8 +8,8 @@ from ev3api.model.motor_steer_duration_post_request import MotorSteerDurationPos
 from ev3api.model.steering_unit import SteeringUnit
 from ev3api.model.tacho_motor import TachoMotor
 
-class Buggy(EV3):
 
+class Buggy(EV3):
     def __init__(self, host_address):
         super().__init__(host_address)
 
@@ -128,12 +128,14 @@ class Buggy(EV3):
             steering_unit=self.steering_unit,
             set_speed=self.max_speed / 100.0 * speed_percent,
             set_counts=counts,
-            set_turn=turn
+            set_turn=turn,
         )
 
         self.motorApi.motor_steer_counts_post(req)
 
-    def steer_duration(self, speed_percent: int, duration_sec: float, turn: int) -> None:
+    def steer_duration(
+        self, speed_percent: int, duration_sec: float, turn: int
+    ) -> None:
         """
         Turns the robot at the given speed for the given number of seconds
         to the given degree left or right.
@@ -145,7 +147,7 @@ class Buggy(EV3):
             steering_unit=self.steering_unit,
             set_speed=self.max_speed / 100.0 * speed_percent,
             set_duration=duration_sec * 1000,
-            set_turn=turn
+            set_turn=turn,
         )
 
         self.motorApi.motor_steer_duration_post(req)
