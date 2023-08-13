@@ -1,7 +1,6 @@
 from enum import Enum
-
-import ev3api.model.sensor
 from ev3api.api.sensor_api import SensorApi
+import ev3api.model.sensor
 
 
 class Sensor:
@@ -9,11 +8,11 @@ class Sensor:
         GYRO = "gyro"
         SONIC = "us"
 
-    def __int__(self, driver: Drivers, sensor_api: SensorApi):
+    def __init__(self, sensor_api: SensorApi, driver: Drivers):
         self.driver = driver
         self.api = sensor_api
 
-        self.sensor = self.api.sensor_type_get(driver)
+        self.sensor = self.api.sensor_type_get(self.driver.value)
         print(self.sensor)
         self.modes = self.sensor["modes"]
 
@@ -27,7 +26,9 @@ class Sensor:
         if mode == self.get_mode():
             return
 
-        self.api.sensor_type_put(self.driver, ev3api.model.sensor.Sensor(mode=mode))
+        self.api.sensor_type_put(
+            self.driver.value, ev3api.model.sensor.Sensor(mode=mode)
+        )
 
     def get_values(self) -> [str]:
-        return self.api.sensor_type_values_get(self.driver)
+        return self.api.sensor_type_values_get(self.driver.value)

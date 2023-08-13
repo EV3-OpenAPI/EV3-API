@@ -6,6 +6,7 @@ from ev3api.api.sensor_api import SensorApi
 from ev3api.api.sound_api import SoundApi
 from ev3api.api_client import ApiClient
 from ev3api.configuration import Configuration
+from ev3api.exceptions import ApiTypeError
 from ev3api.model.led import LED
 from ev3api.model.text import Text
 from ev3api.model.tone import Tone
@@ -14,8 +15,8 @@ from ev3api.model.tone import Tone
 class EV3:
     def __init__(self, host_address):
         parts = host_address.split(":")
-        if parts.length == 1:
-            host_address += ":" + 8080
+        if len(parts) == 1:
+            host_address += ":" + "8080"
         self.configuration = Configuration(host=f"http://{host_address}/api/v1")
         self.hostAddress = host_address
         self.api_client = ApiClient(self.configuration)
@@ -115,7 +116,12 @@ class EV3:
 
         :return: True if any buttons are currently pressed
         """
-        return self.buttonApi.button_pressed_get()
+
+        try:
+            pressedButtons = self.buttonApi.button_pressed_get()
+            return type(pressedButtons) == list and len(pressedButtons) > 0
+        except ApiTypeError as e:
+            print(e)
 
     def flash(self) -> None:
         """

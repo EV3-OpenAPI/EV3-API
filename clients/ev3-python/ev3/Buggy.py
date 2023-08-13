@@ -23,20 +23,20 @@ class Buggy(EV3):
         self.max_speed = motor["max_speed"]
         self.count_per_rot = motor["count_per_rot"]
 
-        self.sonic = Sonic(self.sensorApi)
-        self.gyro = Gyro(self.sensorApi)
+        self.sonicSensor = Sonic(self.sensorApi)
+        self.gyroSensor = Gyro(self.sensorApi)
 
     def gyro(self) -> int:
         """
         :return: the angle measured by the gyro sensor
         """
-        return self.gyro.get_angle()
+        return self.gyroSensor.get_angle()
 
     def distance(self) -> int:
         """
         :return: the distance measured by the sonic sensor
         """
-        return self.sonic.get_distance()
+        return self.sonicSensor.get_distance()
 
     def stop(self) -> None:
         """
@@ -52,8 +52,8 @@ class Buggy(EV3):
         self.left["command"] = "run-forever"
         self.right["command"] = "run-forever"
 
-        self.left["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
-        self.right["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
+        self.left["speed_setpoint"] = self.max_speed // 100 * speed_percent
+        self.right["speed_setpoint"] = self.max_speed // 100 * speed_percent
 
         self.motorApi.motor_tacho_post(self.driving_unit)
 
@@ -75,8 +75,8 @@ class Buggy(EV3):
         self.left["command"] = "run-to-rel-pos"
         self.right["command"] = "run-to-rel-pos"
 
-        self.left["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
-        self.right["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
+        self.left["speed_setpoint"] = self.max_speed // 100 * speed_percent
+        self.right["speed_setpoint"] = self.max_speed // 100 * speed_percent
 
         self.motorApi.motor_tacho_post(self.driving_unit)
 
@@ -93,8 +93,8 @@ class Buggy(EV3):
         self.left["command"] = "run-to-rel-pos"
         self.right["command"] = "run-to-rel-pos"
 
-        self.left["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
-        self.right["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
+        self.left["speed_setpoint"] = self.max_speed // 100 * speed_percent
+        self.right["speed_setpoint"] = self.max_speed // 100 * speed_percent
 
         self.motorApi.motor_tacho_post(self.driving_unit)
 
@@ -108,8 +108,8 @@ class Buggy(EV3):
         self.left["command"] = "run-timed"
         self.right["command"] = "run-timed"
 
-        self.left["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
-        self.right["speed_setpoint"] = self.max_speed / 100.0 * speed_percent
+        self.left["speed_setpoint"] = self.max_speed // 100 * speed_percent
+        self.right["speed_setpoint"] = self.max_speed // 100 * speed_percent
 
         self.left["time_setpoint"] = seconds * 1000
         self.right["time_setpoint"] = seconds * 1000
@@ -126,9 +126,9 @@ class Buggy(EV3):
         """
         req = MotorSteerCountsPostRequest(
             steering_unit=self.steering_unit,
-            set_speed=self.max_speed / 100.0 * speed_percent,
-            set_counts=counts,
-            set_turn=turn,
+            speed=self.max_speed // 100 * speed_percent,
+            counts=counts,
+            turn=turn,
         )
 
         self.motorApi.motor_steer_counts_post(req)
@@ -145,9 +145,9 @@ class Buggy(EV3):
         """
         req = MotorSteerDurationPostRequest(
             steering_unit=self.steering_unit,
-            set_speed=self.max_speed / 100.0 * speed_percent,
-            set_duration=duration_sec * 1000,
-            set_turn=turn,
+            speed=self.max_speed // 100 * speed_percent,
+            duration_ms=duration_sec * 1000,
+            turn=turn,
         )
 
         self.motorApi.motor_steer_duration_post(req)
