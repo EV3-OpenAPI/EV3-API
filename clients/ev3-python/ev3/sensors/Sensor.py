@@ -13,7 +13,6 @@ class Sensor:
         self.api = sensor_api
 
         self.sensor = self.api.sensor_type_get(self.driver.value)
-        print(self.sensor)
         self.modes = self.sensor["modes"]
 
     def get_mode(self) -> str:
