@@ -117,11 +117,8 @@ class EV3:
         :return: True if any buttons are currently pressed
         """
 
-        try:
-            pressedButtons = self.buttonApi.button_pressed_get()
-            return type(pressedButtons) == list and len(pressedButtons) > 0
-        except ApiTypeError as e:
-            print(e)
+        pressedButtons = self.buttonApi.button_pressed_get()
+        return (type(pressedButtons) == list) and (len(pressedButtons) > 0)
 
     def flash(self) -> None:
         """
