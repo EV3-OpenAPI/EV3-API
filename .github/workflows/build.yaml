@@ -10,7 +10,7 @@ jobs:
   build-go-server:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -67,7 +67,7 @@ jobs:
   build-java-client:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Generate java client
         uses: docker://openapitools/openapi-generator-cli:v6.6.0
@@ -102,7 +102,7 @@ jobs:
   build-python-client:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Generate java client
         # Downgrade for Python needed, since in never version files are missing
