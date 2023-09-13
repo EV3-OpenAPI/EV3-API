@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	golang.org/x/image v0.11.0
+	golang.org/x/image v0.12.0
 	golang.org/x/mod v0.12.0
 )
 
