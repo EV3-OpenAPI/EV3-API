@@ -79,7 +79,7 @@ jobs:
           mkdir -p clients/ev3-java/ev3api
           cp -r clients/java-tmp/* clients/ev3-java/ev3api/.
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
