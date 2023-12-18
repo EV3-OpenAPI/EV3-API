@@ -143,17 +143,17 @@ jobs:
     if: github.event_name == 'release' # && github.event.action == 'created'
     steps:
       - name: Download go server
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Go-binary
 
       - name: Download java client
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Java-Jar
 
       - name: Download python client
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Python-Wheel
 
