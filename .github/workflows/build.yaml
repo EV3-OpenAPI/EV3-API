@@ -51,13 +51,13 @@ jobs:
           go test EV3-API/cmd -json > TestResults.json
 
       - name: Upload Go test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Go-results
           path: TestResults.json
 
       - name: Upload Go binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Go-binary
           path: ev3api-server
@@ -92,7 +92,7 @@ jobs:
         working-directory: ./clients/ev3-java
 
       - name: Upload Java fat jar
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Java-Jar
           path: clients/ev3-java/build/libs/ev3-java-${{ github.ref_name }}-all.jar
@@ -130,7 +130,7 @@ jobs:
         working-directory: ./clients/ev3-python
 
       - name: Upload Python wheel
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Python-Wheel
           path: clients/ev3-python/dist/ev3api-*-py3-none-any.whl
