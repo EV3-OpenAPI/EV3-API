@@ -74,13 +74,13 @@ jobs:
         with:
           args: generate -i openapi/spec.yaml -o clients/java-tmp -g java -c openapi/java-client-config.yaml
 
-      - name: Make generated java client Gradle 9 compatible
-        run: git apply --directory=clients/java-tmp openapi/java-client-gradle-9.patch
-
       - name: Copy generated java code
         run: |
           mkdir -p clients/ev3-java/ev3api
           cp -r clients/java-tmp/* clients/ev3-java/ev3api/.
+
+      - name: Make generated java client Gradle 9 compatible
+        run: git apply --directory=clients/ev3-java/ev3api openapi/java-client-gradle-9.patch
 
       - uses: actions/setup-java@v5
         with:
