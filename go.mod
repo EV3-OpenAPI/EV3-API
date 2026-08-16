@@ -1,6 +1,6 @@
 module EV3-API
 
-go 1.25.0
+go 1.26.6
 
 require (
 	github.com/ev3go/ev3 v0.0.0-20230218221813-265c69c34aaa
