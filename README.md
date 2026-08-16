@@ -141,11 +141,7 @@ openapi-generator generate -i openapi/spec.yaml -o clients/ev3-python -g python 
 
 **Important**: The versioning follows [Go semver](https://pkg.go.dev/golang.org/x/mod/semver) specifications, meaning versions have to be in the format "vMAJOR.MINOR.BUGFIX" including the leading "v". This is important when creating a release tag.
 
-If a new release is to be created, the new version number must first be entered in the following files:
-
-* openapi/spec.yaml
-* clients/ev3-java/build.gradle
-* clients/ev3-python/setup.py
+Before creating a release, update the version in `openapi/spec.yaml`. The Java and Python package versions are derived from the release tag.
 
 After that, a new release can be published via the [GitHub GUI](https://github.com/EV3-OpenAPI/EV3-API/releases/new). The repository has a GitHub action that automatically creates the Golang, Java and Python artifacts and attaches them to the release.
 
