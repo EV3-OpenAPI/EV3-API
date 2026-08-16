@@ -84,7 +84,7 @@ func CheckForNewVersion() {
 	if semver.Compare(currVer, rel.TagName) == -1 {
 		log.Printf("INFO - Newer version found. Current: %s, New: %s", currVer, rel.TagName)
 
-		downloadUrl, err := getAssetWithName(rel.Assets, "server")
+		downloadUrl, err := getServerAsset(rel.Assets)
 		if err != nil {
 			log.Printf("ERROR - No server binary in release. %v", err)
 			return
@@ -116,6 +116,10 @@ func getAssetWithName(assets *[]asset, name string) (string, error) {
 	}
 
 	return "", fmt.Errorf("no asset with the given name found")
+}
+
+func getServerAsset(assets *[]asset) (string, error) {
+	return getAssetWithName(assets, SERVER_FILE_NAME)
 }
 
 func downloadVersion(url string) error {
