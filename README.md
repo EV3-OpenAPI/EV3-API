@@ -1,6 +1,6 @@
 [![Go binary](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml/badge.svg)](https://github.com/EV3-OpenAPI/EV3-API/actions/workflows/build.yaml)
 
-![ZHAW logo](https://upload.wikimedia.org/wikipedia/commons/e/e6/ZHAW_Logo.svg)
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/ZHAW_Logo.svg" alt="ZHAW logo" width="132">
 
 # LEGO® MINDSTORMS® EV3-REST
 
