@@ -59,7 +59,7 @@ public class BuggyTest {
     }
 
     @Test
-    void startSleepStop() , InterruptedException {
+    void startSleepStop() throws InterruptedException {
         buggy.on(5);
 
         Thread.sleep(3000);
