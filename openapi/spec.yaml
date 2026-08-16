@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: EV3-REST
   description: EV3-REST
-  version: 0.1.0
+  version: 1.0.6
 servers:
   - url: 'http://127.0.0.1:8080/api/v1'
 
