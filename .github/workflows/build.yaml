@@ -10,10 +10,10 @@ jobs:
   build-go-server:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
 
@@ -51,13 +51,13 @@ jobs:
           go test EV3-API/cmd -json > TestResults.json
 
       - name: Upload Go test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Go-results
           path: TestResults.json
 
       - name: Upload Go binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Go-binary
           path: ev3api-server
@@ -67,10 +67,10 @@ jobs:
   build-java-client:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Generate java client
-        uses: docker://openapitools/openapi-generator-cli:v6.6.0
+        uses: docker://openapitools/openapi-generator-cli:v7.24.0
         with:
           args: generate -i openapi/spec.yaml -o clients/java-tmp -g java -c openapi/java-client-config.yaml
 
@@ -79,20 +79,23 @@ jobs:
           mkdir -p clients/ev3-java/ev3api
           cp -r clients/java-tmp/* clients/ev3-java/ev3api/.
 
-      - uses: actions/setup-java@v4
+      - name: Make generated java client Gradle 9 compatible
+        run: git apply --directory=clients/ev3-java/ev3api openapi/java-client-gradle-9.patch
+
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
         
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew shadowJar
+        run: ./gradlew test shadowJar
         working-directory: ./clients/ev3-java
 
       - name: Upload Java fat jar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Java-Jar
           path: clients/ev3-java/build/libs/ev3-java-${{ github.ref_name }}-all.jar
@@ -102,11 +105,10 @@ jobs:
   build-python-client:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Generate java client
-        # Downgrade for Python needed, since in never version files are missing
-        uses: docker://openapitools/openapi-generator-cli:v6.1.0
+      - name: Generate Python client
+        uses: docker://openapitools/openapi-generator-cli:v7.24.0
         with:
           args: generate -i openapi/spec.yaml -o clients/python-tmp -g python -c openapi/python-client-config.yaml
 
@@ -115,14 +117,19 @@ jobs:
           cp -r clients/python-tmp/* clients/ev3-python/.
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.14'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install build
+          python -m pip install --upgrade build
+          python -m pip install -r requirements.txt -r test-requirements.txt
+        working-directory: ./clients/ev3-python
+
+      - name: Test generated Python client
+        run: python -m pytest ev3api/test
         working-directory: ./clients/ev3-python
 
       - name: Build package
@@ -130,7 +137,7 @@ jobs:
         working-directory: ./clients/ev3-python
 
       - name: Upload Python wheel
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Python-Wheel
           path: clients/ev3-python/dist/ev3api-*-py3-none-any.whl
@@ -143,17 +150,17 @@ jobs:
     if: github.event_name == 'release' # && github.event.action == 'created'
     steps:
       - name: Download go server
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: Go-binary
 
       - name: Download java client
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: Java-Jar
 
       - name: Download python client
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: Python-Wheel
 

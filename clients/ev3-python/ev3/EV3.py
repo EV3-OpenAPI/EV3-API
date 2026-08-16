@@ -7,9 +7,9 @@ from ev3api.api.sound_api import SoundApi
 from ev3api.api_client import ApiClient
 from ev3api.configuration import Configuration
 from ev3api.exceptions import ApiTypeError
-from ev3api.model.led import LED
-from ev3api.model.text import Text
-from ev3api.model.tone import Tone
+from ev3api.models.led import LED
+from ev3api.models.text import Text
+from ev3api.models.tone import Tone
 
 
 class EV3:
@@ -77,7 +77,7 @@ class EV3:
 
         :return: voltage of the battery
         """
-        return self.powerApi.power_get()["voltage"]
+        return self.powerApi.power_get().voltage
 
     def current(self) -> float:
         """
@@ -85,7 +85,7 @@ class EV3:
 
         :return: current of the battery
         """
-        return self.powerApi.power_get()["current"]
+        return self.powerApi.power_get().current
 
     def max_voltage(self) -> float:
         """
@@ -93,7 +93,7 @@ class EV3:
 
         :return: maximum voltage of the battery
         """
-        return self.powerApi.power_get()["voltage_max"]
+        return self.powerApi.power_get().voltage_max
 
     def min_voltage(self) -> float:
         """
@@ -101,14 +101,14 @@ class EV3:
 
         :return: minimum voltage of the battery
         """
-        return self.powerApi.power_get()["voltage_min"]
+        return self.powerApi.power_get().voltage_min
 
     def technology(self) -> str:
         """
         Returns the technology of the battery
         :return: the technology of the battery
         """
-        return self.powerApi.power_get()["technology"]
+        return self.powerApi.power_get().technology
 
     def button(self) -> bool:
         """
