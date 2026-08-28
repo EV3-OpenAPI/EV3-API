@@ -85,7 +85,7 @@ jobs:
       - name: Make generated java client Gradle 9 compatible
         run: git apply --directory=clients/ev3-java/ev3api openapi/java-client-gradle-9.patch
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
