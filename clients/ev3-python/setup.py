@@ -28,7 +28,7 @@ VERSION = os.environ.get("GITHUB_REF_NAME") if is_tag else "0.0.0-dev"
 PYTHON_REQUIRES = ">=3.10"
 REQUIRES = [
     "urllib3 >= 2.7.0, < 3",
-    "python-dateutil >= 2.9.0.post0, < 3",
+    "python-dateutil >= 2.9.0.post0, < 4",
     "pydantic >= 2.13.4, < 3",
 ]
 
