@@ -8,6 +8,11 @@ updates:
   directory: /
   schedule:
     interval: weekly
+  groups:
+    multi-step-actions:
+      patterns:
+      - github/codeql-action/*
+      - gradle/actions/*
 - package-ecosystem: pip
   directory: /clients/ev3-python
   schedule:
@@ -16,8 +21,3 @@ updates:
   directory: /clients/ev3-java
   schedule:
     interval: weekly
-groups:
-  multi-step-actions:
-    patterns:
-    - github/codeql-action/*
-    - gradle/actions/*
