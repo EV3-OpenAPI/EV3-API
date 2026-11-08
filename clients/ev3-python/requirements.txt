@@ -1,4 +1,4 @@
 python_dateutil >= 4.0.0, < 5
 setuptools >= 84.2.1
 urllib3 >= 2.8.0, < 3
-pydantic >= 2.14.2, < 3
+pydantic >= 2.14.3, < 3
